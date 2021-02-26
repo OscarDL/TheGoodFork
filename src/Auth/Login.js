@@ -1,8 +1,8 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '../Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
@@ -10,21 +10,12 @@ import { useDataLayerValue } from '../Context/DataLayer';
 
 export default function Login({navigation}) {
 
-  const [{}, dispatch] = useDataLayerValue();
+  const [_, dispatch] = useDataLayerValue();
 
-  const [loginPage, showLoginPage] = useState(false);
   const [userLogin, setUserLogin] = useState({
     email: '',
     password: ''
   });
-
-
-  const isLoggedIn = async () => {
-    const token = await AsyncStorage.getItem('authToken');
-    token ? DispatchUserInfo(token) : showLoginPage(true);
-  };
-
-  useEffect(() => { isLoggedIn(); }, []);
 
   
   const DispatchUserInfo = async (token) => {
@@ -39,11 +30,9 @@ export default function Login({navigation}) {
       const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/auth/userinfo', config);
       
       if (data?.user) {
+        dispatch({ type: 'SET_TOKEN', token });
         dispatch({ type: 'SET_USER', user: data.user });
-        navigation.navigate(data.user.type === 'admin' ? 'Admin' : 'Home');
-        showLoginPage(true);
       }
-
     } catch (error) {
       Alert.alert(
         "Couldn't get user info",
@@ -66,7 +55,6 @@ export default function Login({navigation}) {
 
       if (data?.token) {
         await AsyncStorage.setItem('authToken', data.token);
-        dispatch({ type: 'SET_TOKEN', token: data.token });
         DispatchUserInfo(data.token);
       }
 
@@ -79,8 +67,8 @@ export default function Login({navigation}) {
     }
   }
 
+
   return (
-    loginPage &&
     <View style={styles.container}>
       <View style={{width: '100%'}}><Text style={{textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
 
@@ -90,7 +78,7 @@ export default function Login({navigation}) {
           <Input placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
         </View>
 
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', marginVertical: 10}}>
           <Button
             buttonStyle={[styles.button]}
             title='Login'

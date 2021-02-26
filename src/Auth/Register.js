@@ -19,7 +19,7 @@ export default function Register({navigation}) {
     type: 'user'
   });
 
-  const [{}, dispatch] = useDataLayerValue();
+  const [_, dispatch] = useDataLayerValue();
 
   const registerUser = async (user) => {
     let complete = true;
@@ -64,7 +64,7 @@ export default function Register({navigation}) {
           "Welcome to The Good Fork!",
           [{
             text: 'LET ME IN',
-            onPress: () => navigation.navigate('Home')
+            onPress: () => navigation.navigate('User')
           }]
         );
         
