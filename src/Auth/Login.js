@@ -73,10 +73,12 @@ export default function Login({navigation}) {
       <View style={{width: '100%'}}><Text style={{textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
 
       <View>
-        <View>
-          <Input placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
-          <Input placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
-        </View>
+        <Input placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
+        <Input style={{marginBottom: 0}} placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
+
+        <TouchableOpacity style={{margin: 10, marginTop: 0}} onPress={() => navigation.navigate('Forgot')}>
+          <Text>Forgot password?</Text>
+        </TouchableOpacity>
 
         <View style={{alignItems: 'center', marginVertical: 10}}>
           <Button

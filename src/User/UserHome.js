@@ -21,25 +21,17 @@ export default function UserHome({title}) {
 function UserHomeComponent({navigation}) {
 
   const [{user}, dispatch] = useDataLayerValue();
-  
+
   const logout = async () => {
     await AsyncStorage.setItem('authToken', '');
-    checkLogin();
+    dispatch({type: 'SET_USER', user: null});
+    dispatch({type: 'SET_TOKEN', token: ''});
   }
-
-  const checkLogin = async () => {
-    const token = await AsyncStorage.getItem('authToken');
-    if(!token) {
-      dispatch({type: 'SET_USER', user: null});
-      dispatch({type: 'SET_TOKEN', token: ''});
-      await AsyncStorage.setItem('authToken', '');
-    }
-  };
 
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <Text style={{fontFamily: 'Roboto'}}>Welcome, {user?.type} {user?.firstName}!</Text>
-      <Button title='Log out' buttonStyle={[styles.button]} onPress={() => logout()} />
+      <Button title='Log out' buttonStyle={[styles.button]} onPress={logout} />
     </View>
   );
 }

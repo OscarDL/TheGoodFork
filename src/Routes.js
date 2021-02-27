@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { View } from 'react-native';
 import React, { useEffect } from 'react';
-import { Icon } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Login from './Auth/Login';
+import Reset from './Auth/Reset';
+import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
 
 import UserHome from './User/UserHome';
@@ -30,9 +32,19 @@ export default function Routes() {
 
   const [{user, token}, dispatch] = useDataLayerValue();
 
+  const logout = async () => {
+    await AsyncStorage.setItem('authToken', '');
+    isLoggedIn();
+  }
+
   const isLoggedIn = async () => {
     const token = await AsyncStorage.getItem('authToken');
-    token ? DispatchUserInfo(token) : dispatch({type: 'SET_TOKEN', token: ''});
+    if(token) {
+      DispatchUserInfo(token)
+    } else {
+      dispatch({type: 'SET_USER', user: null});
+      dispatch({type: 'SET_TOKEN', token: ''});
+    }
   };
 
   const DispatchUserInfo = async (token) => {
@@ -60,6 +72,8 @@ export default function Routes() {
   const authStack = () => {
     return (
       <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name='Reset' options={{title: 'Reset password'}} component={Reset} />
+        <Stack.Screen name='Forgot' options={{title: 'Forgot password'}} component={Forgot} />
         <Stack.Screen name='Login' options={{title: 'Login', headerLeft: null}} component={Login} />
         <Stack.Screen name='Register' options={{title: 'Register', headerLeft: null}} component={Register} />
       </Stack.Navigator>
@@ -95,7 +109,7 @@ export default function Routes() {
   const adminStack = () => {
     return (
       <Stack.Navigator initialRouteName='AdminHome'>
-        <Stack.Screen name='AdminHome' options={{title: 'Admin'}} component={AdminHome} />
+        <Stack.Screen name='AdminHome' options={{title: 'Admin', headerRight: () => (<Button title='Log out' onPress={logout} />)}} component={AdminHome} />
         <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes'}} component={AdminDishes} />
         <Stack.Screen name='AdminTablesList' options={{title: 'Tables list'}} component={AdminTablesList} />
         <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics'}} component={AdminSalesStats} />

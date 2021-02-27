@@ -12,7 +12,7 @@ function AdminCard({title, screen, navigation}) {
   return (
     <TouchableOpacity activeOpacity={0.5} underlayColor='#eee' onPress={() => navigation.navigate(screen)}>
       <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
-        <Icon size={28} color='#111' type='material' name='account-circle' style={{marginRight: 10}} />
+        <Icon size={28} color='#111' type='material' name='account-circle' style={{marginHorizontal: 6, flex: 1, alignItems: 'center', justifyContent: 'center'}} />
         <View style={{flexDirection: 'column'}}>
           <Text style={{fontFamily: 'Roboto'}}>{title}</Text>
           <Text style={{fontFamily: 'Roboto'}}>Description</Text>
@@ -28,24 +28,16 @@ export default function AdminHome({navigation}) {
 
   const logout = async () => {
     await AsyncStorage.setItem('authToken', '');
-    checkLogin();
+    dispatch({type: 'SET_USER', user: null});
+    dispatch({type: 'SET_TOKEN', token: ''});
   }
 
-  const checkLogin = async () => {
-    const token = await AsyncStorage.getItem('authToken');
-    if(!token) {
-      dispatch({type: 'SET_USER', user: null});
-      dispatch({type: 'SET_TOKEN', token: ''});
-      await AsyncStorage.setItem('authToken', '');
-    }
-  };
-
   return (
-    <View style={{...styles.container, alignItems: 'center'}}>
+    <View style={{...styles.container, paddingHorizontal: 0}}>
       {/*<Text style={{fontFamily: 'Roboto'}}>Welcome, {user?.type} {user?.firstName}!</Text>
-      <Button title='Log out' buttonStyle={[styles.button]} onPress={() => logout()} />*/}
+      <Button title='Log out' buttonStyle={[styles.button]} onPress={logout} />*/}
       <ScrollView style={{flex: 1, width: '100%'}}>
-        <View>
+        <View style={{flex: 1, rowGap: 10}}>
           <AdminCard title='Register a new staff member' screen='AdminRegisterStaff' navigation={navigation}/>
           <AdminCard title='Edit table capacity & availability' screen='AdminTablesList' navigation={navigation} />
           <AdminCard title='Edit the dishes list' screen='AdminDishes' navigation={navigation} />
