@@ -70,34 +70,34 @@ export default function Login({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={{width: '100%'}}><Text style={{textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
+      <View style={{width: '100%'}}><Text style={{...styles.roboto, textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
 
       <View>
-        <Input placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
-        <Input style={{marginBottom: 0}} placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
+        <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
+        <Input style={{...styles.roboto, marginBottom: 0}} placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
 
-        <TouchableOpacity style={{margin: 10, marginTop: 0}} onPress={() => navigation.navigate('Forgot')}>
-          <Text>Forgot password?</Text>
+        <TouchableOpacity style={{padding: 10, paddingTop: 0}} onPress={() => navigation.navigate('Forgot')}>
+          <Text style={styles.roboto}>Forgot password?</Text>
         </TouchableOpacity>
+      </View>
 
-        <View style={{alignItems: 'center', marginVertical: 10}}>
-          <Button
-            buttonStyle={[styles.button]}
-            title='Login'
-            icon={<Icon
-              size={28}
-              color='white'
-              type='material'
-              name='account-circle'
-              style={{marginRight: 10}}
-            />}
-            onPress={() => loginUser(userLogin)}
-          />
-        </View>
+      <View style={{alignItems: 'center', marginVertical: 10}}>
+        <Button
+          buttonStyle={[styles.button]}
+          title='Login'
+          icon={<Icon
+            size={28}
+            color='white'
+            type='material'
+            name='lock-open'
+            style={{marginRight: 10}}
+          />}
+          onPress={() => loginUser(userLogin)}
+        />
       </View>
         
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
-        <Text>Don't have an account? Register</Text>
+        <Text style={styles.roboto}>Don't have an account? Register</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Button, Icon, Input } from 'react-native-elements';
 
 import { styles } from '../Styles';
 
@@ -40,11 +40,18 @@ export default function Forgot({navigation}) {
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <View>
-        <Text style={{margin: 10, textAlign: 'center'}}>Forgot your password?</Text>
-        <Text style={{margin: 10, textAlign: 'center'}}>Please fill-in your email address in order to reset it.</Text>
+        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Forgot your password?</Text>
+        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Please fill-in your email address in order to reset it.</Text>
       </View>
-      <Input placeholder='Email address' onChangeText={email => setEmail(email)} />
-      <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => sendEmail(email)} />
+
+      <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setEmail(email)} />
+
+      <Button
+        buttonStyle={[styles.button]}
+        title='Request password reset'
+        onPress={() => sendEmail(email)}
+        icon={<Icon size={24} color='white' type='font-awesome' name='paper-plane' style={{marginRight: 10, padding: 2}}/>}
+      />
     </View>
   );
 }

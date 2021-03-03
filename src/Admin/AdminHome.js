@@ -1,49 +1,57 @@
 import React from 'react';
-import { Button, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { View, Text, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '../Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
 
 
-function AdminCard({title, screen, navigation}) {
+function AdminCard({icon, size = 28, type = 'material', title, description, screen, navigation}) {
   return (
-    <TouchableOpacity activeOpacity={0.5} underlayColor='#eee' onPress={() => navigation.navigate(screen)}>
-      <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
-        <Icon size={28} color='#111' type='material' name='account-circle' style={{marginHorizontal: 6, flex: 1, alignItems: 'center', justifyContent: 'center'}} />
-        <View style={{flexDirection: 'column'}}>
-          <Text style={{fontFamily: 'Roboto'}}>{title}</Text>
-          <Text style={{fontFamily: 'Roboto'}}>Description</Text>
+    <View style={{marginHorizontal: 10, marginVertical: 5}}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        underlayColor='#eee'
+        onPress={() => navigation.navigate(screen)}
+        style={{
+          flex: 1,
+          padding: 8,
+          borderRadius: 4,
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: 'white'
+        }}
+      >
+
+        <Icon
+          size={size}
+          name={icon}
+          type={type}
+          color='#111'
+          style={{marginHorizontal: 8}}
+        />
+
+        <View style={{flexShrink: 1, marginLeft: 8}}>
+          <Text numberOfLines={1} style={styles.roboto}>{title}</Text>
+          <Text style={styles.roboto}>{description}</Text>
         </View>
-      </View>
-    </TouchableOpacity>
+
+      </TouchableOpacity>
+    </View>
   );
 }
 
 export default function AdminHome({navigation}) {
-
-  const [{user}, dispatch] = useDataLayerValue();
-
-  const logout = async () => {
-    await AsyncStorage.setItem('authToken', '');
-    dispatch({type: 'SET_USER', user: null});
-    dispatch({type: 'SET_TOKEN', token: ''});
-  }
-
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
-      {/*<Text style={{fontFamily: 'Roboto'}}>Welcome, {user?.type} {user?.firstName}!</Text>
-      <Button title='Log out' buttonStyle={[styles.button]} onPress={logout} />*/}
-      <ScrollView style={{flex: 1, width: '100%'}}>
-        <View style={{flex: 1, rowGap: 10}}>
-          <AdminCard title='Register a new staff member' screen='AdminRegisterStaff' navigation={navigation}/>
-          <AdminCard title='Edit table capacity & availability' screen='AdminTablesList' navigation={navigation} />
-          <AdminCard title='Edit the dishes list' screen='AdminDishes' navigation={navigation} />
-          <AdminCard title='Check daily revenue of each service' screen='AdminDailyRevenue' navigation={navigation} />
-          <AdminCard title='Check food & drinks sales statistics' screen='AdminSalesStats' navigation={navigation} />
-          <AdminCard title='Check food & drinks stocks statistics' screen='AdminStocksStats' navigation={navigation} />
+      <ScrollView>
+        <View style={{marginVertical: 5}}>
+          <AdminCard icon='assignment-ind' title='Register a new staff member' description='Description 1' screen='AdminRegisterStaff' navigation={navigation}/>
+          <AdminCard icon='event-available' title='Edit table capacity & availability' description='Description 2' screen='AdminTablesList' navigation={navigation} />
+          <AdminCard icon='menu-book' title='Edit the dishes list for customers' description='Description 3' screen='AdminDishes' navigation={navigation} />
+          <AdminCard icon='coins' type='font-awesome-5' title='Check daily revenue of each service' description='Description 4' screen='AdminDailyRevenue' navigation={navigation} />
+          <AdminCard icon='tags' size={26} type='font-awesome' title='Check food & drinks sales statistics' description='Description 5' screen='AdminSalesStats' navigation={navigation} />
+          <AdminCard icon='insights' title='Check food & drinks stocks statistics' description='Description 6' screen='AdminStocksStats' navigation={navigation} />
         </View>
       </ScrollView>
     </View>

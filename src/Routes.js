@@ -22,6 +22,7 @@ import AdminStocksStats from './Admin/AdminStocksStats';
 import AdminDailyRevenue from './Admin/AdminDailyRevenue';
 import AdminRegisterStaff from './Admin/AdminRegisterStaff';
 
+import { styles } from './Styles';
 import { useDataLayerValue } from './Context/DataLayer';
 
 const Stack = createStackNavigator();
@@ -72,10 +73,10 @@ export default function Routes() {
   const authStack = () => {
     return (
       <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name='Register' options={{title: 'Register'}} component={Register} />
         <Stack.Screen name='Reset' options={{title: 'Reset password'}} component={Reset} />
         <Stack.Screen name='Forgot' options={{title: 'Forgot password'}} component={Forgot} />
         <Stack.Screen name='Login' options={{title: 'Login', headerLeft: null}} component={Login} />
-        <Stack.Screen name='Register' options={{title: 'Register', headerLeft: null}} component={Register} />
       </Stack.Navigator>
     );
   }
@@ -109,7 +110,7 @@ export default function Routes() {
   const adminStack = () => {
     return (
       <Stack.Navigator initialRouteName='AdminHome'>
-        <Stack.Screen name='AdminHome' options={{title: 'Admin', headerRight: () => (<Button title='Log out' onPress={logout} />)}} component={AdminHome} />
+        <Stack.Screen name='AdminHome' options={{title: 'Admin', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={AdminHome} />
         <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes'}} component={AdminDishes} />
         <Stack.Screen name='AdminTablesList' options={{title: 'Tables list'}} component={AdminTablesList} />
         <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics'}} component={AdminSalesStats} />

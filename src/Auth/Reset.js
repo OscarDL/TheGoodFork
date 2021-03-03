@@ -12,32 +12,28 @@ export default function Reset({navigation}) {
   const [password, setPassword] = useState(null);
   const [passCheck, setPassCheck] = useState(null);
 
+  const sendAlert = (message) => {
+    Alert.alert(
+      "Password reset",
+      message,
+      [{ text: 'RETRY' }]
+    );
+  }
+
   const resetPassword = async (resetToken, password, passCheck) => {
 
-    if (resetToken === null || resetToken === '') {
-      Alert.alert(
-        "Password reset",
-        "Please fill-in your reset code.",
-        [{ text: 'RETRY' }]
-      );
+    if (!resetToken) {
+      sendAlert("Please enter the reset code you received via email.");
       return;
     }
 
-    if (!(password?.length > 0 && passCheck?.length > 0)) {
-      Alert.alert(
-        "Password reset",
-        "Please enter and confirm your new password.",
-        [{ text: 'RETRY' }]
-      );
+    if (!password || !passCheck) {
+      sendAlert("Please type-in and confirm your new password.");
       return;
     }
 
     if (password !== passCheck) {
-      Alert.alert(
-        "Password reset",
-        "Your new passwords do not match.",
-        [{ text: 'RETRY' }]
-      );
+      sendAlert("Passwords do not match.");
       return;
     }
 
@@ -71,16 +67,14 @@ export default function Reset({navigation}) {
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <View>
-        <Text style={{margin: 10, textAlign: 'center'}}>Reset your password</Text>
-        <Text style={{margin: 10, textAlign: 'center'}}>Please fill-in the reset code we sent you via email, as well as your new password, to reset your credentials.</Text>
+        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Reset your password</Text>
+        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Please fill-in the reset code we sent you via email, as well as your new password, to reset your credentials.</Text>
       </View>
 
-      
-        <Input placeholder='Reset code' onChangeText={token => setToken(token)} />
-        <Input placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
-        <Input placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
-      
-
+      <Input style={styles.roboto} placeholder='Reset code' onChangeText={token => setToken(token)} />
+      <Input style={styles.roboto} placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
+      <Input style={styles.roboto} placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
+    
       <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => resetPassword(token, password, passCheck)} />
     </View>
   );

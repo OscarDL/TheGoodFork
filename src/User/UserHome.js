@@ -30,7 +30,7 @@ function UserHomeComponent({navigation}) {
 
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
-      <Text style={{fontFamily: 'Roboto'}}>Welcome, {user?.type} {user?.firstName}!</Text>
+      <Text style={styles.roboto}>Welcome, {user?.type} {user?.firstName}!</Text>
       <Button title='Log out' buttonStyle={[styles.button]} onPress={logout} />
     </View>
   );

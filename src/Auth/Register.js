@@ -22,9 +22,10 @@ export default function Register({navigation}) {
   const [_, dispatch] = useDataLayerValue();
 
   const registerUser = async (user) => {
+
     let complete = true;
     for (const [_, value] of Object.entries(user)) {
-      value === '' && (complete = false);
+      if (value === '') complete = false;
     }
 
     const config = {
@@ -56,15 +57,16 @@ export default function Register({navigation}) {
 
       if (data?.token) {
         await AsyncStorage.setItem('authToken', data.token);
-        dispatch({ type: 'SET_TOKEN', token: data.token });
-        dispatch({ type: 'SET_USER', user });
 
         Alert.alert(
           "Registration successful",
           "Welcome to The Good Fork!",
           [{
             text: 'LET ME IN',
-            onPress: () => navigation.navigate('User')
+            onPress: () => {
+              dispatch({ type: 'SET_TOKEN', token: data.token });
+              dispatch({ type: 'SET_USER', user }); // Routes stack will change once user context changes
+            }
           }]
         );
         
@@ -87,16 +89,16 @@ export default function Register({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={{width: '100%', textAlign: 'center'}}>
+      <Text style={{...styles.roboto, textAlign: 'center'}}>
         I am {`(${userRegister?.firstName || 'a'} ${userRegister?.lastName || 'user'})`} with {userRegister?.password ? 'a' : 'no'} password set
       </Text>
       
       <View>
-        <Input placeholder='Email address' onChangeText={email => setUserRegister({ ...userRegister, email })} />
-        <Input placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
-        <Input placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
-        <Input placeholder='Password' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
-        <Input placeholder='Confirm password' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
+        <Input style={styles.roboto} placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
+        <Input style={styles.roboto} placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
+        <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setUserRegister({ ...userRegister, email })} />
+        <Input style={styles.roboto} placeholder='Password' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
+        <Input style={styles.roboto} placeholder='Confirm password' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -107,14 +109,16 @@ export default function Register({navigation}) {
             size={28}
             color='white'
             type='material'
-            name='account-circle'
+            name='how-to-reg'
             style={{marginRight: 10}}
           />}
           onPress={() => registerUser(userRegister)}
         />
       </View>
 
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Login')}><Text>Already have an account? Sign in</Text></TouchableOpacity>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.roboto}>Already have an account? Sign in</Text>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 12,
     backgroundColor: 'limegreen'
+  },
+  roboto: {
+    fontFamily: 'Roboto'
   }
 });
 
