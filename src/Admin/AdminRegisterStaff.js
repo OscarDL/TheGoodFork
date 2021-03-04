@@ -18,11 +18,17 @@ export default function AdminRegisterStaff({navigation}) {
     type: 'admin'
   });
 
-  const registerStaff = async (user) => {
+  const registerStaff = async (staff) => {
 
-    let complete = true;
-    for (const [_, value] of Object.entries(user)) {
-      if (value === '') complete = false;
+    for (const [_, value] of Object.entries(staff)) {
+      if (value === '') {
+        Alert.alert(
+          "Incomplete registration",
+          "Please fill in all the fields.",
+          [{ text: 'DISMISS' }]
+        );
+        return;
+      }
     }
 
     const config = {
@@ -30,17 +36,8 @@ export default function AdminRegisterStaff({navigation}) {
         'Content-Type': 'application/json'
       }
     }
-
-    if (!complete) {
-      Alert.alert(
-        "Incomplete registration",
-        "Please fill in all the fields.",
-        [{ text: 'DISMISS' }]
-      );
-      return;
-    }
     
-    if (user?.password !== user?.passCheck) {
+    if (staff?.password !== staff?.passCheck) {
       Alert.alert(
         "Couldn't register staff",
         "Passwords do not match.",
@@ -50,7 +47,7 @@ export default function AdminRegisterStaff({navigation}) {
     }
 
     try {
-      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/register', user, config);
+      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/register', staff, config);
 
       if (data?.token) {
 
@@ -124,7 +121,7 @@ export default function AdminRegisterStaff({navigation}) {
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => null}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('AdminStaffList')}>
         <Text style={styles.roboto}>Edit a staff member instead?</Text>
       </TouchableOpacity>
     </View>

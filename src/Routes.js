@@ -16,6 +16,8 @@ import UserHome from './User/UserHome';
 
 import AdminHome from './Admin/AdminHome';
 import AdminDishes from './Admin/AdminDishes';
+import AdminStaffList from './Admin/AdminStaffList';
+import AdminEditStaff from './Admin/AdminEditStaff';
 import AdminTablesList from './Admin/AdminTablesList';
 import AdminSalesStats from './Admin/AdminSalesStats';
 import AdminStocksStats from './Admin/AdminStocksStats';
@@ -24,6 +26,7 @@ import AdminRegisterStaff from './Admin/AdminRegisterStaff';
 
 import { styles } from './Styles';
 import { useDataLayerValue } from './Context/DataLayer';
+
 
 const Stack = createStackNavigator();
 const Tabs = createMaterialBottomTabNavigator();
@@ -113,6 +116,8 @@ export default function Routes() {
         <Stack.Screen name='AdminHome' options={{title: 'Admin', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={AdminHome} />
         <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes'}} component={AdminDishes} />
         <Stack.Screen name='AdminTablesList' options={{title: 'Tables list'}} component={AdminTablesList} />
+        <Stack.Screen name='AdminStaffList' options={{title: 'Staff members'}} component={AdminStaffList} />
+        <Stack.Screen name='AdminEditStaff' options={{title: 'Edit staff member'}} component={AdminEditStaff} />
         <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics'}} component={AdminSalesStats} />
         <Stack.Screen name='AdminStocksStats' options={{title: 'Stocks statistics'}} component={AdminStocksStats} />
         <Stack.Screen name='AdminDailyRevenue' options={{title: 'Daily revenue'}} component={AdminDailyRevenue} />
