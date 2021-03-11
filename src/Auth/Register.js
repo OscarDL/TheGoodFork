@@ -53,6 +53,7 @@ export default function Register({navigation}) {
     }
 
     try {
+      user.email = user.email.replace(' ', '');
       const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/register', user, config);
 
       if (data?.token) {
@@ -96,7 +97,7 @@ export default function Register({navigation}) {
       <View>
         <Input style={styles.roboto} placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
         <Input style={styles.roboto} placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
-        <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setUserRegister({ ...userRegister, email })} />
+        <Input style={styles.roboto} placeholder='Email address' autoCapitalize='none' onChangeText={email => setUserRegister({ ...userRegister, email })} />
         <Input style={styles.roboto} placeholder='Password' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
         <Input style={styles.roboto} placeholder='Confirm password' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
       </View>

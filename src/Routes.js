@@ -3,16 +3,14 @@ import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { Button, Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Login from './Auth/Login';
 import Reset from './Auth/Reset';
 import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
-
-import UserHome from './User/UserHome';
 
 import AdminHome from './Admin/AdminHome';
 import AdminDishes from './Admin/AdminDishes';
@@ -24,6 +22,15 @@ import AdminStocksStats from './Admin/AdminStocksStats';
 import AdminDailyRevenue from './Admin/AdminDailyRevenue';
 import AdminRegisterStaff from './Admin/AdminRegisterStaff';
 
+import BarmanHome from './Barman/BarmanHome';
+
+import WaiterHome from './Waiter/WaiterHome';
+
+import CookHome from './Cook/CookHome';
+
+import UserHome from './User/UserHome';
+
+import Settings from './Settings';
 import { styles } from './Styles';
 import { useDataLayerValue } from './Context/DataLayer';
 
@@ -44,7 +51,7 @@ export default function Routes() {
   const isLoggedIn = async () => {
     const token = await AsyncStorage.getItem('authToken');
     if(token) {
-      DispatchUserInfo(token)
+      DispatchUserInfo(token);
     } else {
       dispatch({type: 'SET_USER', user: null});
       dispatch({type: 'SET_TOKEN', token: ''});
@@ -73,13 +80,57 @@ export default function Routes() {
 
   useEffect(() => { isLoggedIn(); }, []);
 
+
   const authStack = () => {
     return (
       <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name='Register' options={{title: 'Register'}} component={Register} />
-        <Stack.Screen name='Reset' options={{title: 'Reset password'}} component={Reset} />
-        <Stack.Screen name='Forgot' options={{title: 'Forgot password'}} component={Forgot} />
         <Stack.Screen name='Login' options={{title: 'Login', headerLeft: null}} component={Login} />
+        <Stack.Screen name='Reset' options={{title: 'Reset password', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={Reset} />
+        <Stack.Screen name='Forgot' options={{title: 'Forgot password', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={Forgot} />
+      </Stack.Navigator>
+    );
+  }
+
+  const adminStack = () => {
+    return (
+      <Stack.Navigator initialRouteName='AdminHome'>
+        <Stack.Screen name='AdminHome' component={AdminHome} options={({navigation}) => ({
+          title: 'Admin',
+          headerRight: () => (<Button type='clear' icon={<Icon name='settings' size={26} type='material' />} onPress={() => navigation.navigate('Settings')} buttonStyle={{marginRight: 10}} />)}
+        )}/>
+        <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminDishes} />
+        <Stack.Screen name='AdminTablesList' options={{title: 'Tables list', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminTablesList} />
+        <Stack.Screen name='AdminStaffList' options={{title: 'Staff members', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={AdminStaffList} />
+        <Stack.Screen name='AdminEditStaff' options={{title: 'Edit staff member', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminEditStaff} />
+        <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminSalesStats} />
+        <Stack.Screen name='AdminStocksStats' options={{title: 'Stocks statistics', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminStocksStats} />
+        <Stack.Screen name='AdminDailyRevenue' options={{title: 'Daily revenue', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminDailyRevenue} />
+        <Stack.Screen name='AdminRegisterStaff' options={{title: 'Register staff', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminRegisterStaff} />
+      </Stack.Navigator>
+    );
+  }
+
+  const barmanStack = () => {
+    return (
+      <Stack.Navigator initialRouteName='BarmanHome'>
+        <Stack.Screen name='BarmanHome' options={{title: 'Barman', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={BarmanHome} />
+      </Stack.Navigator>
+    );
+  }
+
+  const waiterStack = () => {
+    return (
+      <Stack.Navigator initialRouteName='WaiterHome'>
+        <Stack.Screen name='WaiterHome' options={{title: 'Waiter', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={WaiterHome} />
+      </Stack.Navigator>
+    );
+  }
+
+  const cookStack = () => {
+    return (
+      <Stack.Navigator initialRouteName='CookHome'>
+        <Stack.Screen name='CookHome' options={{title: 'Cook', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={CookHome} />
       </Stack.Navigator>
     );
   }
@@ -110,25 +161,12 @@ export default function Routes() {
     );
   }
 
-  const adminStack = () => {
-    return (
-      <Stack.Navigator initialRouteName='AdminHome'>
-        <Stack.Screen name='AdminHome' options={{title: 'Admin', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={AdminHome} />
-        <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes'}} component={AdminDishes} />
-        <Stack.Screen name='AdminTablesList' options={{title: 'Tables list'}} component={AdminTablesList} />
-        <Stack.Screen name='AdminStaffList' options={{title: 'Staff members'}} component={AdminStaffList} />
-        <Stack.Screen name='AdminEditStaff' options={{title: 'Edit staff member'}} component={AdminEditStaff} />
-        <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics'}} component={AdminSalesStats} />
-        <Stack.Screen name='AdminStocksStats' options={{title: 'Stocks statistics'}} component={AdminStocksStats} />
-        <Stack.Screen name='AdminDailyRevenue' options={{title: 'Daily revenue'}} component={AdminDailyRevenue} />
-        <Stack.Screen name='AdminRegisterStaff' options={{title: 'Register staff'}} component={AdminRegisterStaff} />
-      </Stack.Navigator>
-    );
-  }
-
   const components = {
-    'admin': adminStack,
     'auth': authStack,
+    'admin': adminStack,
+    'barman': barmanStack,
+    'waiter': waiterStack,
+    'cook': cookStack,
     'user': userStack
   };
 
@@ -136,6 +174,7 @@ export default function Routes() {
     token === null ? <View></View> :
     <NavigationContainer>
       <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
+        <Stack.Screen name='Settings' options={{cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={Settings} />
         <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />
       </Stack.Navigator>
     </NavigationContainer>

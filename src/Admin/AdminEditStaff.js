@@ -28,6 +28,7 @@ const editStaff = async (id, staff, navigation) => {
   }
 
   try {
+    staff.email = staff.email.replace(' ', '');
     const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/admin/accounts/updateStaff/' + id, staff, config);
 
     if (data?.success) {
@@ -124,7 +125,7 @@ export default function AdminEditStaff({route, navigation}) {
       <View>
         <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
         <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
-        <Input value={newStaff.email} onChangeText={email => setNewStaff({ ...newStaff, email })} />
+        <Input value={newStaff.email} autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
       </View>
 
       <View style={{alignItems: 'center'}}>

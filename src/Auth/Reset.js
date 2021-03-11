@@ -70,11 +70,11 @@ export default function Reset({navigation}) {
         <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Reset your password</Text>
         <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Please fill-in the reset code we sent you via email, as well as your new password, to reset your credentials.</Text>
       </View>
-
-      <Input style={styles.roboto} placeholder='Reset code' onChangeText={token => setToken(token)} />
-      <Input style={styles.roboto} placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
-      <Input style={styles.roboto} placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
-    
+      <View style={{width: '100%'}}>
+        <Input style={styles.roboto} placeholder='Reset code' onChangeText={token => setToken(token)} />
+        <Input style={styles.roboto} placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
+        <Input style={styles.roboto} placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
+      </View>
       <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => resetPassword(token, password, passCheck)} />
     </View>
   );

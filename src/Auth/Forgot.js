@@ -10,6 +10,16 @@ export default function Forgot({navigation}) {
   const [email, setEmail] = useState(null);
 
   const sendEmail = async (email) => {
+
+    if (!email) {
+      Alert.alert(
+        "Email address incorrect",
+        "Please provide an email address to send the reset code to.",
+        [{ text: 'OKAY' }]
+      );
+      return;
+    }
+
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -17,6 +27,7 @@ export default function Forgot({navigation}) {
     }
 
     try {
+      email = email.replace(' ', '');
       const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/forgotpassword', {email}, config);
 
       if (data?.success) {
@@ -44,7 +55,7 @@ export default function Forgot({navigation}) {
         <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Please fill-in your email address in order to reset it.</Text>
       </View>
 
-      <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setEmail(email)} />
+      <Input style={styles.roboto} autoCapitalize='none' placeholder='Email address' onChangeText={email => setEmail(email)} />
 
       <Button
         buttonStyle={[styles.button]}

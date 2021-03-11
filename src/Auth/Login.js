@@ -51,6 +51,7 @@ export default function Login({navigation}) {
     }
 
     try {
+      user.email = user.email.replace(' ', '');
       const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/login', user, config);
 
       if (data?.token) {
@@ -73,7 +74,7 @@ export default function Login({navigation}) {
       <View style={{width: '100%'}}><Text style={{...styles.roboto, textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
 
       <View>
-        <Input style={styles.roboto} placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
+        <Input style={styles.roboto} autoCapitalize='none' placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
         <Input style={{...styles.roboto, marginBottom: 0}} placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
 
         <TouchableOpacity style={{padding: 10, paddingTop: 0}} onPress={() => navigation.navigate('Forgot')}>
