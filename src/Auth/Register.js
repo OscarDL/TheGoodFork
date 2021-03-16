@@ -42,10 +42,19 @@ export default function Register({navigation}) {
       );
       return;
     }
+
+    if (user?.password?.length < 6) {
+      Alert.alert(
+        "Couldn't create account",
+        "Your password should have more than 6 characters.",
+        [{ text: 'RETRY' }]
+      );
+      return;
+    }
     
     if (user?.password !== user?.passCheck) {
       Alert.alert(
-        "Couldn't register you",
+        "Couldn't create account",
         "Passwords do not match.",
         [{ text: 'RETRY' }]
       );
@@ -73,7 +82,7 @@ export default function Register({navigation}) {
         
       } else {
         Alert.alert(
-          "Couldn't register you",
+          "Couldn't create account",
           data?.error,
           [{ text: 'RETRY' }]
         );
@@ -81,7 +90,7 @@ export default function Register({navigation}) {
       
     } catch (error) {
       Alert.alert(
-        "Couldn't register you",
+        "Couldn't create account",
         error.response.data.error,
         [{ text: 'RETRY' }]
       );

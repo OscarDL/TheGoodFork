@@ -50,6 +50,15 @@ export default function Login({navigation}) {
       }
     }
 
+    if (!user.email || !user.password) {
+      Alert.alert(
+        "Couldn't sign you in",
+        "Please fill-in both email and password.",
+        [{ text: 'OKAY' }]
+      );
+      return;
+    }
+
     try {
       user.email = user.email.replace(' ', '');
       const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/login', user, config);
