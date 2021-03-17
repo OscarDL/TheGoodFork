@@ -26,12 +26,17 @@ import AdminRegisterStaff from './Admin/AdminRegisterStaff';
 import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
+import WaiterCreateBill from './Waiter/WaiterCreateBill';
+import WaiterSubmitOrder from './Waiter/WaiterSubmitOrder';
+import WaiterCheckOrders from './Waiter/WaiterCheckOrders';
+import WaiterManageTables from './Waiter/WaiterManageTables';
+import WaiterValidateOrder from './Waiter/WaiterValidateOrder';
 
 import CookHome from './Cook/CookHome';
 
 import UserHome from './User/UserHome';
 
-import { styles } from './Styles';
+import { styles } from '../Reusables/Styles';
 import { useDataLayerValue } from './Context/DataLayer';
 
 
@@ -121,6 +126,11 @@ export default function Routes() {
   const waiterStack = () => (
     <Stack.Navigator initialRouteName='WaiterHome'>
       <Stack.Screen name='WaiterHome' options={{title: 'Waiter', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={WaiterHome} />
+      <Stack.Screen name='WaiterManageTables' options={{title: 'Manage table reservations', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterManageTables} />
+      <Stack.Screen name='WaiterValidateOrder' options={{title: 'Validate an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterValidateOrder} />
+      <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Submit an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterSubmitOrder} />
+      <Stack.Screen name='WaiterCheckOrders' options={{title: 'Orders status', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
+      <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
     </Stack.Navigator>
   );
 

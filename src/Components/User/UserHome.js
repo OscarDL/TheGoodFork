@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 import { createStackNavigator } from '@react-navigation/stack';
 

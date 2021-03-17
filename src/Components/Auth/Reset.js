@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 
 
 export default function Reset({navigation}) {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-export default function WaiterHome() {
+export default function AdminDishes() {
   return (
     <View>
-      <Text>WAITER HOME</Text>
+      <Text>LIST OF DISHES WILL APPEAR HERE</Text>
     </View>
   );
 }

@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 
 
 export default function AdminRegisterStaff({navigation}) {

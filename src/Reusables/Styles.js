@@ -12,6 +12,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: 'limegreen'
   },
+  title: {
+    fontSize: 24,
+    paddingBottom: 4,
+    fontWeight: '700',
+    paddingHorizontal: 20,
+  },
   roboto: {
     fontFamily: 'Roboto'
   }

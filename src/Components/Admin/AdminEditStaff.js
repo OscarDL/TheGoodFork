@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 
 
 const editStaff = async (id, staff, navigation) => {

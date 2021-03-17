@@ -4,7 +4,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 

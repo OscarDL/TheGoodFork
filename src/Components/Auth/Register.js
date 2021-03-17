@@ -4,11 +4,13 @@ import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
-import { styles } from '../Styles';
+import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
 export default function Register({navigation}) {
+
+  const [_, dispatch] = useDataLayerValue();
 
   const [userRegister, setUserRegister] = useState({
     email: '',
@@ -18,8 +20,6 @@ export default function Register({navigation}) {
     passCheck: '',
     type: 'user'
   });
-
-  const [_, dispatch] = useDataLayerValue();
 
   const registerUser = async (user) => {
 
