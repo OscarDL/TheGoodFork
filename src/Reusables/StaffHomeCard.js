@@ -11,7 +11,7 @@ export default function StaffHomeCard({icon, size = 28, type = 'material', color
       <TouchableOpacity
         activeOpacity={0.5}
         underlayColor='#eee'
-        onPress={() => navigation.navigate(screen, {staff: params})}
+        onPress={() => navigation.navigate(screen, {params})}
         style={{
           flex: 1,
           padding: 8,
