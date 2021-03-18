@@ -57,7 +57,7 @@ export default function AdminDishes({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         <Button title='Create' onPress={() => navigation.navigate('AdminCreateDish')}/>
-        {dishes?.length > 0 ? <>
+        {dishes?.length > 0 && <>
           <View style={{marginTop: 10}}>
             <Text style={styles.title}>Entrée</Text>
             {dishes?.map((dish, i) => dish.type == 'entree' && <StaffHomeCard
@@ -93,7 +93,7 @@ export default function AdminDishes({navigation}) {
               description={dish?.detail} screen='AdminEditDish' params={dish} navigation={navigation}
             />)}
           </View>
-        </> : <Text>No dishes have been created.</Text>}
+        </>}
       </ScrollView>
     </View>
   );
