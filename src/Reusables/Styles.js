@@ -18,6 +18,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     paddingHorizontal: 20,
   },
+  fab: {
+    right: 0,
+    bottom: 0,
+    margin: 16,
+    position: 'absolute',
+    backgroundColor: '#56aadb'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }

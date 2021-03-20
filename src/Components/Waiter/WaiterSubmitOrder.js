@@ -47,33 +47,18 @@ const submitOrder = async (token, order, navigation) => {
 
 
 export default function WaiterSubmitOrder({navigation}) {
-  const [{token}, _] = useDataLayerValue();
+  const [{token, currentOrder}, _] = useDataLayerValue();
 
   const [order, setOrder] = useState({
     user: {email: '', type: 'waiter'},
-    orderContent: {
-      appetizer: [],
-      mainDish: [],
-      dessert: []
-    },
+    appetizer: [],
+    mainDish: [],
+    dessert: [],
+    drinks: [],
+    alcohols: [],
     price: 0,
     currency: 'EUR',
   });
-
-  const [appetizer, setAppetizer] = useState('');
-  const [mainDish, setMainDish] = useState('');
-  const [dessert, setDessert] = useState('');
-
-
-  const appendOrder = (item, type) => {
-    const newOrder = order.orderContent;
-
-    type === 'appetizer' && newOrder.appetizer.push(item);
-    type === 'mainDish' && newOrder.mainDish.push(item);
-    type === 'dessert' && newOrder.dessert.push(item);
-
-    setOrder({...order, orderContent: newOrder});
-  }
 
 
   return (
@@ -86,19 +71,12 @@ export default function WaiterSubmitOrder({navigation}) {
         <Input style={styles.roboto} placeholder="Customer's email" onChangeText={user => setOrder({ ...order, user: {email: user, type: 'waiter'} })} />
         <Input style={styles.roboto} placeholder='Price' onChangeText={price => setOrder({ ...order, price })} />
         <Input style={styles.roboto} placeholder='Currency' onChangeText={currency => setOrder({ ...order, currency })} />
+      </View>
         
-        <View style={{alignItems: 'center'}}>
-          <Input style={styles.roboto} placeholder='Appetizer' onChangeText={appetizer => setAppetizer(appetizer)}/>
-          <Button buttonStyle={[styles.button]} title='Add' onPress={() => appendOrder(appetizer, 'appetizer')}/>
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <Input style={styles.roboto} placeholder='Main dish' onChangeText={mainDish => setMainDish(mainDish)}/>
-          <Button buttonStyle={[styles.button]} title='Add' onPress={() => appendOrder(mainDish, 'mainDish')}/>
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <Input style={styles.roboto} placeholder='Dessert' onChangeText={dessert => setDessert(dessert)}/>
-          <Button buttonStyle={[styles.button]} title='Add' onPress={() => appendOrder(dessert, 'dessert')}/>
-        </View>
+      <View style={{alignItems: 'center'}}>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} style={{}} title='Add appetizers' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer'})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add main dish' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish'})}/>
+        <Button buttonStyle={[styles.button]} title='Add desserts' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert'})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>

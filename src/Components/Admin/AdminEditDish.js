@@ -114,9 +114,10 @@ export default function AdminEditDish({route, navigation}) {
           <Picker
             style={{height: 38}}
             prompt="Select a type"
-            onValueChange={type => {setNewDish({...newDish, type}); console.log(type)}}
+            selectedValue={newDish.type}
+            onValueChange={type => setNewDish({...newDish, type})}
           >
-            <Picker.Item label="    Entrée"   value="entree"/>
+            <Picker.Item label="    Entrée"   value="appetizer"/>
             <Picker.Item label="    Plat"     value="mainDish"/>
             <Picker.Item label="    Dessert"  value="dessert"/>
             <Picker.Item label="    Boisson"  value="drink"/>
@@ -128,7 +129,7 @@ export default function AdminEditDish({route, navigation}) {
       <View>
         <Input value={newDish.name} onChangeText={name => setNewDish({ ...newDish, name })} />
         <Input value={newDish.detail} onChangeText={detail => setNewDish({ ...newDish, detail })} />
-        <Input value={newDish.price} keyboardType="number-pad" onChangeText={price => setNewDish({ ...newDish, price })} />
+        <Input value={newDish.price.toString()} keyboardType="number-pad" onChangeText={price => setNewDish({ ...newDish, price })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -146,7 +147,9 @@ export default function AdminEditDish({route, navigation}) {
         />
       </View>
       
-      <Button onPress={() => deleteDish(token, params, navigation)} title="delete"/>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => deleteDish(token, params, navigation)}>
+        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.name}</Text>
+      </TouchableOpacity>
     </View>
   );
 }

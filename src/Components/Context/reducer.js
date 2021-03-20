@@ -1,6 +1,13 @@
 export const initialState = {
   user: null,
-  token: null
+  token: null,
+  currentOrder: {
+    appetizer: null,
+    mainDish: null,
+    dessert: null,
+    drinks: null,
+    alcohols: null
+  }
 }
 
 export const reducer = (state, action) => {
@@ -15,6 +22,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         token: action.token
+      };
+    case 'SET_CURRENT_ORDER':
+      return {
+        ...state,
+        currentOrder: action.currentOrder
       };
     default:
       return state;

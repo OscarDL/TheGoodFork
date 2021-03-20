@@ -3,7 +3,6 @@ import { View, Text, Alert} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Input, Button, Icon } from 'react-native-elements';
 
 import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
@@ -60,7 +59,7 @@ export default function WaiterCheckOrders({navigation}) {
         {orders?.length > 0 && <>
           <View style={{marginTop: 10}}>
             <Text style={styles.title}>Ready</Text>
-            {orders?.map((order, i) => order.orderStatus === 'ready' && <StaffHomeCard
+            {orders?.map((order, i) => order.status === 'ready' && <StaffHomeCard
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetail' params={order} navigation={navigation}
@@ -68,7 +67,7 @@ export default function WaiterCheckOrders({navigation}) {
           </View>
           <View style={{marginTop: 10}}>
             <Text style={styles.title}>Preparing</Text>
-            {orders?.map((order, i) => order.orderStatus === 'preparing' && <StaffHomeCard
+            {orders?.map((order, i) => order.status === 'preparing' && <StaffHomeCard
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetail' params={order} navigation={navigation}

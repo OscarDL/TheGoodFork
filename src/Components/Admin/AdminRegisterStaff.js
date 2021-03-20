@@ -88,6 +88,7 @@ export default function AdminRegisterStaff({navigation}) {
           <Picker
             style={{height: 38}}
             prompt="Select a role"
+            selectedValue={staff.type}
             onValueChange={type => setStaff({...staff, type})}
           >
             <Picker.Item label="    admin" value="admin"/>

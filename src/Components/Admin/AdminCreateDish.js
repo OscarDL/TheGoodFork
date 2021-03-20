@@ -12,7 +12,7 @@ export default function AdminCreateDish({navigation}) {
 
   const [{token}, _] = useDataLayerValue();
   const [dish, setDish] = useState({
-    type: '',
+    type: 'appetizer',
     price: 0,
     name: '',
     detail: '',
@@ -21,7 +21,7 @@ export default function AdminCreateDish({navigation}) {
   const createDish = async (dish) => {
 
     for (const [key, value] of Object.entries(dish)) {
-      if (value === '') {
+      if (value === '' && key !== 'detail') {
         Alert.alert(
           "Incomplete dish",
           "Please fill in all the required fields.",
@@ -80,9 +80,10 @@ export default function AdminCreateDish({navigation}) {
           <Picker
             style={{height: 38}}
             prompt="Select a type"
-            onValueChange={type => {setDish({...dish, type}); console.log(type)}}
+            selectedValue={dish.type}
+            onValueChange={type => setDish({...dish, type})}
           >
-            <Picker.Item label="    Entrée"   value="entree"/>
+            <Picker.Item label="    Entrée"   value="appetizer"/>
             <Picker.Item label="    Plat"     value="mainDish"/>
             <Picker.Item label="    Dessert"  value="dessert"/>
             <Picker.Item label="    Boisson"  value="drink"/>

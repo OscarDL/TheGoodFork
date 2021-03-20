@@ -29,6 +29,7 @@ import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
 import WaiterCreateBill from './Waiter/WaiterCreateBill';
+import WaiterOrderDishes from './Waiter/WaiterOrderDishes';
 import WaiterSubmitOrder from './Waiter/WaiterSubmitOrder';
 import WaiterCheckOrders from './Waiter/WaiterCheckOrders';
 import WaiterManageTables from './Waiter/WaiterManageTables';
@@ -111,7 +112,7 @@ export default function Routes() {
       <Stack.Screen name='AdminEditDish' options={{title: 'Edit dish', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminEditDish} />
       <Stack.Screen name='AdminStaffList' options={{title: 'Staff members', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={AdminStaffList} />
       <Stack.Screen name='AdminSettings' options={{title: 'Settings', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={AdminSettings} />
-      <Stack.Screen name='AdminCreateDish' options={{title: 'Create dish', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminCreateDish} />
+      <Stack.Screen name='AdminCreateDish' options={{title: 'Create dish', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={AdminCreateDish} />
       <Stack.Screen name='AdminTablesList' options={{title: 'Tables list', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminTablesList} />
       <Stack.Screen name='AdminEditStaff' options={{title: 'Edit staff member', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminEditStaff} />
       <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminSalesStats} />
@@ -132,6 +133,7 @@ export default function Routes() {
       <Stack.Screen name='WaiterHome' options={{title: 'Waiter', headerRight: () => (<Button title='Log out' onPress={logout} buttonStyle={{...styles.button, marginRight: 10}} />)}} component={WaiterHome} />
       <Stack.Screen name='WaiterManageTables' options={{title: 'Manage table reservations', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterManageTables} />
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Validate an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterValidateOrder} />
+      <Stack.Screen name='WaiterOrderDishes' options={{title: 'Add to order', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDishes} />
       <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Submit an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterSubmitOrder} />
       <Stack.Screen name='WaiterCheckOrders' options={{title: 'Orders status', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
       <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
