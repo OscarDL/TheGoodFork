@@ -52,7 +52,7 @@ export default function WaiterOrderDishes({navigation, route}) {
     if (exists) {
       let newState = state;
       newState[index].quantity += num;
-      setState(tmpState[index].quantity === 0 ? [] : newState);
+      setState(newState[index].quantity === 0 ? [] : newState);
     } else {
       setState(state.concat({name: item.name, status: 'pending', quantity: 1, price: item.price}));
     }
