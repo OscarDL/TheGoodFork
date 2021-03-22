@@ -1,6 +1,7 @@
 import axios from 'axios';
-import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/core';
 import { Input, Button, Icon } from 'react-native-elements';
 
 import { styles } from '../../Reusables/Styles';
@@ -46,19 +47,31 @@ const submitOrder = async (token, order, navigation) => {
 };
 
 
-export default function WaiterSubmitOrder({navigation}) {
-  const [{token, currentOrder}, _] = useDataLayerValue();
+export default function WaiterSubmitOrder({navigation, route}) {
+  const [{token}, _] = useDataLayerValue();
+  const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
   const [order, setOrder] = useState({
     user: {email: '', type: 'waiter'},
-    appetizer: [],
-    mainDish: [],
-    dessert: [],
-    drinks: [],
-    alcohols: [],
+    appetizer: null,
+    mainDish: null,
+    dessert: null,
+    drinks: null,
+    alcohols: null,
     price: 0,
     currency: 'EUR',
   });
+
+  useEffect(() => {
+    // add to the order what the waiter has just added in the screen route parameters
+    if (isFocused) {
+      route.params.appetizer && setOrder({...order, appetizer: route.params.appetizer});
+      route.params.mainDish && setOrder({...order, mainDish: route.params.mainDish});
+      route.params.dessert && setOrder({...order, dessert: route.params.dessert});
+      route.params.drinks && setOrder({...order, drinks: route.params.drinks});
+      route.params.alcohols && setOrder({...order, alcohols: route.params.alcohols});
+    }
+  }, [isFocused]);
 
 
   return (
@@ -69,28 +82,21 @@ export default function WaiterSubmitOrder({navigation}) {
       
       <View>
         <Input style={styles.roboto} placeholder="Customer's email" onChangeText={user => setOrder({ ...order, user: {email: user, type: 'waiter'} })} />
-        <Input style={styles.roboto} placeholder='Price' onChangeText={price => setOrder({ ...order, price })} />
-        <Input style={styles.roboto} placeholder='Currency' onChangeText={currency => setOrder({ ...order, currency })} />
       </View>
         
       <View style={{alignItems: 'center'}}>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} style={{}} title='Add appetizers' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer'})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add main dish' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish'})}/>
-        <Button buttonStyle={[styles.button]} title='Add desserts' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert'})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add appetizers' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add main dish' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add desserts' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add drinks' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drinks: order.drinks})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add alcohols' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohols: order.alcohols})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
           buttonStyle={[styles.button]}
-          title='Register'
-          icon={<Icon
-            size={28}
-            color='white'
-            type='material'
-            name='how-to-reg'
-            style={{marginRight: 10}}
-          />}
-          onPress={() => submitOrder(token, order, navigation)}
+          title='Submit order'
+          onPress={() => console.log(order)} //submitOrder(token, order, navigation)}
         />
       </View>
     </View>
