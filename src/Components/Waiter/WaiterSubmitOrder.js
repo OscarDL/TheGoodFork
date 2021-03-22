@@ -17,7 +17,7 @@ const submitOrder = async (token, order, navigation) => {
   };
 
   try {
-    const {data} = await axios.post('http://10.0.0.2:9000/api/orders/create', order, config);
+    const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/orders/create', order, config);
 
     if (data?.success) {
       Alert.alert(
