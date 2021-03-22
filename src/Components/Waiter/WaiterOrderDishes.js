@@ -9,10 +9,29 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../../Reusables/Styles';
 
 
+const failureAlert = (error, navigation) => {
+  Alert.alert(
+    "Couldn't retrieve orders",
+    error,
+    [
+      {
+        text: 'CANCEL',
+        onPress: () => navigation.goBack()
+      },
+      {
+        text: 'RETRY',
+        onPress: () => getOrders(token)
+      }
+    ]
+  );
+}
+
+
 export default function WaiterOrderDishes({navigation, route}) {
   const {type} = route.params;
   const [state, setState] = useState([]);
   const [dishes, setDishes] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
 
   const getDishes = async () => {
@@ -25,12 +44,14 @@ export default function WaiterOrderDishes({navigation, route}) {
     try {
       const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/dishes', config);
 
-      let newDishes;
-      (data?.success && data?.dishes) ? newDishes = data.dishes : failureAlert(data?.error, navigation);
+      let tmpDishes, newDishes = [];
+      (data?.success && data?.dishes) ? tmpDishes = data.dishes : failureAlert(data?.error, navigation);
 
-      if (newDishes) newDishes.forEach((dish, i) => {
+      if (tmpDishes) tmpDishes.forEach((dish, i) => {
         dish.key = i;
       });
+      tmpDishes.map(dish => dish.type === type && newDishes.push(dish));
+
       setDishes(newDishes);
       
     } catch (error) { failureAlert(error.response.data.error, navigation); }
@@ -48,19 +69,24 @@ export default function WaiterOrderDishes({navigation, route}) {
         return index = i;
       }
     });
-
-    if (exists) {
+    
+    if (exists || num === -1) {
       let newState = state;
-      newState[index].quantity += num;
-      setState(newState[index].quantity === 0 ? [] : newState);
-    } else {
-      setState(state.concat({name: item.name, status: 'pending', quantity: 1, price: item.price}));
-    }
-    console.log(state);
+      if (num === -1 && (newState.length === 0 || newState[index].quantity === 1)) setState([]);
+      else {
+        newState[index].quantity += num;
+        setState(newState);
+      }
+    } else setState(state.concat({name: item.name, status: 'pending', quantity: 1, price: item.price}));
+
+    setRefresh(true); setTimeout(() => setRefresh(false), 10);
   };
+
+
+  const getNumber = (item) => state.find(dish => dish && dish.name === item.name)?.quantity || 0;
   
 
-  const renderItem = ({item}) => ( item?.type === type &&
+  const renderItem = ({item}) => (
     <View style={{flex: 1, justifyContent: 'center', borderRadius: 6, marginHorizontal: 5}}>
       <TouchableOpacity
         activeOpacity={0.5}
@@ -68,8 +94,9 @@ export default function WaiterOrderDishes({navigation, route}) {
         style={{
           flex: 1,
           padding: 8,
-          borderRadius: 6,
           alignItems: 'center',
+          borderTopLeftRadius: 6,
+          borderTopRightRadius: 6,
           flexDirection: 'column',
           backgroundColor: 'white'
         }}
@@ -94,10 +121,18 @@ export default function WaiterOrderDishes({navigation, route}) {
         </View>
       </TouchableOpacity>
 
-      <View style={{flex: 1, justifyContent: 'space-evenly', flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => addToOrder(item, -1)}><Text>-</Text></TouchableOpacity>
-        <Text>0</Text>
-        <TouchableOpacity onPress={() => addToOrder(item, 1)}><Text>+</Text></TouchableOpacity>
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
+        <TouchableOpacity style={{minWidth: '33%', borderBottomLeftRadius: 6, paddingVertical: 10}} onPress={() => addToOrder(item, -1)}>
+          <Text style={{textAlign: 'center'}}>-</Text>
+        </TouchableOpacity>
+
+        <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10}}>
+          {refresh ? getNumber(item) : getNumber(item)}
+        </Text>
+
+        <TouchableOpacity style={{minWidth: '33%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addToOrder(item, 1)}>
+          <Text style={{textAlign: 'center'}}>+</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
