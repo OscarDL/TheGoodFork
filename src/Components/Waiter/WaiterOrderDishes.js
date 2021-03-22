@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import { View, Text, Easing } from 'react-native';
 import TextTicker from 'react-native-text-ticker';
 import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
+import { View, Text, Easing, Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../Reusables/Styles';
@@ -27,9 +27,11 @@ const failureAlert = (error, navigation) => {
 }
 
 
+// FIX ORDER BUG : APPETIZER -> MAIN DISH -> ALCOHOL -> DESSERT -> EDIT ALCOHOL --- DESSERT = NULL
+
 export default function WaiterOrderDishes({navigation, route}) {
   const {type} = route.params;
-  const [state, setState] = useState([]);
+  const [state, setState] = useState(route.params[type] || []);
   const [dishes, setDishes] = useState(null);
   const [refresh, setRefresh] = useState(false);
 
@@ -64,7 +66,7 @@ export default function WaiterOrderDishes({navigation, route}) {
     let index;
     let exists = false;
     state.map((dish, i) => {
-      if(dish.name === item.name) {
+      if(dish._id === item._id) {
         exists = true;
         return index = i;
       }
@@ -73,7 +75,7 @@ export default function WaiterOrderDishes({navigation, route}) {
     if (exists || num === -1) {
       let newState = state;
       
-      if (num === -1 && newState.find(s => s.name === item.name) === undefined) return;
+      if (num === -1 && newState.find(s => s._id === item._id) === undefined) return;
 
       else if (num === -1 && newState[index].quantity === 1)
         newState.splice(index);
@@ -82,61 +84,47 @@ export default function WaiterOrderDishes({navigation, route}) {
 
       setState(newState);
 
-    } else setState(state.concat({name: item.name, status: 'pending', quantity: 1, price: item.price}));
+    } else setState(prevState => prevState.concat({_id: item._id, name: item.name, status: 'pending', quantity: 1, price: item.price}));
 
-    setRefresh(true); setTimeout(() => setRefresh(false), 10);
+    setRefresh(ref => !ref);
   };
 
-
-  const getNumber = (item) => state.find(dish => dish && dish.name === item.name)?.quantity || 0;
-  
+  const getNumber = (item) => state.find(dish => dish && dish._id === item._id)?.quantity || 0;
 
   const renderItem = ({item}) => (
-    <View style={{flex: 1, justifyContent: 'center', borderRadius: 6, marginHorizontal: 5}}>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        underlayColor='#eee'
-        style={{
-          flex: 1,
-          padding: 8,
-          alignItems: 'center',
-          borderTopLeftRadius: 6,
-          borderTopRightRadius: 6,
-          flexDirection: 'column',
-          backgroundColor: 'white'
-        }}
-      >
-        <Icon name='how-to-reg' type='material'/>
+    <View style={{flex: 1, justifyContent: 'center', borderRadius: 6, marginHorizontal: 5, alignItems: 'center', flexDirection: 'column', backgroundColor: 'white'}}>
+      <Icon name='how-to-reg' type='material' style={{paddingTop: 8}}/>
 
-        <View style={{flexShrink: 1}}>
-          <TextTicker loop
-            scrollSpeed={200}
-            bounceSpeed={100}
-            bounceDelay={1000}
-            marqueeDelay={1000}
-            easing={Easing.linear}
-            bouncePadding={{left: 0, right: 0}}
-            style={{...styles.roboto, fontSize: 15, fontWeight: '600', paddingVertical: 10}}
-          >
-            {item?.name}
-          </TextTicker>
+      <View style={{flexShrink: 1, padding: 8}}>
+        <TextTicker loop
+          scrollSpeed={200}
+          bounceSpeed={100}
+          bounceDelay={1000}
+          marqueeDelay={1000}
+          easing={Easing.linear}
+          bouncePadding={{left: 0, right: 0}}
+          style={{...styles.roboto, fontSize: 15, fontWeight: '600', paddingVertical: 10}}
+        >
+          {item?.name}
+        </TextTicker>
 
-          <Text style={styles.roboto}>{item?.price + ' ' + item?.currency}</Text>
-          <Text style={{...styles.roboto, textTransform: 'capitalize', marginTop: 10}}>{item?.details || 'No details'}</Text>
-        </View>
-      </TouchableOpacity>
+        <Text style={styles.roboto}>{item?.price + ' ' + item?.currency}</Text>
+        <Text style={{...styles.roboto, textTransform: 'capitalize', marginTop: 10}}>{item?.details || 'No details'}</Text>
+      </View>
 
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e3e3e3', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
         <TouchableOpacity style={{minWidth: '33%', borderBottomLeftRadius: 6, paddingVertical: 10}} onPress={() => addToOrder(item, -1)}>
-          <Text style={{textAlign: 'center'}}>-</Text>
+          <Text style={{textAlign: 'center', fontSize: 20}}>-</Text>
         </TouchableOpacity>
 
-        <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10}}>
-          {refresh ? getNumber(item) : getNumber(item)}
+        <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
+          {refresh ? getNumber(item) : (
+            route.params[type] !== null ? route.params[type].find(req => req._id === item._id)?.quantity || 0 : getNumber(item)
+          ) /* Hacky way of refreshing the item number count */}
         </Text>
 
         <TouchableOpacity style={{minWidth: '33%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addToOrder(item, 1)}>
-          <Text style={{textAlign: 'center'}}>+</Text>
+          <Text style={{textAlign: 'center', fontSize: 20}}>+</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -17,7 +17,7 @@ const submitOrder = async (token, order, navigation) => {
   };
 
   try {
-    const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/orders/create', order, config);
+    const {data} = await axios.post('http://10.0.0.2:9000/api/orders/create', order, config);
 
     if (data?.success) {
       Alert.alert(
@@ -53,22 +53,22 @@ export default function WaiterSubmitOrder({navigation, route}) {
 
   const [order, setOrder] = useState({
     user: {email: '', type: 'waiter'},
-    appetizer: [],
-    mainDish: [],
-    dessert: [],
-    drink: [],
-    alcohol: [],
+    appetizer: null,
+    mainDish: null,
+    dessert: null,
+    drink: null,
+    alcohol: null,
     price: 0
   });
 
   useEffect(() => {
     // add to the order what the waiter has just added in the screen route parameters
     if (isFocused) {
-      route.params.appetizer && setOrder({...order, appetizer: route.params.appetizer});
-      route.params.mainDish && setOrder({...order, mainDish: route.params.mainDish});
-      route.params.dessert && setOrder({...order, dessert: route.params.dessert});
-      route.params.drink && setOrder({...order, drink: route.params.drink});
-      route.params.alcohol && setOrder({...order, alcohol: route.params.alcohol});
+      route.params.appetizer && setOrder(prevOrder => ({...prevOrder, appetizer: route.params.appetizer}));
+      route.params.mainDish && setOrder(prevOrder => ({...prevOrder, mainDish: route.params.mainDish}));
+      route.params.dessert && setOrder(prevOrder => ({...prevOrder, dessert: route.params.dessert}));
+      route.params.drink && setOrder(prevOrder => ({...prevOrder, drink: route.params.drink}));
+      route.params.alcohol && setOrder(prevOrder => ({...prevOrder, alcohol: route.params.alcohol}));
     }
   }, [isFocused]);
 
@@ -80,7 +80,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
       </Text>
       
       <View>
-        <Input style={styles.roboto} placeholder="Customer's email" onChangeText={user => setOrder({ ...order, user: {email: user, type: 'waiter'} })} />
+        <Input style={styles.roboto} placeholder="Customer's email" onChangeText={user => setOrder(prevOrder => ({ ...prevOrder, user: {email: user, type: 'waiter'} }))} />
       </View>
         
       <View style={{alignItems: 'center'}}>
