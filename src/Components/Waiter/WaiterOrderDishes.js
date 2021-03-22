@@ -50,7 +50,7 @@ export default function WaiterOrderDishes({navigation, route}) {
       if (tmpDishes) tmpDishes.forEach((dish, i) => {
         dish.key = i;
       });
-      tmpDishes.map(dish => dish.type === type && newDishes.push(dish));
+      tmpDishes.forEach(dish => dish.type === type && newDishes.push(dish));
 
       setDishes(newDishes);
       
@@ -72,11 +72,16 @@ export default function WaiterOrderDishes({navigation, route}) {
     
     if (exists || num === -1) {
       let newState = state;
-      if (num === -1 && (newState.length === 0 || newState[index].quantity === 1)) setState([]);
-      else {
-        newState[index].quantity += num;
-        setState(newState);
-      }
+      
+      if (num === -1 && newState.find(s => s.name === item.name) === undefined) return;
+
+      else if (num === -1 && newState[index].quantity === 1)
+        newState.splice(index);
+
+      else newState[index].quantity += num;
+
+      setState(newState);
+
     } else setState(state.concat({name: item.name, status: 'pending', quantity: 1, price: item.price}));
 
     setRefresh(true); setTimeout(() => setRefresh(false), 10);
