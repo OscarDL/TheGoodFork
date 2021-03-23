@@ -64,11 +64,11 @@ export default function WaiterSubmitOrder({navigation, route}) {
   useEffect(() => {
     // add to the order what the waiter has just added in the screen route parameters
     if (isFocused) {
-      route.params.appetizer && setOrder(prevOrder => ({...prevOrder, appetizer: route.params.appetizer}));
-      route.params.mainDish && setOrder(prevOrder => ({...prevOrder, mainDish: route.params.mainDish}));
-      route.params.dessert && setOrder(prevOrder => ({...prevOrder, dessert: route.params.dessert}));
-      route.params.drink && setOrder(prevOrder => ({...prevOrder, drink: route.params.drink}));
-      route.params.alcohol && setOrder(prevOrder => ({...prevOrder, alcohol: route.params.alcohol}));
+      route.params.appetizer !== undefined && setOrder(prevOrder => ({...prevOrder, appetizer: route.params.appetizer}));
+      route.params.mainDish !== undefined && setOrder(prevOrder => ({...prevOrder, mainDish: route.params.mainDish}));
+      route.params.dessert !== undefined && setOrder(prevOrder => ({...prevOrder, dessert: route.params.dessert}));
+      route.params.drink !== undefined && setOrder(prevOrder => ({...prevOrder, drink: route.params.drink}));
+      route.params.alcohol !== undefined && setOrder(prevOrder => ({...prevOrder, alcohol: route.params.alcohol}));
     }
   }, [isFocused]);
 
@@ -84,11 +84,11 @@ export default function WaiterSubmitOrder({navigation, route}) {
       </View>
         
       <View style={{alignItems: 'center'}}>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add appetizers' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add main dish' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add desserts' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add drinks' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drink: order.drink})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title='Add alcohols' onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohol: order.alcohol})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.appetizer ? 'Ajouter' : 'Modifier') + ' entrées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.mainDish ? 'Ajouter' : 'Modifier') + ' plats'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.dessert ? 'Ajouter' : 'Modifier') + ' desserts'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.drink ? 'Ajouter' : 'Modifier') + ' boissons'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drink: order.drink})}/>
+        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.alcohol ? 'Ajouter' : 'Modifier') + ' boissons alcoolisées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohol: order.alcohol})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>

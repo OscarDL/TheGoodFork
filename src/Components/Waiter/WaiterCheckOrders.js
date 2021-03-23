@@ -33,9 +33,6 @@ export default function WaiterCheckOrders({navigation}) {
   const [orders, setOrders] = useState(null);
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
-  useEffect(() => { if (isFocused && token) getOrders(token); }, [token, isFocused]);
-
-
   const getOrders = async () => {
     const config = {
       headers: {
@@ -51,6 +48,8 @@ export default function WaiterCheckOrders({navigation}) {
       
     } catch (error) { failureAlert(error.response.data.error, navigation); }
   };
+
+  useEffect(() => { if (isFocused && token) getOrders(token); }, [token, isFocused]);
 
 
   return (

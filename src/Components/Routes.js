@@ -32,6 +32,7 @@ import WaiterCreateBill from './Waiter/WaiterCreateBill';
 import WaiterOrderDishes from './Waiter/WaiterOrderDishes';
 import WaiterSubmitOrder from './Waiter/WaiterSubmitOrder';
 import WaiterCheckOrders from './Waiter/WaiterCheckOrders';
+import WaiterOrderDetails from './Waiter/WaiterOrderDetails';
 import WaiterManageTables from './Waiter/WaiterManageTables';
 import WaiterValidateOrder from './Waiter/WaiterValidateOrder';
 
@@ -137,6 +138,7 @@ export default function Routes() {
       <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Submit an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterSubmitOrder} />
       <Stack.Screen name='WaiterCheckOrders' options={{title: 'Orders status', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
       <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
+      <Stack.Screen name='WaiterOrderDetails' options={{title: 'Order details', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDetails} />
     </Stack.Navigator>
   );
 

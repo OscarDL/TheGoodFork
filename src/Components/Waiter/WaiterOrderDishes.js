@@ -33,7 +33,10 @@ export default function WaiterOrderDishes({navigation, route}) {
   const {type} = route.params;
   const [state, setState] = useState(route.params[type] || []);
   const [dishes, setDishes] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState({
+    value: false,
+    count: 0
+  });
 
 
   const getDishes = async () => {
@@ -86,7 +89,7 @@ export default function WaiterOrderDishes({navigation, route}) {
 
     } else setState(prevState => prevState.concat({_id: item._id, name: item.name, status: 'pending', quantity: 1, price: item.price}));
 
-    setRefresh(ref => !ref);
+    setRefresh(ref => ({value: !ref.value, count: ref.count+1}));
   };
 
   const getNumber = (item) => state.find(dish => dish && dish._id === item._id)?.quantity || 0;
@@ -118,9 +121,9 @@ export default function WaiterOrderDishes({navigation, route}) {
         </TouchableOpacity>
 
         <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
-          {refresh ? getNumber(item) : (
-            route.params[type] !== null ? route.params[type].find(req => req._id === item._id)?.quantity || 0 : getNumber(item)
-          ) /* Hacky way of refreshing the item number count */}
+          {refresh.value ? getNumber(item) : ( // Hacky way of refreshing the item number count
+            refresh.count === 0 ? route.params[type]?.find(req => req._id === item._id)?.quantity || 0 : getNumber(item)
+          )}
         </Text>
 
         <TouchableOpacity style={{minWidth: '33%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addToOrder(item, 1)}>
@@ -134,7 +137,7 @@ export default function WaiterOrderDishes({navigation, route}) {
   return (
     <View style={{...styles.container, paddingHorizontal: 5, paddingVertical: 10, flex: 1}}>
       <FlatList data={dishes} renderItem={renderItem} numColumns={2}/>
-      <FAB style={styles.fab} icon='check' color='white' onPress={() => navigation.navigate('WaiterSubmitOrder', {[type]: state})}/>
+      <FAB style={styles.fab} icon='check' color='white' onPress={() => navigation.navigate('WaiterSubmitOrder', {[type]: state.length > 0 ? state : null})}/>
     </View>
   );
 }
