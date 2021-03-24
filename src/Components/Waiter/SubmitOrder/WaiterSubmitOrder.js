@@ -2,10 +2,23 @@ import axios from 'axios';
 import { View, Text, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
-import { Input, Button, Icon } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 
-import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
+import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
+
+
+const totalPrice = ({appetizer, mainDish, dessert, drink, alcohol}) => {
+  let total = 0;
+  
+  appetizer?.map(it => total += it.price * it.quantity);
+  mainDish?.map(it => total += it.price * it.quantity);
+  dessert?.map(it => total += it.price * it.quantity);
+  drink?.map(it => total += it.price * it.quantity);
+  alcohol?.map(it => total += it.price * it.quantity);
+  
+  return Number(total.toFixed(2));
+}
 
 
 const submitOrder = async (token, order, navigation) => {
@@ -17,25 +30,25 @@ const submitOrder = async (token, order, navigation) => {
   };
 
   try {
+    order.price = totalPrice(order);
     const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/orders/create', order, config);
 
     if (data?.success) {
-      Alert.alert(
+      return Alert.alert(
         "Order successful",
         "Your order was submitted successfully.",
         [{
           text: 'DONE',
           onPress: () => navigation.goBack()
         }]
-      );
-      
-    } else {
-      Alert.alert(
-        "Couldn't submit order.",
-        data?.error,
-        [{ text: 'RETRY' }]
-      );
+      );      
     }
+
+    Alert.alert(
+      "Couldn't submit order.",
+      data?.error,
+      [{ text: 'RETRY' }]
+    );
     
   } catch (error) {
     Alert.alert(
@@ -84,11 +97,15 @@ export default function WaiterSubmitOrder({navigation, route}) {
       </View>
         
       <View style={{alignItems: 'center'}}>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.appetizer ? 'Ajouter' : 'Modifier') + ' entrées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.mainDish ? 'Ajouter' : 'Modifier') + ' plats'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.dessert ? 'Ajouter' : 'Modifier') + ' desserts'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.drink ? 'Ajouter' : 'Modifier') + ' boissons'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drink: order.drink})}/>
-        <Button buttonStyle={[{...styles.button, marginBottom: 20}]} title={(!order.alcohol ? 'Ajouter' : 'Modifier') + ' boissons alcoolisées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohol: order.alcohol})}/>
+        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.appetizer ? 'Ajouter' : 'Modifier') + ' entrées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/></View>
+
+        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.mainDish ? 'Ajouter' : 'Modifier') + ' plats'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/></View>
+
+        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.dessert ? 'Ajouter' : 'Modifier') + ' desserts'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/></View>
+
+        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.drink ? 'Ajouter' : 'Modifier') + ' boissons'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drink: order.drink})}/></View>
+        
+        <Button buttonStyle={[styles.button]} title={(!order.alcohol ? 'Ajouter' : 'Modifier') + ' boissons alcoolisées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohol: order.alcohol})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>

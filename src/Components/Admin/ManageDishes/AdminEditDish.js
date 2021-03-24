@@ -5,15 +5,16 @@ import { Picker } from '@react-native-picker/picker';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
 
 
-const editStaff = async (id, staff, navigation) => {
+const editDish = async (token, id, dish, navigation) => {
 
-  for (const [_, value] of Object.entries(staff)) {
+  for (const [_, value] of Object.entries(dish)) {
     if (value === '') {
       Alert.alert(
-        "Staff account incomplete",
+        "Dish incomplete",
         "Please fill in all the fields.",
         [{ text: 'DISMISS' }]
       );
@@ -23,52 +24,53 @@ const editStaff = async (id, staff, navigation) => {
 
   const config = {
     headers: {
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   }
 
   try {
-    staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/admin/accounts/updateStaff/' + id, staff, config);
+    const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/dishes/edit/' + id, dish, config);
 
     if (data?.success) {
       Alert.alert(
-        staff.firstName + ' ' + staff.lastName,
-        data?.data,
+        dish.name,
+        "Successfully updated dish.",
         [{ text: 'DONE', onPress: () => navigation.goBack() }]
       );
     }
 
   } catch (error) {
     Alert.alert(
-      `Couldn't update ${staff.firstName} ${staff.lastName}`,
-      error.response.data.error || "Unknown error.",
+      `Couldn't update ${dish.name}`,
+      error.response?.data.error || "Unknown error.",
       [{ text: 'RETRY' }]
     );
   }
 }
 
-const deleteStaff = (staff, navigation) => {
+const deleteDish = (token, dish, navigation) => {
   const config = {
     headers: {
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   }
   
   Alert.alert(
     "Are you sure?",
-    `You're about to delete ${staff.firstName} ${staff.lastName}'s account.`,
+    `You're about to delete ${dish.name}.`,
     [
       { text: 'CANCEL' },
       { text: 'CONTINUE',
         onPress: async () => {
 
           try {
-            const {data} = await axios.delete('https://the-good-fork.herokuapp.com/api/admin/accounts/deleteStaff/' + staff._id, config);
+            const {data} = await axios.delete('https://the-good-fork.herokuapp.com/api/dishes/delete/' + dish._id, config);
         
             if (data?.success) {
               Alert.alert(
-                staff.firstName + ' ' + staff.lastName,
+                dish.name,
                 data?.data,
                 [{ text: 'DONE', onPress: () => navigation.goBack() }]
               );
@@ -76,7 +78,7 @@ const deleteStaff = (staff, navigation) => {
         
           } catch (error) {
             Alert.alert(
-              `Couldn't update ${staff.firstName} ${staff.lastName}`,
+              `Couldn't update ${dish.name}`,
               error.response.data.error || "Unknown error.",
               [{ text: 'RETRY' }]
             );
@@ -89,14 +91,15 @@ const deleteStaff = (staff, navigation) => {
 }
 
 
-export default function AdminEditStaff({route, navigation}) {
+export default function AdminEditDish({route, navigation}) {
 
   const {params} = route.params;
+  const [{token}, _] = useDataLayerValue();
 
-  const [newStaff, setNewStaff] = useState({
-    firstName: params.firstName,
-    lastName: params.lastName,
-    email: params.email,
+  const [newDish, setNewDish] = useState({
+    name: params.name,
+    detail: params.detail,
+    price: params.price,
     type: params.type
   });
 
@@ -104,28 +107,29 @@ export default function AdminEditStaff({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <Text style={{marginVertical: 10}}>Choose your staff member's role</Text>
+        <Text style={{marginVertical: 10}}>Modifiez votre menu</Text>
         <View style={{height: 10}}></View>
 
         <View style={{width: '50%', height: 42, padding: 1, borderWidth: 1, borderColor: '#bbb', borderRadius: 4, backgroundColor: 'white'}}>
           <Picker
             style={{height: 38}}
-            prompt="Select a role"
-            selectedValue={newStaff.type}
-            onValueChange={type => setNewStaff({...newStaff, type})}
+            prompt="Select a type"
+            selectedValue={newDish.type}
+            onValueChange={type => setNewDish({...newDish, type})}
           >
-            <Picker.Item label="    admin" value="admin"/>
-            <Picker.Item label="    barman" value="barman"/>
-            <Picker.Item label="    cook" value="cook"/>
-            <Picker.Item label="    waiter" value="waiter"/>
+            <Picker.Item label="    Entrée"   value="appetizer"/>
+            <Picker.Item label="    Plat"     value="mainDish"/>
+            <Picker.Item label="    Dessert"  value="dessert"/>
+            <Picker.Item label="    Boisson"  value="drink"/>
+            <Picker.Item label="    Alcool"   value="alcohol"/>
           </Picker>
         </View>
       </View>
 
       <View>
-        <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
-        <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
-        <Input value={newStaff.email} autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
+        <Input value={newDish.name} onChangeText={name => setNewDish({ ...newDish, name })} />
+        <Input value={newDish.detail} onChangeText={detail => setNewDish({ ...newDish, detail })} />
+        <Input value={newDish.price.toString()} keyboardType="number-pad" onChangeText={price => setNewDish({ ...newDish, price })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -139,12 +143,12 @@ export default function AdminEditStaff({route, navigation}) {
             type='font-awesome-5'
             style={{marginRight: 10, marginBottom: 3}}
           />}
-          onPress={() => editStaff(params._id, newStaff, navigation)}
+          onPress={() => editDish(token, params._id, newDish, navigation)}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => deleteStaff(params, navigation)}>
-        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.firstName} {params.lastName}</Text>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => deleteDish(token, params, navigation)}>
+        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.name}</Text>
       </TouchableOpacity>
     </View>
   );

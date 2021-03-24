@@ -4,8 +4,8 @@ import { View, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Button, Input, Icon } from 'react-native-elements';
 
-import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
+import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
 
 
 export default function AdminCreateDish({navigation}) {

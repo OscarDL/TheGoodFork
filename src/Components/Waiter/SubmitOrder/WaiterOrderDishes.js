@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
+import { Icon } from 'react-native-elements';
 import TextTicker from 'react-native-text-ticker';
 import React, { useEffect, useState } from 'react';
-import { Button, Icon } from 'react-native-elements';
 import { View, Text, Easing, Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../../Reusables/Styles';
 
 
 const failureAlert = (error, navigation) => {

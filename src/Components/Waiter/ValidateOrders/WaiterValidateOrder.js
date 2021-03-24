@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { View, Text, Alert} from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
-import StaffHomeCard from '../../Reusables/StaffHomeCard';
+import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
+import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
 const failureAlert = (error, navigation) => {
@@ -27,7 +27,7 @@ const failureAlert = (error, navigation) => {
 }
 
 
-export default function WaiterCheckOrders({navigation}) {
+export default function WaiterValidateOrder({navigation}) {
 
   const [{token}, _] = useDataLayerValue();
   const [orders, setOrders] = useState(null);
@@ -44,9 +44,14 @@ export default function WaiterCheckOrders({navigation}) {
     try {
       const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/orders', config);
 
-      (data?.success && data?.orders) ? setOrders(data.orders) : failureAlert(data?.error, navigation);
+      let newOrders = [];
+
+      if (data.success) {
+        data.orders?.map(order => order.validated === false && newOrders.push(order));
+        setOrders(newOrders);
+      } else failureAlert(data?.error, navigation);
       
-    } catch (error) { failureAlert(error.response.data.error, navigation); }
+    } catch (error) { failureAlert(error.response?.data.error, navigation); }
   };
 
   useEffect(() => { if (isFocused && token) getOrders(token); }, [token, isFocused]);
@@ -57,20 +62,14 @@ export default function WaiterCheckOrders({navigation}) {
       <ScrollView>
         {orders?.length > 0 && <>
           <View style={{marginTop: 10}}>
-            <Text style={styles.title}>Ready</Text>
-            {orders?.map((order, i) => order.status === 'ready' && <StaffHomeCard
-              key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
+            <Text style={styles.title}>Orders</Text>
+
+            {orders?.map((order, i) => <StaffHomeCard
+              key={i} size={26} icon='how-to-reg' title={`${order?.user?.firstName} ${order?.user?.lastName}`} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
-              screen='WaiterOrderDetail' params={order} navigation={navigation}
+              screen='WaiterOrderDetails' params={order} navigation={navigation}
             />)}
-          </View>
-          <View style={{marginTop: 10}}>
-            <Text style={styles.title}>Preparing</Text>
-            {orders?.map((order, i) => order.status === 'preparing' && <StaffHomeCard
-              key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
-              description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
-              screen='WaiterOrderDetail' params={order} navigation={navigation}
-            />)}
+
           </View>
         </>}
       </ScrollView>

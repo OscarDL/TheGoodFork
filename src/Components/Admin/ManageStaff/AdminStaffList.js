@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
-import StaffHomeCard from '../../Reusables/StaffHomeCard';
+import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
+import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
 const failureAlert = (error, navigation) => {

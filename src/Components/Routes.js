@@ -13,28 +13,28 @@ import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
 
 import AdminHome from './Admin/AdminHome';
-import AdminDishes from './Admin/AdminDishes';
-import AdminEditDish from './Admin/AdminEditDish';
+import AdminDishes from './Admin/ManageDishes/AdminDishes';
+import AdminEditDish from './Admin/ManageDishes/AdminEditDish';
 import AdminSettings from './Admin/AdminSettings';
-import AdminStaffList from './Admin/AdminStaffList';
-import AdminEditStaff from './Admin/AdminEditStaff';
-import AdminCreateDish from './Admin/AdminCreateDish';
+import AdminStaffList from './Admin/ManageStaff/AdminStaffList';
+import AdminEditStaff from './Admin/ManageStaff/AdminEditStaff';
+import AdminCreateDish from './Admin/ManageDishes/AdminCreateDish';
 import AdminTablesList from './Admin/AdminTablesList';
 import AdminSalesStats from './Admin/AdminSalesStats';
 import AdminStocksStats from './Admin/AdminStocksStats';
 import AdminDailyRevenue from './Admin/AdminDailyRevenue';
-import AdminRegisterStaff from './Admin/AdminRegisterStaff';
+import AdminRegisterStaff from './Admin/ManageStaff/AdminRegisterStaff';
 
 import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
-import WaiterCreateBill from './Waiter/WaiterCreateBill';
-import WaiterOrderDishes from './Waiter/WaiterOrderDishes';
-import WaiterSubmitOrder from './Waiter/WaiterSubmitOrder';
-import WaiterCheckOrders from './Waiter/WaiterCheckOrders';
-import WaiterOrderDetails from './Waiter/WaiterOrderDetails';
-import WaiterManageTables from './Waiter/WaiterManageTables';
-import WaiterValidateOrder from './Waiter/WaiterValidateOrder';
+import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
+import WaiterOrderDishes from './Waiter/SubmitOrder/WaiterOrderDishes';
+import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
+import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
+import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
+import WaiterManageTables from './Waiter/ManageTables/WaiterManageTables';
+import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
 import CookHome from './Cook/CookHome';
 
