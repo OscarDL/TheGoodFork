@@ -25,6 +25,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: '#56aadb'
   },
+  pickerView: {
+    height: 45,
+    padding: 1,
+    width: '50%',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: '#bbb',
+    backgroundColor: 'white'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }
