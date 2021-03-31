@@ -5,8 +5,8 @@ import { Picker } from '@react-native-picker/picker';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../../../Reusables/Styles';
-import { useDataLayerValue } from '../../Context/DataLayer';
+import { styles } from '../../Reusables/Styles';
+import { useDataLayerValue } from '../Context/DataLayer';
 
 
 const editDish = async (token, id, dish, navigation) => {
@@ -35,7 +35,7 @@ const editDish = async (token, id, dish, navigation) => {
     if (data?.success) {
       Alert.alert(
         dish.name,
-        "Successfully updated dish.",
+        data?.data,
         [{ text: 'DONE', onPress: () => navigation.goBack() }]
       );
     }
@@ -43,7 +43,7 @@ const editDish = async (token, id, dish, navigation) => {
   } catch (error) {
     Alert.alert(
       `Couldn't update ${dish.name}`,
-      error.response?.data.error || "Unknown error.",
+      error.response.data.error || "Unknown error.",
       [{ text: 'RETRY' }]
     );
   }
@@ -128,7 +128,7 @@ export default function AdminEditDish({route, navigation}) {
 
       <View>
         <Input value={newDish.name} onChangeText={name => setNewDish({ ...newDish, name })} />
-        <Input value={newDish.detail} onChangeText={detail => setNewDish({ ...newDish, detail })} />
+        <Input value={newDish.detail || 'Aucun Détail'} onChangeText={detail => setNewDish({ ...newDish, detail })} />
         <Input value={newDish.price.toString()} keyboardType="number-pad" onChangeText={price => setNewDish({ ...newDish, price })} />
       </View>
 
