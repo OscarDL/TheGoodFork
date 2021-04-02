@@ -34,6 +34,20 @@ const styles = StyleSheet.create({
     borderColor: '#bbb',
     backgroundColor: 'white'
   },
+  item: {
+    flex: 1,
+    borderRadius: 6,
+    marginBottom: 10,
+    marginHorizontal: 5, 
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: 'white'
+  },
+  itemInvisible: {
+    color: 'transparent',
+    backgroundColor: 'transparent'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }

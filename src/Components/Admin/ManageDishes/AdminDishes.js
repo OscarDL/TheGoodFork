@@ -7,6 +7,7 @@ import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
+import { getDishes } from '../../../Functions/dishes';
 import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
@@ -34,23 +35,9 @@ export default function AdminDishes({navigation}) {
   const [dishType, setDishType] = useState('all');
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
-  useEffect(() => { isFocused && getDishes(); }, [isFocused]);
-
-
-  const getDishes = async () => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    try {
-      const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/dishes', config);
-
-      (data?.success && data?.dishes) ? setDishes(data.dishes) : failureAlert(data?.error, navigation);
-      
-    } catch (error) { failureAlert(error.response.data.error, navigation); }
-  };
+  useEffect(() => {
+    if (isFocused) getDishes().then(res => res.success ? setDishes(res.dishes) : failureAlert(res, navigation));
+  }, [isFocused]);
 
 
   return (
@@ -80,7 +67,7 @@ export default function AdminDishes({navigation}) {
             {(dishType === 'appetizer' || dishType === 'all') && <>
               <Text style={{...styles.title, marginTop: 6}}>Entrées</Text>
               {dishes?.map((dish, i) => dish.type === 'appetizer' && <StaffHomeCard
-                key={i} icon='how-to-reg' title={dish?.name} subtitle={dish?.price + dish?.currency}
+                key={i} icon='how-to-reg' title={dish?.name} subtitle={dish?.price + ' ' + dish?.currency}
                 description={dish?.detail || 'Aucun détail'} screen='AdminEditDish' params={dish} navigation={navigation}
               />)}
             </>}

@@ -6,95 +6,38 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
+import { deleteOrder, validateOrder } from '../../../Functions/orders';
 
 
-const validateOrder = async (order, token, navigation) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
-  try {
-    order.validated = true;
-    const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/orders/edit/' + order._id, order, config);
-
-    if (!data.success) return Alert.alert(
-      "Impossible de valider la commande.",
-      "Erreur: " + data?.error,
-      [
-        { text: 'CANCEL' },
-        {
-          text: 'RETRY',
-          onPress: () => validateOrder(order, token, navigation)
-        }
-      ]
-    );
-
-    Alert.alert(
-      "Succès",
-      "La commande a bien été validée.",
-      [{text: 'TERMINÉ', onPress: () => navigation.goBack()}]
-    );
-    
-  } catch (error) { 
-    Alert.alert(
-      "Impossible de valider la commande.",
-      "Erreur: " + error.response?.data.error,
-      [
-        { text: 'CANCEL' },
-        {
-          text: 'RETRY',
-          onPress: () => validateOrder(order, token, navigation)
-        }
-      ]
-    );
-   }
+const handleValidate = (order, token, navigation) => {
+  validateOrder(order, token).then(res => Alert.alert(
+    res.success ? res.title : "Could not validate order",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ));
 }
 
-const deleteOrder = async (order, token, navigation) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
-  try {
-    const {data} = await axios.delete('http://10.0.0.2:9000/api/orders/delete/' + order._id, config);
-
-    if (!data.success) return Alert.alert(
-      "Impossible de valider la commande.",
-      "Erreur: " + data?.error,
-      [
-        { text: 'CANCEL' },
-        {
-          text: 'RETRY',
-          onPress: () => deleteOrder(order, token, navigation)
-        }
-      ]
-    );
-
-    Alert.alert(
-      "Succès",
-      "Cette commande a été supprimée avec succès.",
-      [{text: 'TERMINÉ', onPress: () => navigation.goBack()}]
-    );
-    
-  } catch (error) {
-    Alert.alert(
-      "Impossible de supprimer la commande.",
-      "Erreur: " + error.response?.data.error,
-      [
-        { text: 'CANCEL' },
-        {
-          text: 'RETRY',
-          onPress: () => deleteOrder(order, token, navigation)
-        }
-      ]
-    );
-  }
+const handleDelete = (order, token, navigation) => {
+  Alert.alert(
+    "Are you sure?",
+    `You're about to delete this order.`,
+    [
+      { text: 'CANCEL' },
+      { text: 'CONTINUE',
+        onPress: () => deleteOrder(order, token).then(res => Alert.alert(
+          res.success ? res.title : "Could not delete order",
+          res.success ? res.desc : res,
+          [{
+            text: res.success ? "DONE" : "RETRY",
+            onPress: () => res.success ? navigation.goBack() : null
+          }]
+        ))
+      }
+    ]
+  );
 }
 
 
@@ -183,12 +126,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>Total: {order.price} {order.currency}</Text>
 
         <View style={{alignItems: 'center', margin: 10, marginBottom: 20}}>
-          <TouchableOpacity style={{padding: 10}} onPress={() => deleteOrder(order, token, navigation)}>
+          <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(order, token, navigation)}>
             <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete this order</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <FAB style={styles.fab} icon='check' color='white' onPress={() => validateOrder(order, token, navigation)}/>
+      <FAB style={styles.fab} icon='check' color='white' onPress={() => handleValidate(order, token, navigation)}/>
     </View>
   );
 }

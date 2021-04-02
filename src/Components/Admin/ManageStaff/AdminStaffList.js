@@ -1,10 +1,10 @@
-import axios from 'axios';
 import { View, Text, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
+import { getStaff } from '../../../Functions/staff';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
@@ -20,7 +20,7 @@ const failureAlert = (error, navigation) => {
       },
       {
         text: 'RETRY',
-        onPress: () => getSpecialUsers(token)
+        onPress: () => getStaff(token)
       }
     ]
   );
@@ -33,24 +33,11 @@ export default function AdminStaffList({navigation}) {
   const [{token}, _] = useDataLayerValue();
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
-  useEffect(() => { if (isFocused && token) getSpecialUsers(token); }, [token, isFocused]);
-
-
-  const getSpecialUsers = async (token) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+  useEffect(() => {
+    if (isFocused && token) {
+      getStaff(token).then(res => res.success ? setStaffs(res.users) : failureAlert(res, navigation)); 
     }
-
-    try {
-      const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/admin/accounts/staff', config);
-
-      (data?.success && data?.users) ? setStaffs(data.users) : failureAlert(data?.error, navigation);
-      
-    } catch (error) { failureAlert(error.response.data.error, navigation); }
-  };
+  }, [isFocused]);
 
 
   return (

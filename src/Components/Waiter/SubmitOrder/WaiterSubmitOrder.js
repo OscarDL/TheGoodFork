@@ -5,58 +5,19 @@ import { useIsFocused } from '@react-navigation/core';
 import { Input, Button } from 'react-native-elements';
 
 import { styles } from '../../../Reusables/Styles';
+import { submitOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
-const totalPrice = ({appetizer, mainDish, dessert, drink, alcohol}) => {
-  let total = 0;
-  
-  appetizer?.map(it => total += it.price * it.quantity);
-  mainDish?.map(it => total += it.price * it.quantity);
-  dessert?.map(it => total += it.price * it.quantity);
-  drink?.map(it => total += it.price * it.quantity);
-  alcohol?.map(it => total += it.price * it.quantity);
-  
-  return Number(total.toFixed(2));
-}
-
-
-const submitOrder = async (token, order, navigation) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-
-  try {
-    order.price = totalPrice(order);
-    const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/orders/create', order, config);
-
-    if (data?.success) {
-      return Alert.alert(
-        "Order successful",
-        "Your order was submitted successfully.",
-        [{
-          text: 'DONE',
-          onPress: () => navigation.goBack()
-        }]
-      );      
-    }
-
-    Alert.alert(
-      "Couldn't submit order.",
-      data?.error,
-      [{ text: 'RETRY' }]
-    );
-    
-  } catch (error) {
-    Alert.alert(
-      "Couldn't submit order",
-      error.response.data.error,
-      [{ text: 'RETRY' }]
-    );
-  }
+const handleSubmit = (order, token, navigation) => {
+  submitOrder(order, token).then(res => Alert.alert(
+    res.success ? res.title : "Could not submit order",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ))
 };
 
 
@@ -112,7 +73,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
         <Button
           buttonStyle={[styles.button]}
           title='Submit order'
-          onPress={() => submitOrder(token, order, navigation)}
+          onPress={() => handleSubmit(order, token, navigation)}
         />
       </View>
     </View>

@@ -7,87 +7,38 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
+import { editDish, deleteDish } from '../../../Functions/dishes';
 
 
-const editDish = async (token, id, dish, navigation) => {
-
-  for (const [_, value] of Object.entries(dish)) {
-    if (value === '') {
-      Alert.alert(
-        "Dish incomplete",
-        "Please fill in all the fields.",
-        [{ text: 'DISMISS' }]
-      );
-      return;
-    }
-  }
-
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  }
-
-  try {
-    const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/dishes/edit/' + id, dish, config);
-
-    if (data?.success) {
-      Alert.alert(
-        dish.name,
-        data?.data,
-        [{ text: 'DONE', onPress: () => navigation.goBack() }]
-      );
-    }
-
-  } catch (error) {
-    Alert.alert(
-      `Couldn't update ${dish.name}`,
-      error.response.data.error || "Unknown error.",
-      [{ text: 'RETRY' }]
-    );
-  }
+const handleEdit = (token, id, dish, navigation) => {
+  editDish(token, id, dish).then(res => Alert.alert(
+    res.success ? res.title : "Could not edit dish",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ));
 }
 
-const deleteDish = (token, dish, navigation) => {
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  }
-  
+const handleDelete = (token, dish, navigation) => {
   Alert.alert(
     "Are you sure?",
     `You're about to delete ${dish.name}.`,
     [
       { text: 'CANCEL' },
       { text: 'CONTINUE',
-        onPress: async () => {
-
-          try {
-            const {data} = await axios.delete('https://the-good-fork.herokuapp.com/api/dishes/delete/' + dish._id, config);
-        
-            if (data?.success) {
-              Alert.alert(
-                dish.name,
-                "Successfully updated dish.",
-                [{ text: 'DONE', onPress: () => navigation.goBack() }]
-              );
-            }
-        
-          } catch (error) {
-            Alert.alert(
-              `Couldn't update ${dish.name}`,
-              error.response?.data.error || "Unknown error.",
-              [{ text: 'RETRY' }]
-            );
-          }
-
-        }
+        onPress: () => deleteDish(token, dish._id, dish).then(res => Alert.alert(
+          res.success ? res.title : "Could not delete dish",
+          res.success ? res.desc : res,
+          [{
+            text: res.success ? "DONE" : "RETRY",
+            onPress: () => res.success ? navigation.goBack() : null
+          }]
+        ))
       }
     ]
-  );  
+  );
 }
 
 
@@ -127,9 +78,9 @@ export default function AdminEditDish({route, navigation}) {
       </View>
 
       <View>
-        <Input value={newDish.name} onChangeText={name => setNewDish({ ...newDish, name })} />
-        <Input value={newDish.detail || 'Aucun Détail'} onChangeText={detail => setNewDish({ ...newDish, detail })} />
-        <Input value={newDish.price.toString()} keyboardType="number-pad" onChangeText={price => setNewDish({ ...newDish, price })} />
+        <Input value={newDish.name} onChangeText={name => setNewDish({...newDish, name})}/>
+        <Input value={newDish.detail} placeholder='Aucun détail' onChangeText={detail => setNewDish({...newDish, detail})}/>
+        <Input value={newDish.price.toString()} keyboardType='number-pad' onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})} />
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -143,11 +94,11 @@ export default function AdminEditDish({route, navigation}) {
             type='font-awesome-5'
             style={{marginRight: 10, marginBottom: 3}}
           />}
-          onPress={() => editDish(token, params._id, newDish, navigation)}
+          onPress={() => handleEdit(token, params._id, newDish, navigation)}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => deleteDish(token, params, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, params, navigation)}>
         <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.name}</Text>
       </TouchableOpacity>
     </View>

@@ -1,14 +1,27 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { styles } from '../../../Reusables/Styles';
+import { registerStaff } from '../../../Functions/staff';
+import { useDataLayerValue } from '../../Context/DataLayer';
+
+
+const handleRegister = (staff, token, navigation) => {
+  registerStaff(staff, token).then(res => Alert.alert(
+    res.success ? res.title : "Could not register staff member",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ));
+}
 
 
 export default function AdminRegisterStaff({navigation}) {
-
+  const [{token},] = useDataLayerValue();
   const [staff, setStaff] = useState({
     email: '',
     firstName: '',
@@ -17,66 +30,6 @@ export default function AdminRegisterStaff({navigation}) {
     passCheck: '',
     type: 'admin'
   });
-
-  const registerStaff = async (staff) => {
-
-    for (const [_, value] of Object.entries(staff)) {
-      if (value === '') {
-        Alert.alert(
-          "Incomplete registration",
-          "Please fill in all the fields.",
-          [{ text: 'DISMISS' }]
-        );
-        return;
-      }
-    }
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-    
-    if (staff?.password !== staff?.passCheck) {
-      Alert.alert(
-        "Couldn't register staff",
-        "Passwords do not match.",
-        [{ text: 'RETRY' }]
-      );
-      return;
-    }
-
-    try {
-      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/register', staff, config);
-
-      if (data?.token) {
-
-        Alert.alert(
-          "Registration successful",
-          "Your new staff account is ready.",
-          [{
-            text: 'DONE',
-            onPress: () => navigation.goBack()
-          }]
-        );
-        
-      } else {
-        Alert.alert(
-          "Couldn't register staff",
-          data?.error,
-          [{ text: 'RETRY' }]
-        );
-      }
-      
-    } catch (error) {
-      Alert.alert(
-        "Couldn't register staff",
-        error.response.data.error,
-        [{ text: 'RETRY' }]
-      );
-    }
-
-  }
 
   return (
     <View style={styles.container}>
@@ -116,7 +69,7 @@ export default function AdminRegisterStaff({navigation}) {
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => registerStaff(staff)}
+          onPress={() => handleRegister(staff, token, navigation)}
         />
       </View>
       

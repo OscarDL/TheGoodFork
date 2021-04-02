@@ -5,7 +5,20 @@ import { Picker } from '@react-native-picker/picker';
 import { Button, Input, Icon } from 'react-native-elements';
 
 import { styles } from '../../../Reusables/Styles';
+import { createDish } from '../../../Functions/dishes';
 import { useDataLayerValue } from '../../Context/DataLayer';
+
+
+const handleCreate = (dish, token, navigation) => {
+  createDish(dish, token).then(res => Alert.alert(
+    res.success ? res.title : "Could not create dish",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ));
+}
 
 
 export default function AdminCreateDish({navigation}) {
@@ -18,58 +31,6 @@ export default function AdminCreateDish({navigation}) {
     detail: '',
   });
 
-  const createDish = async (dish) => {
-
-    for (const [key, value] of Object.entries(dish)) {
-      if (value === '' && key !== 'detail') {
-        Alert.alert(
-          "Incomplete dish",
-          "Please fill in all the required fields.",
-          [{ text: 'DISMISS' }]
-        );
-        return;
-      }
-    }
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    }
-    
-
-    try {
-      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/dishes/create', dish, config);
-
-      if (data?.success) {
-
-        Alert.alert(
-          "Successfully created",
-          "Your new dish is ready.",
-          [{
-            text: 'DONE',
-            onPress: () => navigation.goBack()
-          }]
-        );
-        
-      } else {
-        Alert.alert(
-          "Couldn't create dish",
-          data?.error,
-          [{ text: 'RETRY' }]
-        );
-      }
-      
-    } catch (error) {
-      Alert.alert(
-        "Couldn't create dish",
-        error.response.data.error,
-        [{ text: 'RETRY' }]
-      );
-    }
-
-  }
 
   return (
     <View style={styles.container}>
@@ -93,9 +54,9 @@ export default function AdminCreateDish({navigation}) {
       </View>
 
       <View>
-        <Input placeholder='Nom' onChangeText={name => setDish({ ...dish, name })} />
-        <Input placeholder='Prix en euro' onChangeText={price => setDish({ ...dish, price })} />
-        <Input placeholder='Détails' onChangeText={detail => setDish({ ...dish, detail })} />
+        <Input placeholder='Nom' onChangeText={name => setDish({...dish, name})}/>
+        <Input placeholder='Détails' onChangeText={detail => setDish({...dish, detail})}/>
+        <Input placeholder='Prix en euro' keyboardType='number-pad' onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -109,7 +70,7 @@ export default function AdminCreateDish({navigation}) {
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => createDish(dish)}
+          onPress={() => handleCreate(dish, token, navigation)}
         />
       </View>
     </View>

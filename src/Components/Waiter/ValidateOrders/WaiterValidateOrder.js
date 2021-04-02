@@ -1,10 +1,10 @@
-import axios from 'axios';
 import { View, Text, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
+import { getOrders } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
@@ -33,28 +33,11 @@ export default function WaiterValidateOrder({navigation}) {
   const [orders, setOrders] = useState(null);
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
-  const getOrders = async () => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+  useEffect(() => {
+    if (isFocused && token) {
+      getOrders(token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
     }
-
-    try {
-      const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/orders', config);
-
-      let newOrders = [];
-
-      if (data.success) {
-        data.orders?.map(order => order.validated === false && newOrders.push(order));
-        setOrders(newOrders);
-      } else failureAlert(data?.error, navigation);
-      
-    } catch (error) { failureAlert(error.response?.data.error, navigation); }
-  };
-
-  useEffect(() => { if (isFocused && token) getOrders(token); }, [token, isFocused]);
+  }, [isFocused]);
 
 
   return (

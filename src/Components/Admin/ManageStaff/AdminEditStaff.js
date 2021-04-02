@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -6,93 +5,47 @@ import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
+import { editStaff, deleteStaff } from '../../../Functions/staff';
 
 
-const editStaff = async (id, staff, navigation) => {
-
-  for (const [_, value] of Object.entries(staff)) {
-    if (value === '') {
-      Alert.alert(
-        "Staff account incomplete",
-        "Please fill in all the fields.",
-        [{ text: 'DISMISS' }]
-      );
-      return;
-    }
-  }
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
-  try {
-    staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/admin/accounts/updateStaff/' + id, staff, config);
-
-    if (data?.success) {
-      Alert.alert(
-        staff.firstName + ' ' + staff.lastName,
-        data?.data,
-        [{ text: 'DONE', onPress: () => navigation.goBack() }]
-      );
-    }
-
-  } catch (error) {
-    Alert.alert(
-      `Couldn't update ${staff.firstName} ${staff.lastName}`,
-      error.response.data.error || "Unknown error.",
-      [{ text: 'RETRY' }]
-    );
-  }
+const handleEdit = (id, staff, token, navigation) => {
+  editStaff(id, staff, token).then(res => Alert.alert(
+    res.success ? res.title : "Could not edit staff member",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.goBack() : null
+    }]
+  ));
 }
 
-const deleteStaff = (staff, navigation) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-  
+
+const handleDelete = (staff, token, navigation) => {
   Alert.alert(
     "Are you sure?",
-    `You're about to delete ${staff.firstName} ${staff.lastName}'s account.`,
+    `You're about to delete ${staff.firstName} ${staff.lastName}.`,
     [
       { text: 'CANCEL' },
       { text: 'CONTINUE',
-        onPress: async () => {
-
-          try {
-            const {data} = await axios.delete('https://the-good-fork.herokuapp.com/api/admin/accounts/deleteStaff/' + staff._id, config);
-        
-            if (data?.success) {
-              Alert.alert(
-                staff.firstName + ' ' + staff.lastName,
-                data?.data,
-                [{ text: 'DONE', onPress: () => navigation.goBack() }]
-              );
-            }
-        
-          } catch (error) {
-            Alert.alert(
-              `Couldn't update ${staff.firstName} ${staff.lastName}`,
-              error.response.data.error || "Unknown error.",
-              [{ text: 'RETRY' }]
-            );
-          }
-
-        }
+        onPress: () => deleteStaff(staff, token).then(res => Alert.alert(
+          res.success ? res.title : "Could not delete staff member",
+          res.success ? res.desc : res,
+          [{
+            text: res.success ? "DONE" : "RETRY",
+            onPress: () => res.success ? navigation.goBack() : null
+          }]
+        ))
       }
     ]
-  );  
+  );
 }
 
 
 export default function AdminEditStaff({route, navigation}) {
-
   const {params} = route.params;
 
+  const [{token},] = useDataLayerValue();
   const [newStaff, setNewStaff] = useState({
     firstName: params.firstName,
     lastName: params.lastName,
@@ -139,11 +92,11 @@ export default function AdminEditStaff({route, navigation}) {
             type='font-awesome-5'
             style={{marginRight: 10, marginBottom: 3}}
           />}
-          onPress={() => editStaff(params._id, newStaff, navigation)}
+          onPress={() => handleEdit(params._id, newStaff, token, navigation)}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => deleteStaff(params, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(params, token, navigation)}>
         <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.firstName} {params.lastName}</Text>
       </TouchableOpacity>
     </View>
