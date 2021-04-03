@@ -6,12 +6,26 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
+import { registerUser } from '../../Functions/auth';
+
+
+const handleRegister = (user, dispatch) => {
+  registerUser(user).then(res => Alert.alert(
+    res.success ? "Registration successful" : "Could not validate order",
+    res.success ? "Welcome to The Good Fork!" : res,
+    [{
+      text: res.success ? 'LET ME IN' : 'RETRY',
+      onPress: () => {
+        dispatch({ type: 'SET_TOKEN', token: res.token });
+        dispatch({ type: 'SET_USER', user: res.user }); // Routes stack will change once user context changes
+      }
+    }]
+  ));
+}
 
 
 export default function Register({navigation}) {
-
   const [_, dispatch] = useDataLayerValue();
-
   const [userRegister, setUserRegister] = useState({
     email: '',
     firstName: '',
@@ -21,81 +35,6 @@ export default function Register({navigation}) {
     type: 'user'
   });
 
-  const registerUser = async (user) => {
-
-    let complete = true;
-    for (const [_, value] of Object.entries(user)) {
-      if (value === '') complete = false;
-    }
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    if (!complete) {
-      Alert.alert(
-        "Incomplete registration",
-        "Please fill in all the fields.",
-        [{ text: 'DISMISS' }]
-      );
-      return;
-    }
-
-    if (user?.password?.length < 6) {
-      Alert.alert(
-        "Couldn't create account",
-        "Your password should have more than 6 characters.",
-        [{ text: 'RETRY' }]
-      );
-      return;
-    }
-    
-    if (user?.password !== user?.passCheck) {
-      Alert.alert(
-        "Couldn't create account",
-        "Passwords do not match.",
-        [{ text: 'RETRY' }]
-      );
-      return;
-    }
-
-    try {
-      user.email = user.email.replace(' ', '');
-      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/register', user, config);
-
-      if (data?.token) {
-        await AsyncStorage.setItem('authToken', data.token);
-
-        Alert.alert(
-          "Registration successful",
-          "Welcome to The Good Fork!",
-          [{
-            text: 'LET ME IN',
-            onPress: () => {
-              dispatch({ type: 'SET_TOKEN', token: data.token });
-              dispatch({ type: 'SET_USER', user }); // Routes stack will change once user context changes
-            }
-          }]
-        );
-        
-      } else {
-        Alert.alert(
-          "Couldn't create account",
-          data?.error,
-          [{ text: 'RETRY' }]
-        );
-      }
-      
-    } catch (error) {
-      Alert.alert(
-        "Couldn't create account",
-        error.response.data.error,
-        [{ text: 'RETRY' }]
-      );
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -122,7 +61,7 @@ export default function Register({navigation}) {
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => registerUser(userRegister)}
+          onPress={() => handleRegister(userRegister, dispatch)}
         />
       </View>
 

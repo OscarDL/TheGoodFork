@@ -6,76 +6,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
+import { dispatchUserInfo, login } from '../../Functions/auth';
+
+
+const loginUser = (user, dispatch) => {
+  login(user).then(async (res) => {
+    if (!res.success)
+      return Alert.alert("User login", res, [{text: "RETRY"}]);
+
+    await AsyncStorage.setItem('authToken', res.token);
+    dispatchUserInfo(res.token).then(userInfo => {
+      if (userInfo.success) {
+        dispatch({ type: 'SET_TOKEN', token: res.token });
+        dispatch({ type: 'SET_USER', user: userInfo.user });
+      }
+    });
+  });
+}
 
 
 export default function Login({navigation}) {
-
-  const [_, dispatch] = useDataLayerValue();
-
+  const [,dispatch] = useDataLayerValue();
   const [userLogin, setUserLogin] = useState({
     email: '',
     password: ''
   });
-
-  
-  const DispatchUserInfo = async (token) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    }
-
-    try {
-      const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/auth/userinfo', config);
-      
-      if (data?.user) {
-        dispatch({ type: 'SET_TOKEN', token });
-        dispatch({ type: 'SET_USER', user: data.user });
-      }
-    } catch (error) {
-      Alert.alert(
-        "Couldn't get user info",
-        error.response.data.error,
-        [{ text: 'DISMISS' }]
-      );
-    }
-  }
-
-
-  const loginUser = async (user) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    if (!user.email || !user.password) {
-      Alert.alert(
-        "Couldn't sign you in",
-        "Please fill-in both email and password.",
-        [{ text: 'OKAY' }]
-      );
-      return;
-    }
-
-    try {
-      user.email = user.email.replace(' ', '');
-      const {data} = await axios.post('https://the-good-fork.herokuapp.com/api/auth/login', user, config);
-
-      if (data?.token) {
-        await AsyncStorage.setItem('authToken', data.token);
-        DispatchUserInfo(data.token);
-      }
-
-    } catch (error) {
-      Alert.alert(
-        "Couldn't sign you in",
-        error.response.data.error,
-        [{ text: 'RETRY' }]
-      );
-    }
-  }
 
 
   return (
@@ -102,7 +57,7 @@ export default function Login({navigation}) {
             name='lock-open'
             style={{marginRight: 10}}
           />}
-          onPress={() => loginUser(userLogin)}
+          onPress={() => loginUser(userLogin, dispatch)}
         />
       </View>
         

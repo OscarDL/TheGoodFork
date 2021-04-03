@@ -2,66 +2,27 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';
+import { resetPassword } from '../../Functions/auth';
 
 import { styles } from '../../Reusables/Styles';
 
 
-export default function Reset({navigation}) {
+const handleReset = (token, password, passCheck, navigation) => {
+  resetPassword(token, password, passCheck).then(res => Alert.alert(
+    res.success ? res.title : "Password reset",
+    res.success ? res.desc : res,
+    [{
+      text: res.success ? "DONE" : "RETRY",
+      onPress: () => res.success ? navigation.navigate('Login') : null
+    }]
+  ))
+}
 
+
+export default function Reset({navigation}) {
   const [token, setToken] = useState(null);
   const [password, setPassword] = useState(null);
   const [passCheck, setPassCheck] = useState(null);
-
-  const sendAlert = (message) => {
-    Alert.alert(
-      "Password reset",
-      message,
-      [{ text: 'RETRY' }]
-    );
-  }
-
-  const resetPassword = async (resetToken, password, passCheck) => {
-
-    if (!resetToken) {
-      sendAlert("Please enter the reset code you received via email.");
-      return;
-    }
-
-    if (!password || !passCheck) {
-      sendAlert("Please type-in and confirm your new password.");
-      return;
-    }
-
-    if (password !== passCheck) {
-      sendAlert("Passwords do not match.");
-      return;
-    }
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    try {
-      const {data} = await axios.put('https://the-good-fork.herokuapp.com/api/auth/resetpassword/' + resetToken, {password}, config);
-
-      if (data?.success) {
-        Alert.alert(
-          "Password reset",
-          data.data,
-          [{ text: 'OKAY', onPress: () => navigation.navigate('Login') }]
-        );
-      }
-
-    } catch (error) {
-      Alert.alert(
-        "Couldn't reset password",
-        error.response.data.error,
-        [{ text: 'RETRY', onPress: () =>  navigation.goBack() }]
-      );
-    }
-  }
 
 
   return (
@@ -75,7 +36,7 @@ export default function Reset({navigation}) {
         <Input style={styles.roboto} placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
         <Input style={styles.roboto} placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
       </View>
-      <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => resetPassword(token, password, passCheck)} />
+      <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => handleReset(token, password, passCheck, navigation)} />
     </View>
   );
 }
