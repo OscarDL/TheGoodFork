@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
@@ -14,13 +13,9 @@ const loginUser = (user, dispatch) => {
     if (!res.success)
       return Alert.alert("User login", res, [{text: "RETRY"}]);
 
+    dispatch({ type: 'SET_USER', user: res.user });
+    dispatch({ type: 'SET_TOKEN', token: res.token });
     await AsyncStorage.setItem('authToken', res.token);
-    dispatchUserInfo(res.token).then(userInfo => {
-      if (userInfo.success) {
-        dispatch({ type: 'SET_TOKEN', token: res.token });
-        dispatch({ type: 'SET_USER', user: userInfo.user });
-      }
-    });
   });
 }
 

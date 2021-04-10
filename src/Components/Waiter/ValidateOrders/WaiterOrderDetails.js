@@ -42,14 +42,14 @@ const handleDelete = (order, token, navigation) => {
 
 
 export default function WaiterOrderDetails({navigation, route}) {
-  const order = route.params.params;
+  const {order, readOnly} = route.params.params;
   const [{token}, _] = useDataLayerValue();
   
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         {order.appetizer && <>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 6}}>
             <Text style={styles.title}>Apéritifs</Text>
 
             <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
@@ -64,12 +64,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         </>}
 
         {order.mainDish && <>
-          <View style={{marginTop: 10}}>
+          <View>
             <Text style={styles.title}>Plats principaux</Text>
 
             <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
               {order.mainDish?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                   <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
                   <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
                 </View>
@@ -79,12 +79,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         </>}
 
         {order.dessert && <>
-          <View style={{marginTop: 10}}>
+          <View>
             <Text style={styles.title}>Desserts</Text>
 
             <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
               {order.dessert?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                   <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
                   <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
                 </View>
@@ -94,12 +94,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         </>}
 
         {order.drink && <>
-          <View style={{marginTop: 10}}>
+          <View>
             <Text style={styles.title}>Boissons</Text>
 
             <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
               {order.drink?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                   <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
                   <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
                 </View>
@@ -109,12 +109,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         </>}
 
         {order.alcohol && <>
-          <View style={{marginTop: 10}}>
+          <View>
             <Text style={styles.title}>Boissons alcoolisées</Text>
 
             <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
               {order.alcohol?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                   <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
                   <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
                 </View>
@@ -126,12 +126,16 @@ export default function WaiterOrderDetails({navigation, route}) {
         <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>Total: {order.price} {order.currency}</Text>
 
         <View style={{alignItems: 'center', margin: 10, marginBottom: 20}}>
+          {readOnly
+            ?
+            <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>status: {order.status}</Text>
+            :
           <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(order, token, navigation)}>
             <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete this order</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       </ScrollView>
-      <FAB style={styles.fab} icon='check' color='white' onPress={() => handleValidate(order, token, navigation)}/>
+      {!readOnly && <FAB style={styles.fab} icon='check' color='white' onPress={() => handleValidate(order, token, navigation)}/>}
     </View>
   );
 }

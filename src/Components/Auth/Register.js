@@ -1,8 +1,7 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
@@ -15,10 +14,11 @@ const handleRegister = (user, dispatch) => {
     res.success ? "Welcome to The Good Fork!" : res,
     [{
       text: res.success ? 'LET ME IN' : 'RETRY',
-      onPress: () => {
+      onPress: async () => { if (res.success) {
+        await AsyncStorage.setItem('authToken', res.token);
         dispatch({ type: 'SET_TOKEN', token: res.token });
         dispatch({ type: 'SET_USER', user: res.user }); // Routes stack will change once user context changes
-      }
+      }}
     }]
   ));
 }

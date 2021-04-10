@@ -50,7 +50,8 @@ export default function AdminEditStaff({route, navigation}) {
     firstName: params.firstName,
     lastName: params.lastName,
     email: params.email,
-    type: params.type
+    type: params.type,
+    password: null
   });
 
 
@@ -79,6 +80,7 @@ export default function AdminEditStaff({route, navigation}) {
         <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
         <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
         <Input value={newStaff.email} autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
+        <Input placeholder='Change password' secureTextEntry onChangeText={password => setNewStaff({ ...newStaff, password })} />
       </View>
 
       <View style={{alignItems: 'center'}}>

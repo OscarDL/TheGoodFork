@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { apiUrl } from '../../config';
 
@@ -105,3 +107,32 @@ export const resetPassword = async (resetToken, password, passCheck) => {
     };
   } catch (error) { return error.response?.data.error || "Unknown error."; }
 }
+
+
+export const checkLogin = async (dispatch) => {
+  AsyncStorage.getItem('authToken').then(token => {
+
+    if (!token) {
+      dispatch({type: 'SET_USER', user: null});
+      return dispatch({type: 'SET_TOKEN', token: ''});
+    }
+
+    dispatchUserInfo(token).then(async (res) => {
+      if (res.success) {
+        dispatch({type: 'SET_USER', user: res.user});
+        dispatch({type: 'SET_TOKEN', token});
+      } else Alert.alert(
+        "Login error", "Could not retrieve your information. Please sign in again.",
+        [{
+          "text": "OKAY",
+          onPress: async () => {
+            await AsyncStorage.removeItem('authToken');
+            dispatch({type: 'SET_USER', user: null});
+            dispatch({type: 'SET_TOKEN', token: ''});
+          }
+        }]
+      );
+    });
+
+  });
+};

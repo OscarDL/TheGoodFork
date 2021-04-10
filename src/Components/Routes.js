@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { Button, Icon } from 'react-native-elements';
+import { View, ActivityIndicator, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
@@ -41,6 +41,7 @@ import CookHome from './Cook/CookHome';
 import UserHome from './User/UserHome';
 
 import { styles } from '../Reusables/Styles';
+import { checkLogin } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
 
 
@@ -54,40 +55,10 @@ export default function Routes() {
 
   const logout = async () => {
     await AsyncStorage.setItem('authToken', '');
-    isLoggedIn();
+    checkLogin(dispatch);
   }
 
-  const isLoggedIn = async () => {
-    const token = await AsyncStorage.getItem('authToken');
-    if(token) {
-      DispatchUserInfo(token);
-    } else {
-      dispatch({type: 'SET_USER', user: null});
-      dispatch({type: 'SET_TOKEN', token: ''});
-    }
-  };
-
-  const DispatchUserInfo = async (token) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    }
-
-    try {
-
-      const {data} = await axios.get('https://the-good-fork.herokuapp.com/api/auth/userinfo', config);
-      if (data?.user) {
-        await AsyncStorage.setItem('authToken', token);
-        dispatch({type: 'SET_USER', user: data.user});
-        dispatch({type: 'SET_TOKEN', token});
-      }
-
-    } catch (error) { await AsyncStorage.setItem('authToken', ''); }
-  }
-
-  useEffect(() => { isLoggedIn(); }, []);
+  useEffect(() => { checkLogin(dispatch); }, [dispatch]);
 
 
   const authStack = () => (
@@ -182,7 +153,7 @@ export default function Routes() {
   };
 
   return (
-    token === null ? <View></View> :
+    token === null ? <View><ActivityIndicator/></View> :
     <NavigationContainer>
       <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
         <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />

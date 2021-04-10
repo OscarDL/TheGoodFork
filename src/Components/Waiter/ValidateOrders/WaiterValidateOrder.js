@@ -44,13 +44,13 @@ export default function WaiterValidateOrder({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         {orders?.length > 0 && <>
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: 6}}>
             <Text style={styles.title}>Orders</Text>
 
             {orders?.map((order, i) => <StaffHomeCard
               key={i} size={26} icon='how-to-reg' title={`${order?.user?.firstName} ${order?.user?.lastName}`} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
-              screen='WaiterOrderDetails' params={order} navigation={navigation}
+              screen='WaiterOrderDetails' params={{order, readOnly: false}} navigation={navigation}
             />)}
 
           </View>

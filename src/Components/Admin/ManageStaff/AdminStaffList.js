@@ -44,28 +44,28 @@ export default function AdminStaffList({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         {staffs && <>
-          <View style={{marginTop: 12}}>
+          <View style={{marginTop: 6}}>
             <Text style={styles.title}>Administrators</Text>
             {staffs?.map((staff, i) => staff.type == 'admin' && <StaffHomeCard
               key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
               description={staff?.type} screen='AdminEditStaff' params={staff} navigation={navigation}
             />)}
           </View>
-          <View style={{marginTop: 6}}>
+          <View>
             <Text style={styles.title}>Barmen</Text>
             {staffs?.map((staff, i) => staff.type == 'barman' && <StaffHomeCard
               key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
               description={staff?.type} screen='AdminEditStaff' params={staff} navigation={navigation}
             />)}
           </View>
-          <View style={{marginTop: 6}}>
+          <View>
             <Text style={styles.title}>Cooks</Text>
             {staffs?.map((staff, i) => staff.type == 'cook' && <StaffHomeCard
               key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
               description={staff?.type} screen='AdminEditStaff' params={staff} navigation={navigation}
             />)}
           </View>
-          <View style={{marginTop: 6}}>
+          <View>
             <Text style={styles.title}>Waiters</Text>
             {staffs?.map((staff, i) => staff.type == 'waiter' && <StaffHomeCard
               key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
