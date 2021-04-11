@@ -136,3 +136,9 @@ export const checkLogin = async (dispatch) => {
 
   });
 };
+
+
+export const logout = async (dispatch) => {
+  await AsyncStorage.removeItem('authToken', '')
+  checkLogin(dispatch);
+}
