@@ -25,11 +25,11 @@ export const getOrders = async (token) => {
 };
 
 
-export const addToOrder = (content, item, num) => {
+export const addToOrder = (order, type, item, num, setPrice) => {
   let index;
   let exists = false;
   
-  content.map((dish, i) => {
+  order[type].map((dish, i) => {
     if(dish._id === item._id) {
       exists = true;
       return index = i;
@@ -37,25 +37,27 @@ export const addToOrder = (content, item, num) => {
   });
   
   if (exists || num === -1) {
-    let newContent = content;
-    
-    if (num === -1 && newContent.find(found => found._id === item._id) === undefined)
-      return [];
-    else if (num === -1 && newContent[index].quantity === 1)
-      newContent.splice(index);
-    else newContent[index].quantity += num;
 
-    return newContent;
-  }
+    if (num === -1 && order[type].find(found => found._id === item._id) === undefined)
+      return order;
+    else if (num === -1 && order[type][index].quantity === 1)
+      order[type].splice(index);
+    else
+      order[type][index].quantity += num;
 
-  return content.concat({
+  } else order[type].push({
     _id: item._id,
     name: item.name,
     status: 'pending',
     quantity: 1,
     price: item.price
   });
-}
+
+  order.price = totalPrice(order);
+  setPrice(order.price);
+
+  return order;
+};
 
 
 export const validateOrder = async (order, token) => {
@@ -78,7 +80,7 @@ export const validateOrder = async (order, token) => {
       desc: "Successfully validated this order."
     }
   } catch (error) { return error.response?.data.error || "Unknown error."; }
-}
+};
 
 
 export const deleteOrder = async (order, token) => {
@@ -100,7 +102,7 @@ export const deleteOrder = async (order, token) => {
       desc: "Successfully deleted this order."
     }
   } catch (error) { return error.response?.data.error || "Unknown error."; }
-}
+};
 
 
 export const submitOrder = async (order, token) => {
@@ -126,14 +128,14 @@ export const submitOrder = async (order, token) => {
 };
 
 
-export const totalPrice = ({appetizer, mainDish, dessert, drink, alcohol}) => {
+export const totalPrice = (order) => {
   let total = 0;
   
-  appetizer?.map(it => total += it.price * it.quantity);
-  mainDish?.map(it => total += it.price * it.quantity);
-  dessert?.map(it => total += it.price * it.quantity);
-  drink?.map(it => total += it.price * it.quantity);
-  alcohol?.map(it => total += it.price * it.quantity);
+  order.appetizer?.map(it => total += it.price * it.quantity);
+  order.mainDish?.map(it => total += it.price * it.quantity);
+  order.dessert?.map(it => total += it.price * it.quantity);
+  order.drink?.map(it => total += it.price * it.quantity);
+  order.alcohol?.map(it => total += it.price * it.quantity);
   
   return Number(total.toFixed(2));
-}
+};

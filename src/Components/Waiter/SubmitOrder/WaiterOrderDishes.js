@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { FAB } from 'react-native-paper';
 import { Icon } from 'react-native-elements';
 import TextTicker from 'react-native-text-ticker';
 import React, { useEffect, useState } from 'react';
@@ -9,10 +7,10 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../../../Reusables/Styles';
 import { getDishes } from '../../../Functions/dishes';
 import { formatGrid } from '../../../Functions/utils';
-import { addToOrder } from '../../../Functions/orders';
+import { addToOrder, totalPrice } from '../../../Functions/orders';
 
 
-const failureAlert = (error, navigation) => {
+const failureAlert = (error, navigation, setFailed) => {
   Alert.alert(
     "Couldn't retrieve orders",
     error,
@@ -23,32 +21,33 @@ const failureAlert = (error, navigation) => {
       },
       {
         text: 'RETRY',
-        onPress: () => getOrders(token)
+        onPress: () => setFailed(true)
       }
     ]
   );
 }
 
 
-export default function WaiterOrderDishes({navigation, route}) {
-  const {type} = route.params;
-  const [state, setState] = useState(route.params[type] || []);
+export default function WaiterOrderDishes({navigation, type, order, setOrder, setPrice}) {
   const [dishes, setDishes] = useState(null);
-  const [refresh, setRefresh] = useState({
-    value: false,
-    count: 0
-  });
+  const [failed, setFailed] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    getDishes(type).then(res => res.success ? setDishes(res.dishes) : failureAlert(res, navigation));
-  }, []);
+    if (failed) {
+      getDishes(type).then(res => {
+        setFailed(false);
+        res.success ? setDishes(res.dishes) : failureAlert(res, navigation, setFailed);
+      });
+    }
+  }, [failed, setFailed]);
 
   const addItem = (item, num) => {
-    setState(prevState => addToOrder(prevState, item, num));
-    setRefresh(ref => ({value: !ref.value, count: ref.count+1}));
+    setOrder(prevOrder => addToOrder(prevOrder, type, item, num, setPrice));
+    setRefresh(ref => !ref);
   };
 
-  const getNumber = (item) => state.find(dish => dish && dish._id === item._id)?.quantity || 0;
+  const getNumber = (item) => order[type]?.find(dish => dish && dish._id === item._id)?.quantity || 0;
 
   const renderItem = ({item}) => (
     item.empty ? <View style={[styles.item, styles.itemInvisible]}/> :
@@ -78,9 +77,7 @@ export default function WaiterOrderDishes({navigation, route}) {
         </TouchableOpacity>
 
         <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
-          {refresh.value ? getNumber(item) : ( // Hacky way of refreshing the item number count
-            refresh.count === 0 ? route.params[type]?.find(req => req._id === item._id)?.quantity || 0 : getNumber(item)
-          )}
+          {refresh ? getNumber(item) : getNumber(item) /* Hacky way of refreshing the item number count */}
         </Text>
 
         <TouchableOpacity style={{minWidth: '33%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>
@@ -94,7 +91,6 @@ export default function WaiterOrderDishes({navigation, route}) {
   return (
     <View style={{...styles.container, paddingHorizontal: 5, paddingVertical: 10, flex: 1}}>
       {dishes && <FlatList data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
-      <FAB style={styles.fab} icon='check' color='white' onPress={() => navigation.navigate('WaiterSubmitOrder', {[type]: state.length > 0 ? state : null})}/>
     </View>
   );
 }

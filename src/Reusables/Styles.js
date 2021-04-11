@@ -49,6 +49,14 @@ const styles = StyleSheet.create({
     color: 'transparent',
     backgroundColor: 'transparent'
   },
+  orderStrip: {
+    flex: 1,
+    padding: 10,
+    maxHeight: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }

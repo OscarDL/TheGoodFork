@@ -1,81 +1,102 @@
-import axios from 'axios';
+import React, { useState } from 'react';
+import Dialog from 'react-native-dialog';
+import { Button } from 'react-native-elements';
 import { View, Text, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useIsFocused } from '@react-navigation/core';
-import { Input, Button } from 'react-native-elements';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import { styles } from '../../../Reusables/Styles';
+import WaiterOrderDishes from './WaiterOrderDishes';
 import { submitOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
-const handleSubmit = (order, token, navigation) => {
+const handleSubmit = (order, token, setOrder, setPrice, setDialog) => {
+  if (order.appetizer.length === 0) order.appetizer = null;
+  if (order.mainDish.length === 0) order.mainDish = null;
+  if (order.dessert.length === 0) order.dessert = null;
+  if (order.drink.length === 0) order.drink = null;
+  if (order.alcohol.length === 0) order.alcohol = null;
+
   submitOrder(order, token).then(res => Alert.alert(
     res.success ? res.title : "Could not submit order",
     res.success ? res.desc : res,
     [{
       text: res.success ? "DONE" : "RETRY",
-      onPress: () => res.success ? navigation.goBack() : null
+      onPress: () => {
+        if (res.success) {
+          setDialog(false);
+          setOrder({
+            user: {email: null, type: 'waiter'},
+            appetizer: [],
+            mainDish: [],
+            dessert: [],
+            drink: [],
+            alcohol: [],
+            price: 0
+          });
+        } else return null
+      }
     }]
   ))
 };
 
+const Tabs = createMaterialTopTabNavigator();
 
-export default function WaiterSubmitOrder({navigation, route}) {
+
+function WaiterSubmitOrderTabs({order, setOrder, setPrice}) {
+  return (
+    <Tabs.Navigator initialRouteName='Appetizer' backBehavior='initialRoute' tabBarOptions={{scrollEnabled: true, pressColor: 'darkgrey'}}>
+      <Tabs.Screen name='Appetizer'>
+        {props => <WaiterOrderDishes {...props} type='appetizer' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+      </Tabs.Screen>
+      <Tabs.Screen name='MainDish'>
+        {props => <WaiterOrderDishes {...props} type='mainDish' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+      </Tabs.Screen>
+      <Tabs.Screen name='Dessert'>
+        {props => <WaiterOrderDishes {...props} type='dessert' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+      </Tabs.Screen>
+      <Tabs.Screen name='Drink'>
+        {props => <WaiterOrderDishes {...props} type='drink' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+      </Tabs.Screen>
+      <Tabs.Screen name='Alcohol'>
+        {props => <WaiterOrderDishes {...props} type='alcohol' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+      </Tabs.Screen>
+    </Tabs.Navigator>
+  );
+}
+
+
+export default function WaiterSubmitOrder() {
   const [{token}, _] = useDataLayerValue();
-  const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
+  const [dialog, setDialog] = useState(false);
+  const [price, setPrice] = useState(0);
   const [order, setOrder] = useState({
-    user: {email: '', type: 'waiter'},
-    appetizer: null,
-    mainDish: null,
-    dessert: null,
-    drink: null,
-    alcohol: null,
+    user: {email: null, type: 'waiter'},
+    appetizer: [],
+    mainDish: [],
+    dessert: [],
+    drink: [],
+    alcohol: [],
     price: 0
   });
 
-  useEffect(() => {
-    // add to the order what the waiter has just added in the screen route parameters
-    if (isFocused) {
-      route.params.appetizer !== undefined && setOrder(prevOrder => ({...prevOrder, appetizer: route.params.appetizer}));
-      route.params.mainDish !== undefined && setOrder(prevOrder => ({...prevOrder, mainDish: route.params.mainDish}));
-      route.params.dessert !== undefined && setOrder(prevOrder => ({...prevOrder, dessert: route.params.dessert}));
-      route.params.drink !== undefined && setOrder(prevOrder => ({...prevOrder, drink: route.params.drink}));
-      route.params.alcohol !== undefined && setOrder(prevOrder => ({...prevOrder, alcohol: route.params.alcohol}));
-    }
-  }, [isFocused]);
+  return <>
+    <WaiterSubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
+    
+    <Dialog.Container visible={dialog}>
+      <Dialog.Title style={{fontWeight: '700'}}>Customer email</Dialog.Title>
+      <Dialog.Description>
+        Please type-in your customer's email address.
+      </Dialog.Description>
+      <Dialog.Input style={{fontWeight: '700'}} onChangeText={email => setOrder({...order, user: {email, type: 'waiter'}})}/>
+      <Dialog.Button label='Cancel' style={{fontWeight: '700'}} onPress={() => {setOrder({...order, user: {email: null, type: 'waiter'}}); setDialog(false)}} />
+      <Dialog.Button label='Done' style={{fontWeight: '700'}} onPress={() => handleSubmit(order, token, setOrder, setDialog)} />
+    </Dialog.Container>
 
-
-  return (
-    <View style={{...styles.container, paddingHorizontal: 0}}>
-      <Text style={{...styles.roboto, textAlign: 'center'}}>
-        Place an order for a customer here.
-      </Text>
-      
-      <View>
-        <Input style={styles.roboto} placeholder="Customer's email" onChangeText={user => setOrder(prevOrder => ({ ...prevOrder, user: {email: user, type: 'waiter'} }))} />
-      </View>
-        
-      <View style={{alignItems: 'center'}}>
-        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.appetizer ? 'Ajouter' : 'Modifier') + ' entrées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'appetizer', appetizer: order.appetizer})}/></View>
-
-        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.mainDish ? 'Ajouter' : 'Modifier') + ' plats'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'mainDish', mainDish: order.mainDish})}/></View>
-
-        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.dessert ? 'Ajouter' : 'Modifier') + ' desserts'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'dessert', dessert: order.dessert})}/></View>
-
-        <View style={{marginBottom: 20}}><Button buttonStyle={[styles.button]} title={(!order.drink ? 'Ajouter' : 'Modifier') + ' boissons'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'drink', drink: order.drink})}/></View>
-        
-        <Button buttonStyle={[styles.button]} title={(!order.alcohol ? 'Ajouter' : 'Modifier') + ' boissons alcoolisées'} onPress={() => navigation.navigate('WaiterOrderDishes', {type: 'alcohol', alcohol: order.alcohol})}/>
-      </View>
-
-      <View style={{alignItems: 'center'}}>
-        <Button
-          buttonStyle={[styles.button]}
-          title='Submit order'
-          onPress={() => handleSubmit(order, token, navigation)}
-        />
-      </View>
+    <View style={styles.orderStrip}>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
+      <Button buttonStyle={[styles.button]} onPress={() => setDialog(true)} title='Place order'/>
     </View>
-  );
+  </>
 }

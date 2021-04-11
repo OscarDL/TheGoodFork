@@ -117,7 +117,7 @@ export default function Routes() {
 
 
   const userStack = () => (
-    <Tabs.Navigator screenOptions={{}} barStyle={{ backgroundColor: 'white' }} backBehavior activeColor='tomato' sceneAnimationEnabled shifting>
+    <Tabs.Navigator barStyle={{ backgroundColor: 'white' }} activeColor='tomato'>
       <Tabs.Screen name='UserHome' options={{ title: 'The Good Fork', tabBarLabel: 'Home', tabBarIcon: ({color}) => <Icon color={color} type='material' name='home' /> }}>
         {props => <UserHome {...props} title='Home' />}
       </Tabs.Screen>
