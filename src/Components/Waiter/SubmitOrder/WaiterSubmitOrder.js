@@ -17,27 +17,30 @@ const handleSubmit = (order, token, setOrder, setPrice, setDialog) => {
   if (order.drink.length === 0) order.drink = null;
   if (order.alcohol.length === 0) order.alcohol = null;
 
-  submitOrder(order, token).then(res => Alert.alert(
-    res.success ? res.title : "Could not submit order",
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? "DONE" : "RETRY",
-      onPress: () => {
-        if (res.success) {
-          setDialog(false);
-          setOrder({
-            user: {email: null, type: 'waiter'},
-            appetizer: [],
-            mainDish: [],
-            dessert: [],
-            drink: [],
-            alcohol: [],
-            price: 0
-          });
-        } else return null
-      }
-    }]
-  ))
+  submitOrder(order, token).then(res => {
+    setDialog(false);
+    Alert.alert(
+      res.success ? res.title : "Could not submit order",
+      res.success ? res.desc : res,
+      [{
+        text: res.success ? "DONE" : "RETRY",
+        onPress: () => {
+          if (res.success) {
+            setPrice(0);
+            setOrder({
+              user: {email: null, type: 'waiter'},
+              appetizer: [],
+              mainDish: [],
+              dessert: [],
+              drink: [],
+              alcohol: [],
+              price: 0
+            });
+          } else null
+        }
+      }]
+    );
+  })
 };
 
 const Tabs = createMaterialTopTabNavigator();
