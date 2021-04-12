@@ -112,9 +112,8 @@ export const submitOrder = async (order, token) => {
       'Authorization': `Bearer ${token}`
     }
   };
-
+  
   try {
-    order.price = totalPrice(order);
     const {data} = await axios.post(apiUrl + 'orders/create', order, config);
     
     if (!data.success) return data?.error;

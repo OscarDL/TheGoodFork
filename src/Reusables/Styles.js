@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: 20,
     justifyContent: 'space-evenly',
   },
   button: {
@@ -37,9 +36,8 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    margin: 5,
     borderRadius: 6,
-    marginBottom: 10,
-    marginHorizontal: 5, 
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',

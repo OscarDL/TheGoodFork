@@ -7,7 +7,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../../../Reusables/Styles';
 import { getDishes } from '../../../Functions/dishes';
 import { formatGrid } from '../../../Functions/utils';
-import { addToOrder, totalPrice } from '../../../Functions/orders';
+import { addToOrder } from '../../../Functions/orders';
 
 
 const failureAlert = (error, navigation, setFailed) => {
@@ -89,8 +89,8 @@ export default function WaiterOrderDishes({navigation, type, order, setOrder, se
 
 
   return (
-    <View style={{...styles.container, paddingHorizontal: 5, paddingVertical: 10, flex: 1}}>
-      {dishes && <FlatList data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
+    <View style={{...styles.container, flex: 1}}>
+      {dishes && <FlatList style={{padding: 5}} data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
     </View>
   );
 }
