@@ -70,7 +70,12 @@ export default function WaiterSubmitOrder() {
   const [dialog, setDialog] = useState(false);
   const [price, setPrice] = useState(0);
   const [order, setOrder] = useState({
-    user: {email: null, type: 'waiter'},
+    user: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      type: 'waiter'
+    },
     appetizer: [],
     mainDish: [],
     dessert: [],
@@ -83,15 +88,23 @@ export default function WaiterSubmitOrder() {
     <WaiterSubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
     
     <Dialog.Container visible={dialog}>
-      <Dialog.Title style={{fontWeight: '700'}}>Customer email address</Dialog.Title>
+      <Dialog.Title style={{fontWeight: '700'}}>Customer details</Dialog.Title>
       <Dialog.Description>
         Tip: if the customer registers with this email address in the future, they'll be able to retrieve details from this order.
       </Dialog.Description>
-      <Dialog.Input autoCapitalize='none'
-        onChangeText={email => setOrder({...order, user: {email, type: 'waiter'}})}
+      <Dialog.Input placeholder='First name' value={order.user.firstName}
+        onChangeText={firstName => setOrder({...order, user: {...order.user, firstName}})}
         style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
       />
-      <Dialog.Button label='Cancel' color='#4bf' style={{fontWeight: '700'}} onPress={() => {setOrder({...order, user: {email: null, type: 'waiter'}}); setDialog(false)}} />
+      <Dialog.Input placeholder='Last name' value={order.user.lastName}
+        onChangeText={lastName => setOrder({...order, user: {...order.user, lastName}})}
+        style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
+      />
+      <Dialog.Input placeholder='Email address' value={order.user.email} autoCapitalize='none'
+        onChangeText={email => setOrder({...order, user: {...order.user, email}})}
+        style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
+      />
+      <Dialog.Button label='Cancel' color='#4bf' style={{fontWeight: '700'}} onPress={() => setDialog(false)} />
       <Dialog.Button label='Done' color='#4bf' style={{fontWeight: '700'}} onPress={() => handleSubmit(order, token, setOrder, setPrice, setDialog)} />
     </Dialog.Container>
 
