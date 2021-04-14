@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
@@ -17,6 +17,13 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     fontWeight: '700',
     paddingHorizontal: 20,
+  },
+  card: {
+    padding: 10,
+    borderRadius: 6,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    backgroundColor: 'white'
   },
   fab: {
     right: 0,
@@ -59,5 +66,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto'
   }
 });
-
-export {styles};

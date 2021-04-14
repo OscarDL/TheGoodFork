@@ -53,7 +53,7 @@ export default function AdminRegisterStaff({navigation}) {
       <View>
         <Input placeholder='First name' onChangeText={firstName => setStaff({ ...staff, firstName })} />
         <Input placeholder='Last name' onChangeText={lastName => setStaff({ ...staff, lastName })} />
-        <Input placeholder='Email address' onChangeText={email => setStaff({ ...staff, email })} />
+        <Input placeholder='Email address' autoCapitalize='none' onChangeText={email => setStaff({ ...staff, email })} />
         <Input placeholder='Password' secureTextEntry onChangeText={password => setStaff({ ...staff, password })} />
         <Input placeholder='Confirm password' secureTextEntry onChangeText={passCheck => setStaff({ ...staff, passCheck })} />
       </View>

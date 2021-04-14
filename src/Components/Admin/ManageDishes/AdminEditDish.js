@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -61,7 +60,7 @@ export default function AdminEditDish({route, navigation}) {
         <Text style={{marginVertical: 10}}>Modifiez votre menu</Text>
         <View style={{height: 10}}></View>
 
-        <View style={{width: '50%', height: 42, padding: 1, borderWidth: 1, borderColor: '#bbb', borderRadius: 4, backgroundColor: 'white'}}>
+        <View style={{...styles.pickerView, height: 42}}>
           <Picker
             style={{height: 38}}
             prompt="Select a type"

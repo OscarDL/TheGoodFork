@@ -26,9 +26,8 @@ import AdminRegisterStaff from './Admin/ManageStaff/AdminRegisterStaff';
 import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
+import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
-import WaiterOrderDishes from './Waiter/SubmitOrder/WaiterOrderDishes';
-import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
 import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
 import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterManageTables from './Waiter/ManageTables/WaiterManageTables';
@@ -37,9 +36,9 @@ import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 import CookHome from './Cook/CookHome';
 
 import UserHome from './User/UserHome';
-import UserOrders from './User/UserOrders';
 import UserAccount from './User/UserAccount';
 import UserPlanning from './User/UserPlanning';
+import UserOrders from './User/Orders/UserOrdersHome';
 
 import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
@@ -101,8 +100,7 @@ export default function Routes() {
       <Stack.Screen name='WaiterHome' options={{title: 'Waiter', headerRight: () => <Button title='Log out' onPress={() => logout(dispatch)} buttonStyle={{...styles.button, marginRight: 10}} />}} component={WaiterHome} />
       <Stack.Screen name='WaiterManageTables' options={{title: 'Manage table reservations', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterManageTables} />
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Validate an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterValidateOrder} />
-      <Stack.Screen name='WaiterOrderDishes' options={{title: 'Add to order', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDishes} />
-      <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Submit an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterSubmitOrder} />
+      <Stack.Screen name='WaiterNewOrder' options={{headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterNewOrder} />
       <Stack.Screen name='WaiterCheckOrders' options={{title: 'Orders status', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
       <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
       <Stack.Screen name='WaiterOrderDetails' options={{title: 'Order details', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDetails} />
@@ -117,7 +115,7 @@ export default function Routes() {
 
 
   const userStack = () => (
-    <Tabs.Navigator barStyle={{ backgroundColor: 'white' }} activeColor='tomato'>
+    <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor='tomato'>
       <Tabs.Screen name='UserHome' options={{ title: 'The Good Fork', tabBarLabel: 'Home', tabBarIcon: ({color}) => <Icon color={color} type='material' name='home' /> }}>
         {props => <UserHome {...props} title='Home' />}
       </Tabs.Screen>

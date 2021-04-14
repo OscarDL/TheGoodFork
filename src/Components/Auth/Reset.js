@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';

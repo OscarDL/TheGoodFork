@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { FAB } from 'react-native-paper';
 import { View, Text, Alert} from 'react-native';
 import React, { useEffect, useState } from 'react';

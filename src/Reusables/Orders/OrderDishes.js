@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Easing, Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../../../Reusables/Styles';
-import { getDishes } from '../../../Functions/dishes';
-import { formatGrid } from '../../../Functions/utils';
-import { addToOrder } from '../../../Functions/orders';
+import { styles } from '../Styles';
+import { getDishes } from '../../Functions/dishes';
+import { formatGrid } from '../../Functions/utils';
+import { addToOrder } from '../../Functions/orders';
 
 
 const failureAlert = (error, navigation, setFailed) => {
@@ -28,7 +28,7 @@ const failureAlert = (error, navigation, setFailed) => {
 }
 
 
-export default function WaiterOrderDishes({navigation, type, order, setOrder, setPrice}) {
+export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
   const [dishes, setDishes] = useState(null);
   const [failed, setFailed] = useState(true);
   const [refresh, setRefresh] = useState(false);
@@ -90,7 +90,7 @@ export default function WaiterOrderDishes({navigation, type, order, setOrder, se
 
   return (
     <View style={{...styles.container, flex: 1}}>
-      {dishes && <FlatList style={{padding: 5}} data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
+      {dishes && <FlatList contentContainerStyle={{padding: 5}} data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
     </View>
   );
 }

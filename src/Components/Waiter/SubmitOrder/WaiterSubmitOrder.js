@@ -1,116 +1,88 @@
+import { Alert } from 'react-native';
 import React, { useState } from 'react';
-import Dialog from 'react-native-dialog';
-import { Button } from 'react-native-elements';
-import { View, Text, Alert } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Collapsible from 'react-native-collapsible';
+import { View, ScrollView, Text } from 'react-native';
+import { Button, Input, Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
-import WaiterOrderDishes from './WaiterOrderDishes';
 import { submitOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import { Platform } from 'react-native';
+import OrderDetails from '../../../Reusables/Orders/OrderDetails';
 
 
-const handleSubmit = (order, token, setOrder, setPrice, setDialog) => {
-  submitOrder(order, token).then(res => {
-    setDialog(false);
+const sectionTitle = {
+  flex: 1,
+  marginVertical: 10,
+  alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'space-between'
+};
+const sectionText = {
+  flexGrow: 1,
+  fontSize: 20,
+  textAlign: 'center'
+};
+
+const handleSubmit = (order, user, token, navigation) => {
+  submitOrder({...order, user}, token).then(res => {
+    res.success && navigation.goBack();
     Alert.alert(
       res.success ? res.title : "Could not submit order",
-      res.success ? res.desc : res,
+      res.success ? res.desc : res.error,
       [{
         text: res.success ? "DONE" : "OK",
-        onPress: () => {
-          if (res.success) {
-            setPrice(0);
-            setOrder({
-              user: {email: null, type: 'waiter'},
-              appetizer: [],
-              mainDish: [],
-              dessert: [],
-              drink: [],
-              alcohol: [],
-              price: 0
-            });
-          } else null
-        }
+        onPress: () => res.success || order.price === 0 ? navigation.goBack() : null
       }]
     );
   });
 };
 
 
-const Tabs = createMaterialTopTabNavigator();
-
-function WaiterSubmitOrderTabs({order, setOrder, setPrice}) {
-  return (
-    <Tabs.Navigator initialRouteName='Appetizer' backBehavior='initialRoute' tabBarOptions={{scrollEnabled: true, pressColor: 'darkgrey'}}>
-      <Tabs.Screen name='Appetizer'>
-        {props => <WaiterOrderDishes {...props} type='appetizer' order={order} setOrder={setOrder} setPrice={setPrice}/>}
-      </Tabs.Screen>
-      <Tabs.Screen name='MainDish'>
-        {props => <WaiterOrderDishes {...props} type='mainDish' order={order} setOrder={setOrder} setPrice={setPrice}/>}
-      </Tabs.Screen>
-      <Tabs.Screen name='Dessert'>
-        {props => <WaiterOrderDishes {...props} type='dessert' order={order} setOrder={setOrder} setPrice={setPrice}/>}
-      </Tabs.Screen>
-      <Tabs.Screen name='Drink'>
-        {props => <WaiterOrderDishes {...props} type='drink' order={order} setOrder={setOrder} setPrice={setPrice}/>}
-      </Tabs.Screen>
-      <Tabs.Screen name='Alcohol'>
-        {props => <WaiterOrderDishes {...props} type='alcohol' order={order} setOrder={setOrder} setPrice={setPrice}/>}
-      </Tabs.Screen>
-    </Tabs.Navigator>
-  );
-}
-
-
-export default function WaiterSubmitOrder() {
+export default function WaiterSubmitOrder({navigation, route}) {
+  const {order} = route.params;
   const [{token}, _] = useDataLayerValue();
 
-  const [dialog, setDialog] = useState(false);
-  const [price, setPrice] = useState(0);
-  const [order, setOrder] = useState({
-    user: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      type: 'waiter'
-    },
-    appetizer: [],
-    mainDish: [],
-    dessert: [],
-    drink: [],
-    alcohol: [],
-    price: 0
-  });
+  const [details, setDetails] = useState(false);
+  const [customer, setCustomer] = useState(true);
 
-  return <>
-    <WaiterSubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
-    
-    <Dialog.Container visible={dialog}>
-      <Dialog.Title style={{fontWeight: '700'}}>Customer details</Dialog.Title>
-      <Dialog.Description>
-        Tip: if the customer registers with this email address in the future, they'll be able to retrieve details from this order.
-      </Dialog.Description>
-      <Dialog.Input placeholder='First name' value={order.user.firstName}
-        onChangeText={firstName => setOrder({...order, user: {...order.user, firstName}})}
-        style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
-      />
-      <Dialog.Input placeholder='Last name' value={order.user.lastName}
-        onChangeText={lastName => setOrder({...order, user: {...order.user, lastName}})}
-        style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
-      />
-      <Dialog.Input placeholder='Email address' value={order.user.email} autoCapitalize='none'
-        onChangeText={email => setOrder({...order, user: {...order.user, email}})}
-        style={{borderBottomColor: '#4bf', borderBottomWidth: Platform.OS === 'android' ? 1 : 0}}
-      />
-      <Dialog.Button label='Cancel' color='#4bf' style={{fontWeight: '700'}} onPress={() => setDialog(false)} />
-      <Dialog.Button label='Done' color='#4bf' style={{fontWeight: '700'}} onPress={() => handleSubmit(order, token, setOrder, setPrice, setDialog)} />
-    </Dialog.Container>
+  const [user, setUser] = useState({
+    firstName: null,
+    lastName: null,
+    email: null,
+    type: 'waiter'
+  })
 
-    <View style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
-      <Button buttonStyle={[styles.button]} onPress={() => setDialog(true)} title='Place order'/>
+  return (
+    <View style={{...styles.container, justifyContent: 'space-between'}}>
+      <ScrollView contentContainerStyle={{padding: 5}}>
+        <TouchableOpacity style={sectionTitle} onPress={() => setCustomer(!customer)}>
+            <Icon style={{opacity: 0 /* Center title */}}  name={'expand-less'}/>
+            <Text style={sectionText}>Customer details</Text>
+            <Icon name={customer ? 'expand-less' : 'expand-more'}/>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={!customer}>
+          <Input placeholder='First name' onChangeText={firstName => setUser({ ...user, firstName })} />
+          <Input placeholder='Last name' onChangeText={lastName => setUser({ ...user, lastName })} />
+          <Input placeholder='Email address' autoCapitalize='none' onChangeText={email => setUser({ ...user, email })} />
+        </Collapsible>
+
+        <TouchableOpacity style={sectionTitle} onPress={() => setDetails(!details)}>
+            <Icon style={{opacity: 0} /* Center title */} name={'expand-less'}/>
+            <Text style={sectionText}>Order details</Text>
+            <Icon name={details ? 'expand-less' : 'expand-more'}/>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={!details}>
+          <OrderDetails order={order}/>
+          <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>Total: {order.price} €</Text>
+        </Collapsible>
+      </ScrollView>
+
+      <View style={{padding: 5}}>
+        <Button title='Submit order' buttonStyle={[styles.button]} onPress={() => handleSubmit(order, user, token, navigation)} />
+      </View>
     </View>
-  </>
+  );
 }

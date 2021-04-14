@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { styles } from '../../Reusables/Styles';
 import { useDataLayerValue } from '../Context/DataLayer';
+import StaffHomeCard from '../../Reusables/StaffHomeCard';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -19,9 +20,13 @@ export default function UserHome({title}) {
 function UserHomeComponent({navigation, route}) {
   const [{user}, _] = useDataLayerValue();
   return (
-    <View style={{...styles.container, alignItems: 'center'}}>
-      <Text style={styles.roboto}>Welcome, {user?.type} {user?.firstName}!</Text>
-      <Text>{route.name}</Text>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={{marginVertical: 5}}>
+          <StaffHomeCard icon='app-registration' title='Submit an order manually' description='Description 3' screen='WaiterSubmitOrder' navigation={navigation} />
+        </View>
+      </ScrollView>
     </View>
   );
 }
+

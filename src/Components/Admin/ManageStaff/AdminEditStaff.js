@@ -20,7 +20,6 @@ const handleEdit = (id, staff, token, navigation) => {
   ));
 }
 
-
 const handleDelete = (staff, token, navigation) => {
   Alert.alert(
     "Are you sure?",

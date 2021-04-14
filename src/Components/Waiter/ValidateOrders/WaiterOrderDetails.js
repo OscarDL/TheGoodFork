@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import { FAB } from 'react-native-paper';
 import { View, Text, Alert } from 'react-native';
@@ -6,6 +5,7 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
+import OrderDetails from '../../../Reusables/Orders/OrderDetails';
 import { deleteOrder, validateOrder } from '../../../Functions/orders';
 
 
@@ -48,80 +48,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
-        {order.appetizer && <>
-          <View style={{marginTop: 6}}>
-            <Text style={styles.title}>Apéritifs</Text>
-
-            <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
-              {order.appetizer?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
-                  <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                  <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </>}
-
-        {order.mainDish && <>
-          <View>
-            <Text style={styles.title}>Plats principaux</Text>
-
-            <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
-              {order.mainDish?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
-                  <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                  <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </>}
-
-        {order.dessert && <>
-          <View>
-            <Text style={styles.title}>Desserts</Text>
-
-            <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
-              {order.dessert?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
-                  <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                  <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </>}
-
-        {order.drink && <>
-          <View>
-            <Text style={styles.title}>Boissons</Text>
-
-            <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
-              {order.drink?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
-                  <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                  <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </>}
-
-        {order.alcohol && <>
-          <View>
-            <Text style={styles.title}>Boissons alcoolisées</Text>
-
-            <View style={{backgroundColor: 'white', borderRadius: 6, marginHorizontal: 10, marginVertical: 5, padding: 10}}>
-              {order.alcohol?.map((it, i) =>
-                <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
-                  <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                  <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </>}
+        <OrderDetails order={order}/>
 
         <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>Total: {order.price} {order.currency}</Text>
 
