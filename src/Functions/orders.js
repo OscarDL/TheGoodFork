@@ -3,7 +3,7 @@ import axios from 'axios';
 import { apiUrl } from '../../config';
 
 
-export const getOrders = async (token) => {
+export const getOrders = async (user, token) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export const getOrders = async (token) => {
     let newOrders = [];
     data.orders?.map(order => order.validated === false && newOrders.push(order));
 
-    return {success: true, orders: newOrders};
+    return {success: true, orders: user.type === 'user' ? data.orders : newOrders};
     
   } catch (error) { return error.response?.data.error || "Unknown error."; }
 };
@@ -41,7 +41,7 @@ export const addToOrder = (order, type, item, num, setPrice) => {
     if (num === -1 && order[type].find(found => found._id === item._id) === undefined)
       return order;
     else if (num === -1 && order[type][index].quantity === 1)
-      order[type].splice(index);
+      order[type].splice(index, 1);
     else
       order[type][index].quantity += num;
 
@@ -83,6 +83,52 @@ export const validateOrder = async (order, token) => {
 };
 
 
+export const editOrder = async (order, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  
+  try {
+    order.price = totalPrice(order); // For security
+    const {data} = await axios.put(apiUrl + 'orders/edit/' + order._id, order, config);
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: "Order successsful",
+      desc: "Your order was edited successfully."
+    }
+  } catch (error) { return error.response?.data.error || "Unknown error."; }
+};
+
+
+export const submitOrder = async (order, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  
+  try {
+    order.price = totalPrice(order); // For security
+    const {data} = await axios.post(apiUrl + 'orders/create', order, config);
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: "Order successsful",
+      desc: "Your order was submitted successfully."
+    }
+  } catch (error) { return error.response?.data.error || "Unknown error."; }
+};
+
+
 export const deleteOrder = async (order, token) => {
   const config = {
     headers: {
@@ -100,28 +146,6 @@ export const deleteOrder = async (order, token) => {
       success: true,
       title: "Order deletion",
       desc: "Successfully deleted this order."
-    }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
-};
-
-
-export const submitOrder = async (order, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
-  try {
-    const {data} = await axios.post(apiUrl + 'orders/create', order, config);
-    
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: "Order successsful",
-      desc: "Your order was submitted successfully."
     }
   } catch (error) { return error.response?.data.error || "Unknown error."; }
 };

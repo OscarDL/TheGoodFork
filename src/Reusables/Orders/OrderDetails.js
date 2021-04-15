@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import { styles } from '../Styles';
+import { totalPrice } from '../../Functions/orders';
 
 
 export default function OrderDetails({order}) {
   return (
     <View>
-      {order.appetizer.length > 0 && <>
+      {order.appetizer?.length > 0 && <>
         <View style={{marginTop: 6}}>
           <Text style={styles.title}>Apéritifs</Text>
 
@@ -15,14 +16,14 @@ export default function OrderDetails({order}) {
             {order.appetizer?.map((it, i) =>
               <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                 <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
+                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
               </View>
             )}
           </View>
         </View>
       </>}
 
-      {order.mainDish.length > 0 && <>
+      {order.mainDish?.length > 0 && <>
         <View>
           <Text style={styles.title}>Plats principaux</Text>
 
@@ -30,14 +31,14 @@ export default function OrderDetails({order}) {
             {order.mainDish?.map((it, i) =>
               <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                 <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
+                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
               </View>
             )}
           </View>
         </View>
       </>}
 
-      {order.dessert.length > 0 && <>
+      {order.dessert?.length > 0 && <>
         <View>
           <Text style={styles.title}>Desserts</Text>
 
@@ -45,14 +46,14 @@ export default function OrderDetails({order}) {
             {order.dessert?.map((it, i) =>
               <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                 <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
+                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
               </View>
             )}
           </View>
         </View>
       </>}
 
-      {order.drink.length > 0 && <>
+      {order.drink?.length > 0 && <>
         <View>
           <Text style={styles.title}>Boissons</Text>
 
@@ -60,14 +61,14 @@ export default function OrderDetails({order}) {
             {order.drink?.map((it, i) =>
               <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                 <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
+                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
               </View>
             )}
           </View>
         </View>
       </>}
 
-      {order.alcohol.length > 0 && <>
+      {order.alcohol?.length > 0 && <>
         <View>
           <Text style={styles.title}>Boissons alcoolisées</Text>
 
@@ -75,12 +76,16 @@ export default function OrderDetails({order}) {
             {order.alcohol?.map((it, i) =>
               <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
                 <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency}</Text>
+                <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
               </View>
             )}
           </View>
         </View>
       </>}
+      
+      <Text style={{...styles.title, textAlign: 'center', marginTop: 20}}>
+        Total: {totalPrice(order)} EUR {/* order.price won't update when going back from edit mode for some reason */}
+      </Text>
     </View>
   )
 }

@@ -38,7 +38,7 @@ import CookHome from './Cook/CookHome';
 import UserHome from './User/UserHome';
 import UserAccount from './User/UserAccount';
 import UserPlanning from './User/UserPlanning';
-import UserOrders from './User/Orders/UserOrdersHome';
+import UserOrders from './User/Orders/UserOrders';
 
 import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
@@ -124,7 +124,7 @@ export default function Routes() {
         {props => <UserPlanning {...props} title='Planning' />}
       </Tabs.Screen>
       
-      <Tabs.Screen name='UserOrders' options={{ title: 'Manage Orders', tabBarLabel: 'Orders', tabBarIcon: ({color}) => <Icon color={color} type='material' name='account-circle' /> }}>
+      <Tabs.Screen name='UserOrders' options={{ title: 'Manage Orders', tabBarLabel: 'Orders', tabBarIcon: ({color}) => <Icon color={color} type='material' name='restaurant' /> }}>
         {props => <UserOrders {...props} title='Orders' />}
       </Tabs.Screen>
 

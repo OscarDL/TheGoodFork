@@ -29,13 +29,13 @@ const failureAlert = (error, navigation) => {
 
 export default function WaiterCheckOrders({navigation}) {
 
-  const [{token}, _] = useDataLayerValue();
+  const isFocused = useIsFocused();
   const [orders, setOrders] = useState(null);
-  const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
+  const [{user, token}, _] = useDataLayerValue();
 
   useEffect(() => {
-    if (isFocused && token) {
-      getOrders(token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
+    if (isFocused && token) { // refresh data also when using navigation.goBack()
+      getOrders(user, token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
     }
   }, [isFocused]);
 
@@ -50,7 +50,7 @@ export default function WaiterCheckOrders({navigation}) {
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-            />)}
+            />)} || <Text>No orders yet</Text>
           </View>
           <View>
             <Text style={styles.title}>Preparing</Text>
@@ -58,7 +58,7 @@ export default function WaiterCheckOrders({navigation}) {
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-            />)}
+            />)} || <Text>No orders yet</Text>
           </View>
         </>}
       </ScrollView>

@@ -29,7 +29,7 @@ const handleSubmit = (order, user, token, navigation) => {
     res.success && navigation.goBack();
     Alert.alert(
       res.success ? res.title : "Could not submit order",
-      res.success ? res.desc : res.error,
+      res.success ? res.desc : res,
       [{
         text: res.success ? "DONE" : "OK",
         onPress: () => res.success || order.price === 0 ? navigation.goBack() : null
@@ -76,7 +76,6 @@ export default function WaiterSubmitOrder({navigation, route}) {
 
         <Collapsible collapsed={!details}>
           <OrderDetails order={order}/>
-          <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>Total: {order.price} €</Text>
         </Collapsible>
       </ScrollView>
 

@@ -29,13 +29,13 @@ const failureAlert = (error, navigation) => {
 
 export default function WaiterValidateOrder({navigation}) {
 
-  const [{token}, _] = useDataLayerValue();
+  const [{user, token}, _] = useDataLayerValue();
   const [orders, setOrders] = useState(null);
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
   useEffect(() => {
     if (isFocused && token) {
-      getOrders(token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
+      getOrders(user, token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
     }
   }, [isFocused]);
 

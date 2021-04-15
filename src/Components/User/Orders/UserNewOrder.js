@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from 'react-native-elements';
 import { View, Text } from 'react-native';
+import { Button } from 'react-native-elements';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import UserSubmitOrder from './UserSubmitOrder';
@@ -33,7 +33,7 @@ function UserNewOrderComponent({navigation}) {
 
     <View style={styles.orderStrip}>
       <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
-      <Button buttonStyle={[styles.button]} onPress={() => navigation.navigate('UserSubmitOrder', {order})} title='Place order'/>
+      <Button buttonStyle={[styles.button]} onPress={() => navigation.navigate('UserSubmitOrder', {order, type: 'submit'})} title='Place order'/>
     </View>
   </>
 }

@@ -4,26 +4,15 @@ import { View, Text, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
+import { deleteOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import OrderDetails from '../../../Reusables/Orders/OrderDetails';
-import { deleteOrder, validateOrder } from '../../../Functions/orders';
 
 
-const handleValidate = (order, token, navigation) => {
-  validateOrder(order, token).then(res => Alert.alert(
-    res.success ? res.title : "Could not validate order",
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? "DONE" : "RETRY",
-      onPress: () => res.success ? navigation.goBack() : null
-    }]
-  ));
-}
-
-const handleDelete = (order, token, navigation) => {
+const handleCancel = (order, token, navigation) => {
   Alert.alert(
     "Are you sure?",
-    `You're about to delete this order.`,
+    `You're about to cancel your order.`,
     [
       { text: 'CANCEL' },
       { text: 'CONTINUE',
@@ -40,26 +29,26 @@ const handleDelete = (order, token, navigation) => {
   );
 }
 
-
-export default function WaiterOrderDetails({navigation, route}) {
-  const {order, readOnly} = route.params.params;
+export default function UserOrderDetails({navigation, route}) {
+  const {order} = route.params.params;
   const [{token}, _] = useDataLayerValue();
   
   return (
     <View style={styles.container}>
       <ScrollView>
+
         <OrderDetails order={order}/>
         <View style={{alignItems: 'center', margin: 20}}>
-          {readOnly
-            ?
+
           <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>status: {order.status}</Text>
-            :
-          <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(order, token, navigation)}>
-            <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete this order</Text>
-          </TouchableOpacity>}
+          <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={() => handleCancel(order, token, navigation)}>
+            <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Cancel this order</Text>
+          </TouchableOpacity>
+
         </View>
+
       </ScrollView>
-      {!readOnly && <FAB style={styles.fab} icon='check' color='white' onPress={() => handleValidate(order, token, navigation)}/>}
+      <FAB style={styles.fab} icon='pencil' color='white' onPress={() => navigation.navigate('UserEditOrder', {order})}/>
     </View>
   );
 }
