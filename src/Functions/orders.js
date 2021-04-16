@@ -3,6 +3,28 @@ import axios from 'axios';
 import { apiUrl } from '../../config';
 
 
+export const getOrder = async (id, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }
+
+  try {
+    const {data} = await axios.get(apiUrl + 'orders/' + id, config);
+
+    if (!data.success) return data?.error;
+
+    // Replace all null order dish types to arrays
+    Object.keys(data.order).forEach(key => (key !== 'details' && data.order[key] === null) && (data.order[key] = []));
+
+    return {success: true, order: data.order};
+    
+  } catch (error) { return error.response?.data.error || "Unknown error."; }
+};
+
+
 export const getOrders = async (user, token) => {
   const config = {
     headers: {

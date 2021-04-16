@@ -24,7 +24,7 @@ export default function StaffHomeCard({icon, size = 28, type = 'material', color
         <Icon size={size} name={icon} type={type} color={color} style={{marginHorizontal: 8}}/>
 
         <View style={{flexShrink: 1, marginLeft: 8}}>
-          <Text numberOfLines={1} style={{...styles.roboto, fontSize: 18, fontWeight: '700'}}>{title}</Text>
+          <Text numberOfLines={1} style={{...styles.roboto, fontSize: 18, fontWeight: '700', minWidth: '100%'}}>{title}</Text>
           {subtitle && <Text style={styles.roboto}>{subtitle}</Text>}
           <Text style={{...styles.roboto, textTransform: 'capitalize', marginTop: 10}}>{description}</Text>
         </View>

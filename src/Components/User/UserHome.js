@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, TextInput } from 'react-native';
 
 import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
 import StaffHomeCard from '../../Reusables/StaffHomeCard';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -17,8 +16,7 @@ export default function UserHome({title}) {
   );
 }
 
-function UserHomeComponent({navigation, route}) {
-  const [{user}, _] = useDataLayerValue();
+function UserHomeComponent({navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>

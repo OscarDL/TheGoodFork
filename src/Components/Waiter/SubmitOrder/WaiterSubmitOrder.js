@@ -11,19 +11,6 @@ import { useDataLayerValue } from '../../Context/DataLayer';
 import OrderDetails from '../../../Reusables/Orders/OrderDetails';
 
 
-const sectionTitle = {
-  flex: 1,
-  marginVertical: 10,
-  alignItems: 'center',
-  flexDirection: 'row',
-  justifyContent: 'space-between'
-};
-const sectionText = {
-  flexGrow: 1,
-  fontSize: 20,
-  textAlign: 'center'
-};
-
 const handleSubmit = (order, user, token, navigation) => {
   submitOrder({...order, user}, token).then(res => {
     res.success && navigation.goBack();
@@ -43,44 +30,50 @@ export default function WaiterSubmitOrder({navigation, route}) {
   const {order} = route.params;
   const [{token}, _] = useDataLayerValue();
 
-  const [details, setDetails] = useState(false);
-  const [customer, setCustomer] = useState(true);
+  const [details, setDetails] = useState(null);
+  const [collapsed, setCollapsed] = useState({order: true, customer: false});
 
   const [user, setUser] = useState({
     firstName: null,
     lastName: null,
     email: null,
     type: 'waiter'
-  })
+  });
 
   return (
     <View style={{...styles.container, justifyContent: 'space-between'}}>
       <ScrollView contentContainerStyle={{padding: 5}}>
-        <TouchableOpacity style={sectionTitle} onPress={() => setCustomer(!customer)}>
-            <Icon style={{opacity: 0 /* Center title */}}  name={'expand-less'}/>
-            <Text style={sectionText}>Customer details</Text>
-            <Icon name={customer ? 'expand-less' : 'expand-more'}/>
+        <View style={{marginTop: 6}}>
+          <Text style={styles.title}>Détails supplémentaires</Text>
+          <TextInput placeholder='Give extra information for your order...' onChangeText={setDetails} multiline
+          value={order.details} style={{margin: 10, padding: 10, borderRadius: 5, backgroundColor: 'white'}} />
+        </View>
+        
+        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, customer: !collapsed.customer})}>
+            <Icon style={{opacity: 0, paddingHorizontal: 10 /* Center title */}}  name={'expand-less'}/>
+            <Text style={styles.sectionText}>Customer details</Text>
+            <Icon style={{paddingHorizontal: 10}} name={collapsed.customer ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
-        <Collapsible collapsed={!customer}>
+        <Collapsible collapsed={collapsed.customer}>
           <Input placeholder='First name' onChangeText={firstName => setUser({ ...user, firstName })} />
           <Input placeholder='Last name' onChangeText={lastName => setUser({ ...user, lastName })} />
           <Input placeholder='Email address' autoCapitalize='none' onChangeText={email => setUser({ ...user, email })} />
         </Collapsible>
 
-        <TouchableOpacity style={sectionTitle} onPress={() => setDetails(!details)}>
-            <Icon style={{opacity: 0} /* Center title */} name={'expand-less'}/>
-            <Text style={sectionText}>Order details</Text>
-            <Icon name={details ? 'expand-less' : 'expand-more'}/>
+        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, order: !collapsed.order})}>
+            <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+            <Text style={styles.sectionText}>Order details</Text>
+            <Icon style={{paddingHorizontal: 10}} name={collapsed.order ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
-        <Collapsible collapsed={!details}>
-          <OrderDetails order={order}/>
+        <Collapsible collapsed={collapsed.order}>
+          <OrderDetails order={order} hideDetails={true}/>
         </Collapsible>
       </ScrollView>
 
       <View style={{padding: 5}}>
-        <Button title='Submit order' buttonStyle={[styles.button]} onPress={() => handleSubmit(order, user, token, navigation)} />
+        <Button title='Submit order' buttonStyle={[styles.button]} onPress={() => handleSubmit({...order, details}, user, token, navigation)} />
       </View>
     </View>
   );

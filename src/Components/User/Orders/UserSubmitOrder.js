@@ -1,7 +1,9 @@
-import React from 'react';
-import { Alert } from 'react-native';
-import { Button } from 'react-native-elements';
+import React, { useState } from 'react';
+import { Alert , TextInput } from 'react-native';
+import Collapsible from 'react-native-collapsible';
+import { Button, Icon } from 'react-native-elements';
 import { View, ScrollView, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
 import OrderDetails from '../../../Reusables/Orders/OrderDetails';
@@ -41,15 +43,33 @@ const handleSubmit = (order, user, token, navigation) => {
 export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
   const [{user, token}, _] = useDataLayerValue();
+  
+  const [details, setDetails] = useState(null);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <View style={{...styles.container, justifyContent: 'space-between'}}>
       <ScrollView contentContainerStyle={{padding: 5}}>
-        <OrderDetails order={order}/>
+        <View style={{marginTop: 6}}>
+          <Text style={styles.title}>Détails supplémentaires</Text>
+          <TextInput placeholder='Give extra information for your order...' defaultValue={order.details} multiline
+          onChangeText={setDetails} style={{margin: 10, padding: 10, borderRadius: 5, backgroundColor: 'white'}}/>
+        </View>
+        
+        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed(!collapsed)}>
+            <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+            <Text style={styles.sectionText}>Order details</Text>
+            <Icon style={{paddingHorizontal: 10}} name={collapsed ? 'expand-more' : 'expand-less'}/>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={collapsed}>
+          <OrderDetails order={order} hideDetails={true}/>
+        </Collapsible>
       </ScrollView>
+
       <View style={{padding: 5}}>
         <Button title='Submit order' buttonStyle={[styles.button]}
-        onPress={() => type === 'edit' ? handleEdit(order, token, navigation) : handleSubmit(order, user, token, navigation)} />
+        onPress={() => type === 'edit' ? handleEdit({...order, details}, token, navigation) : handleSubmit({...order, details}, user, token, navigation)} />
       </View>
     </View>
   );

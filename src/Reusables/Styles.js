@@ -62,6 +62,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  sectionTitle: {
+    flex: 1,
+    marginVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  sectionText: {
+    flexGrow: 1,
+    fontSize: 20,
+    textAlign: 'center'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }
