@@ -29,6 +29,7 @@ const failureAlert = (error, navigation, setFailed) => {
 export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
   const [dishes, setDishes] = useState(null);
   const [failed, setFailed] = useState(true);
+  //const [sort, setSort] = useState({by: 'name', in: 'asc'});
 
   useEffect(() => {
     if (failed) {
@@ -39,17 +40,10 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
     }
   }, [failed, setFailed]);
 
-  /*const addItem = (item, num) => {
-    setOrder(prevOrder => addToOrder(prevOrder, type, item, num, setPrice));
-    setRefresh(ref => !ref);
-  };*/
-
-  //const getNumber = (item) => order[type]?.find(dish => dish && dish._id === item._id)?.quantity || 0;
-
   const renderItem = ({item}) => (
     item.empty
       ?
-    <View style={[styles.item, styles.itemInvisible]}/>
+    <View style={[styles.item, styles.itemInvisible] /* Show an invisible item for impair dishes number */}/>
       :
     <OrderItem item={item} type={type} order={order} setOrder={setOrder} setPrice={setPrice} />
   );

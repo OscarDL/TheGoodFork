@@ -20,7 +20,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
     <View style={styles.item}>
       <Icon name='how-to-reg' type='material' style={{paddingTop: 8}}/>
 
-      <View style={{flexShrink: 1, padding: 8}}>
+      <View style={{padding: 8}}>
         <TextTicker loop
           scrollSpeed={200}
           bounceSpeed={100}
@@ -32,7 +32,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
         >
           {item?.name}
         </TextTicker>
-        <Text style={styles.roboto}>{item?.price + ' ' + item?.currency}</Text>
+        <Text style={{...styles.roboto}}>{item?.price + ' ' + item?.currency}</Text>
         <TextTicker loop
           scrollSpeed={200}
           bounceSpeed={100}

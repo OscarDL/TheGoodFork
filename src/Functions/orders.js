@@ -16,9 +16,6 @@ export const getOrder = async (id, token) => {
 
     if (!data.success) return data?.error;
 
-    // Replace all null order dish types to arrays
-    Object.keys(data.order).forEach(key => (key !== 'details' && data.order[key] === null) && (data.order[key] = []));
-
     return {success: true, order: data.order};
     
   } catch (error) { return error.response?.data.error || "Unknown error."; }
@@ -38,10 +35,10 @@ export const getOrders = async (user, token) => {
 
     if (!data.success) return data?.error;
 
-    let newOrders = [];
+    let newOrders = []; // Return non validated orders to waiters only
     data.orders?.map(order => order.validated === false && newOrders.push(order));
 
-    return {success: true, orders: user.type === 'user' ? data.orders : newOrders};
+    return {success: true, orders: user.type === 'waiter' ? newOrders : data.orders};
     
   } catch (error) { return error.response?.data.error || "Unknown error."; }
 };
@@ -176,11 +173,11 @@ export const deleteOrder = async (order, token) => {
 export const totalPrice = (order) => {
   let total = 0;
   
-  order.appetizer?.map(it => total += it.price * it.quantity);
-  order.mainDish?.map(it => total += it.price * it.quantity);
-  order.dessert?.map(it => total += it.price * it.quantity);
-  order.drink?.map(it => total += it.price * it.quantity);
-  order.alcohol?.map(it => total += it.price * it.quantity);
+  order.appetizer.map(it => total += it.price * it.quantity);
+  order.mainDish.map(it => total += it.price * it.quantity);
+  order.dessert.map(it => total += it.price * it.quantity);
+  order.drink.map(it => total += it.price * it.quantity);
+  order.alcohol.map(it => total += it.price * it.quantity);
   
   return Number(total.toFixed(2));
 };

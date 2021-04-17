@@ -9,7 +9,7 @@ import { useDataLayerValue } from '../../Context/DataLayer';
 import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
-const failureAlert = (error, navigation) => {
+const failureAlert = (error, user, token, navigation) => {
   Alert.alert(
     "Couldn't retrieve orders",
     error,
@@ -20,7 +20,7 @@ const failureAlert = (error, navigation) => {
       },
       {
         text: 'RETRY',
-        onPress: () => getOrders(token)
+        onPress: () => getOrders(user, token)
       }
     ]
   );
@@ -29,13 +29,13 @@ const failureAlert = (error, navigation) => {
 
 export default function WaiterValidateOrder({navigation}) {
 
-  const [{user, token}, _] = useDataLayerValue();
-  const [orders, setOrders] = useState(null);
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
+  const [orders, setOrders] = useState(null);
+  const [{user, token}, _] = useDataLayerValue();
 
   useEffect(() => {
     if (isFocused && token) {
-      getOrders(user, token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, navigation));
+      getOrders(user, token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, user, token, navigation));
     }
   }, [isFocused]);
 

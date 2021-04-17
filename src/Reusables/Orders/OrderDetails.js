@@ -6,7 +6,7 @@ import { styles } from '../Styles';
 
 export default OrderDetails = ({order, hideDetails}) => (
   <View>
-    {order.appetizer?.length > 0 && <View style={{marginTop: 6}}>
+    {order.appetizer.length > 0 && <View style={{marginTop: 6}}>
       <Text style={styles.title}>Apéritifs</Text>
 
       <View style={styles.card}>
@@ -19,7 +19,7 @@ export default OrderDetails = ({order, hideDetails}) => (
       </View>
     </View>}
 
-    {order.mainDish?.length > 0 && <View>
+    {order.mainDish.length > 0 && <View>
       <Text style={styles.title}>Plats principaux</Text>
 
       <View style={styles.card}>
@@ -32,7 +32,7 @@ export default OrderDetails = ({order, hideDetails}) => (
       </View>
     </View>}
 
-    {order.dessert?.length > 0 && <View>
+    {order.dessert.length > 0 && <View>
       <Text style={styles.title}>Desserts</Text>
 
       <View style={styles.card}>
@@ -45,7 +45,7 @@ export default OrderDetails = ({order, hideDetails}) => (
       </View>
     </View>}
 
-    {order.drink?.length > 0 && <View>
+    {order.drink.length > 0 && <View>
       <Text style={styles.title}>Boissons</Text>
 
       <View style={styles.card}>
@@ -58,7 +58,7 @@ export default OrderDetails = ({order, hideDetails}) => (
       </View>
     </View>}
 
-    {order.alcohol?.length > 0 && <View>
+    {order.alcohol.length > 0 && <View>
       <Text style={styles.title}>Boissons alcoolisées</Text>
 
       <View style={styles.card}>
