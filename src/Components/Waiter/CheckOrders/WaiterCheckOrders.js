@@ -49,7 +49,7 @@ export default function WaiterCheckOrders({navigation}) {
             key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
             description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          /> : <Text>No orders yet</Text>)}
+          /> : <Text key={i}>No orders yet</Text>)}
         </View>}
 
         {orders?.length > 0 && <View>
@@ -58,7 +58,7 @@ export default function WaiterCheckOrders({navigation}) {
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          /> : <Text>No orders yet</Text>)}
+          /> : <Text key={i}>No orders yet</Text>)}
         </View>}
       </ScrollView>
     </View>
