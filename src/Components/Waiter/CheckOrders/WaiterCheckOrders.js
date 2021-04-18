@@ -43,22 +43,22 @@ export default function WaiterCheckOrders({navigation}) {
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
-        {orders?.filter(order => order.status === 'ready').length > 0 && <View style={{marginTop: 6}}>
+        {orders?.length > 0 && <View style={{marginTop: 6}}>
           <Text style={styles.title}>Ready</Text>
-          {orders?.map((order, i) => order.status === 'ready' && <StaffHomeCard
+          {orders?.map((order, i) => order.status === 'ready' ? <StaffHomeCard
             key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
             description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          />)} || <Text>No orders yet</Text>
+          /> : <Text>No orders yet</Text>)}
         </View>}
 
-        {orders?.filter(order => order.status === 'preparing').length > 0 && <View>
+        {orders?.length > 0 && <View>
           <Text style={styles.title}>Preparing</Text>
-          {orders?.map((order, i) => order.status === 'preparing' && <StaffHomeCard
+          {orders?.map((order, i) => order.status === 'preparing' ? <StaffHomeCard
               key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
               description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
               screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          />)} || <Text>No orders yet</Text>
+          /> : <Text>No orders yet</Text>)}
         </View>}
       </ScrollView>
     </View>

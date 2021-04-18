@@ -1,9 +1,9 @@
 import { Alert } from 'react-native';
 import React, { useState } from 'react';
 import Collapsible from 'react-native-collapsible';
-import { View, ScrollView, Text } from 'react-native';
 import { Button, Input, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, ScrollView, Text, TextInput } from 'react-native';
 
 import { styles } from '../../../Reusables/Styles';
 import { submitOrder } from '../../../Functions/orders';
