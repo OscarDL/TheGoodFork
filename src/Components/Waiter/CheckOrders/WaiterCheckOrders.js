@@ -43,23 +43,31 @@ export default function WaiterCheckOrders({navigation}) {
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
-        {orders?.length > 0 && <View style={{marginTop: 6}}>
+        <View>
           <Text style={styles.title}>Ready</Text>
-          {orders?.map((order, i) => order.status === 'ready' ? <StaffHomeCard
+          {orders?.filter(order => order.status === 'ready' && order.orderedBy === user.email)?.length > 0
+            ?
+          orders.map((order, i) => <StaffHomeCard
             key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
             description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          /> : <Text key={i}>No orders yet</Text>)}
-        </View>}
+          />)
+            :
+          <Text style={{textAlign: 'center', width: '100%', padding: 10, fontSize: 16}}>No orders yet</Text>}
+        </View>
 
-        {orders?.length > 0 && <View>
+        <View>
           <Text style={styles.title}>Preparing</Text>
-          {orders?.map((order, i) => order.status === 'preparing' ? <StaffHomeCard
-              key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
-              description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
-              screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
-          /> : <Text key={i}>No orders yet</Text>)}
-        </View>}
+          {orders?.filter(order => order.status === 'preparing' && order.orderedBy === user.email)?.length > 0
+            ?
+          orders.map((order, i) => <StaffHomeCard
+            key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
+            description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
+            screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
+          />)
+            :
+          <Text style={{textAlign: 'center', width: '100%', padding: 10, fontSize: 16}}>No orders yet</Text>}
+        </View>
       </ScrollView>
     </View>
   );

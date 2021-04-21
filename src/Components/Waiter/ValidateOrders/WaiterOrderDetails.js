@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FAB } from 'react-native-paper';
 import { View, Text, Alert } from 'react-native';
+import { useIsFocused } from '@react-navigation/core';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import OrderDetails from '../../../Reusables/Orders/OrderDetails';
-import { deleteOrder, validateOrder } from '../../../Functions/orders';
+import { deleteOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
 
 const handleValidate = (order, token, navigation) => {
@@ -43,23 +44,37 @@ const handleDelete = (order, token, navigation) => {
 
 export default function WaiterOrderDetails({navigation, route}) {
   const {order, readOnly} = route.params.params;
+
+  const isFocused = useIsFocused();
   const [{token}, _] = useDataLayerValue();
+  const [updatedOrder, setUpdatedOrder] = useState(order);
+
+  useEffect(() => {
+    navigation.setOptions({title: updatedOrder.user.firstName + ' ' + updatedOrder.user.lastName});
+  }, []);
+
+  useEffect(() => {
+    isFocused && getOrder(order._id, token).then(res => setUpdatedOrder(res.order));
+  }, [isFocused, setUpdatedOrder]);
+  
   
   return (
     <View style={styles.container}>
       <ScrollView>
-        <OrderDetails order={order}/>
+        <OrderDetails order={updatedOrder}/>
         <View style={{alignItems: 'center', margin: 20}}>
           {readOnly
             ?
-          <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>status: {order.status}</Text>
+          <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>status: {updatedOrder.status}</Text>
             :
-          <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(order, token, navigation)}>
+          <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(updatedOrder, token, navigation)}>
             <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete this order</Text>
           </TouchableOpacity>}
         </View>
       </ScrollView>
-      {!readOnly && <FAB style={styles.fab} icon='check' color='white' onPress={() => handleValidate(order, token, navigation)}/>}
+      <FAB style={styles.fab} icon={readOnly ? 'pencil' : 'check'} color='white'
+        onPress={() => readOnly ? navigation.navigate('WaiterEditOrder', {order: updatedOrder}) : handleValidate(updatedOrder, token, navigation)}
+      />
     </View>
   );
 }

@@ -13,7 +13,7 @@ export default function WaiterHome({navigation}) {
           <StaffHomeCard icon='book-online' title='Manage table reservations' description='Description 1' screen='WaiterManageTables' navigation={navigation}/>
           <StaffHomeCard icon='assignment-turned-in' title='Validate customer orders' description='Description 2' screen='WaiterValidateOrder' navigation={navigation} />
           <StaffHomeCard icon='app-registration' title='Submit an order manually' description='Description 3' screen='WaiterNewOrder' navigation={navigation} />
-          <StaffHomeCard icon='alarm' title='Check ongoing orders status' description='Description 4' screen='WaiterCheckOrders' navigation={navigation} />
+          <StaffHomeCard icon='alarm' title='Ongoing orders' description='Check the status of orders you placed.' screen='WaiterCheckOrders' navigation={navigation} />
           <StaffHomeCard icon='credit-card' title='Create a table bill' description='Description 5' screen='WaiterCreateBill' navigation={navigation} />
         </View>
       </ScrollView>

@@ -15,7 +15,7 @@ const handleEdit = (order, token, navigation) => {
   editOrder(order, token).then(res => {
     res.success && navigation.goBack();
     Alert.alert(
-      res.success ? res.title : "Could not submit order",
+      res.success ? res.title : "Could not edit order",
       res.success ? res.desc : res,
       [{
         text: res.success ? "DONE" : "OK",
@@ -26,7 +26,7 @@ const handleEdit = (order, token, navigation) => {
 };
   
 const handleSubmit = (order, user, token, navigation) => {
-  submitOrder({...order, user}, token).then(res => {
+  submitOrder({...order, user}, token, user.email).then(res => {
     res.success && navigation.goBack();
     Alert.alert(
       res.success ? res.title : "Could not submit order",

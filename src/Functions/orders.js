@@ -125,7 +125,7 @@ export const editOrder = async (order, token) => {
 };
 
 
-export const submitOrder = async (order, token) => {
+export const submitOrder = async (order, token, email) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -134,6 +134,7 @@ export const submitOrder = async (order, token) => {
   };
   
   try {
+    order.orderedBy = email;
     order.price = totalPrice(order); // For security
     const {data} = await axios.post(apiUrl + 'orders/create', order, config);
     

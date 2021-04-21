@@ -27,6 +27,7 @@ import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
 import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
+import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
 import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
 import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
@@ -101,7 +102,8 @@ export default function Routes() {
       <Stack.Screen name='WaiterManageTables' options={{title: 'Manage table reservations', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterManageTables} />
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Validate an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterValidateOrder} />
       <Stack.Screen name='WaiterNewOrder' options={{headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterNewOrder} />
-      <Stack.Screen name='WaiterCheckOrders' options={{title: 'Orders status', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
+      <Stack.Screen name='WaiterEditOrder' options={{headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterEditOrder} />
+      <Stack.Screen name='WaiterCheckOrders' options={{title: 'Ongoing orders', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
       <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
       <Stack.Screen name='WaiterOrderDetails' options={{title: 'Order details', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDetails} />
     </Stack.Navigator>

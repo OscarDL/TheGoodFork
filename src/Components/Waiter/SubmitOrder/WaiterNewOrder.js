@@ -39,7 +39,7 @@ function WaiterNewOrderComponent({navigation}) {
 
     <View style={styles.orderStrip}>
       <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
-      <Button buttonStyle={[styles.button]} onPress={() => navigation.navigate('WaiterSubmitOrder', {order})} title='Place order'/>
+      <Button buttonStyle={[styles.button]} onPress={() => navigation.navigate('WaiterSubmitOrder', {order, type: 'submit'})} title='Place order'/>
     </View>
   </>
 }
