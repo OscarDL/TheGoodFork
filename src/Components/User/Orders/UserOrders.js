@@ -1,7 +1,8 @@
 import { FAB } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import { View, ScrollView, Text, Alert } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import UserNewOrder from './UserNewOrder';
@@ -14,35 +15,6 @@ import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
 const Stack = createStackNavigator();
-
-const actions = [
-  {
-    text: 'Sur place',
-    icon: require('./icons/onsite.png'),
-    name: 'onsite',
-    position: 1
-  },
-  {
-    text: 'A emporter',
-    icon: require('./icons/takeaway.png'),
-    name: 'takeaway',
-    position: 2
-  }
-]
-
-const handleNavigation = (navigation) => Alert.alert(
-  'Type de commande',
-  'Nous offrons des commandes sur place et à emporter. Faites votre choix !',
-  [{
-    text: 'Annuler'
-  }, {
-    text: 'Sur place',
-    onPress: () => navigation.navigate('UserNewOrder', {takeaway: false})
-  }, {
-    text: 'À emporter',
-    onPress: () => navigation.navigate('UserNewOrder', {takeaway: true}) // SHOW DATE TIME PICKER INSTEAD
-  }]
-);
 
 export default function UserOrders({title}) {
   return (
@@ -64,9 +36,43 @@ function UserOrdersComponent({navigation}) {
   const [orders, setOrders] = useState(null);
   const [{user, token}, _] = useDataLayerValue();
 
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState('date');
+  const [date, setDate] = useState(new Date(Date.now()));
+
   useEffect(() => {
     isFocused && getOrders(user, token).then(res => setOrders(res.orders));
   }, [isFocused]);
+
+
+  const handleNavigation = () => Alert.alert(
+    'Type de commande',
+    'Nous offrons des commandes sur place et à emporter. Faites votre choix !',
+    [{
+      text: 'Annuler'
+    }, {
+      text: 'Sur place',
+      onPress: () => navigation.navigate('UserNewOrder', {type: {takeaway: false}})
+    }, {
+      text: 'À emporter',
+      onPress: () => setShow(true)
+    }]
+  );
+
+  const onChange = (e) => {
+    setShow(false);
+    if (e.type === 'dismissed') return setMode('date');
+
+    const newDate = new Date(e.nativeEvent.timestamp); setDate(newDate);
+
+    if (mode === 'date') {
+      setMode('time'); setShow(true);
+    } else {
+      setMode('date'); // if user goes back in navigation stack and wants to choose a new time
+      navigation.navigate('UserNewOrder', {type: {takeaway: true, date: newDate.toUTCString()}});
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -75,8 +81,8 @@ function UserOrdersComponent({navigation}) {
         <View>
           <Text style={{...styles.title, marginTop: 6}}>To be paid</Text>
           {orders?.filter(order => !order.paid).length > 0 ? orders.map((order, i) => !order.paid && <StaffHomeCard
-            key={i} icon='restaurant' title={`${new Date(order.dateOrdered).toDateString().slice(4, -5)},
-            ${new Date(order.dateOrdered).toLocaleTimeString()}`} subtitle={order?.price + ' ' + order?.currency}
+            key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
+            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={order?.price + ' ' + order?.currency}
             description={'Status: ' + order.status} screen='UserOrderDetails' params={{order}} navigation={navigation}
           />) : <Text style={styles.emptySection}>You don't have any order to pay.</Text>}
         </View>
@@ -84,8 +90,8 @@ function UserOrdersComponent({navigation}) {
         <View>
           <Text style={{...styles.title, marginTop: 6}}>History</Text>
           {orders?.filter(order => order.paid).length > 0 ? orders.map((order, i) => order.paid && <StaffHomeCard
-            key={i} icon='restaurant' title={`${new Date(order.dateOrdered).toDateString().slice(4, -5)},
-            ${new Date(order.dateOrdered).toLocaleTimeString()}`} subtitle={order?.price + ' ' + order?.currency}
+            key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
+            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={order?.price + ' ' + order?.currency}
             description={'Status: ' + order.status} screen='UserOrderDetails' params={{order}} navigation={navigation}
           />) : <Text style={styles.emptySection}>You don't have any previous orders.</Text>}
         </View>
@@ -94,7 +100,15 @@ function UserOrdersComponent({navigation}) {
         <Text style={{...styles.title, padding: 0, margin: 0}}>You don't have any orders.</Text>
       </View>)}
 
-      <FAB style={styles.fab} animated label='New order' icon='plus' color='white' onPress={() => handleNavigation(navigation)}/>
+      {show && <DateTimePicker
+        mode={mode}
+        value={date}
+        is24Hour={true}
+        display='default'
+        onChange={onChange}
+      />}
+
+      <FAB style={styles.fab} animated label='New order' icon='plus' color='white' onPress={handleNavigation}/>
     </View>
   );
 }

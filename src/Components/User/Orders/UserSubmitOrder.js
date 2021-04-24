@@ -48,7 +48,7 @@ export default function UserSubmitOrder({navigation, route}) {
   const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
-    navigation.setOptions({title: 'Votre commande ' + !order.takeaway ? 'sur place' : 'à emporter'})
+    navigation.setOptions({title: 'Commande ' + (!order.takeaway ? 'sur place' : 'à emporter')})
   }, []);
 
 

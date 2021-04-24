@@ -13,13 +13,13 @@ const Stack = createStackNavigator();
 export default UserNewOrder = ({title, route}) => (
   <Stack.Navigator initialRouteName='UserNewOrderComponent'>
     <Stack.Screen name='UserNewOrderComponent' options={{title}}>
-      {props => <UserNewOrderComponent {...props} takeaway={route.params.takeaway} />}
+      {props => <UserNewOrderComponent {...props} type={route.params.type} />}
     </Stack.Screen>
     <Stack.Screen name='UserSubmitOrder' component={UserSubmitOrder} options={{title: 'Verify & Submit', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}}/>
   </Stack.Navigator>
 );
 
-function UserNewOrderComponent({navigation, takeaway}) {
+function UserNewOrderComponent({navigation, type}) {
   const [price, setPrice] = useState(0);
   const [order, setOrder] = useState({
     appetizer: [],
@@ -28,7 +28,7 @@ function UserNewOrderComponent({navigation, takeaway}) {
     drink: [],
     alcohol: [],
     price: 0,
-    takeaway
+    type
   });
 
   return <>
