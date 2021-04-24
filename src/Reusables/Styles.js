@@ -74,6 +74,12 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
+  emptySection: {
+    padding: 10,
+    fontSize: 16,
+    width: '100%',
+    textAlign: 'center'
+  },
   roboto: {
     fontFamily: 'Roboto'
   }

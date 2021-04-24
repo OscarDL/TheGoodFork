@@ -45,7 +45,7 @@ export default function AdminDishes({navigation}) {
         <View style={{alignItems: 'center', marginTop: 30, marginBottom: 15}}>
           <View style={styles.pickerView}>
             <Picker
-              style={{height: 38}}
+              style={{height: 40}}
               prompt="Que souhaites-tu afficher ?"
               selectedValue={dishType}
               onValueChange={type => setDishType(type)}

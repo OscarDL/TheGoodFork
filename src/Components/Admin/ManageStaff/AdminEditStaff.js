@@ -60,9 +60,9 @@ export default function AdminEditStaff({route, navigation}) {
         <Text style={{marginVertical: 10}}>Choose your staff member's role</Text>
         <View style={{height: 10}}></View>
 
-        <View style={{width: '50%', height: 42, padding: 1, borderWidth: 1, borderColor: '#bbb', borderRadius: 4, backgroundColor: 'white'}}>
+        <View style={styles.pickerView}>
           <Picker
-            style={{height: 38}}
+            style={{height: 40}}
             prompt="Select a role"
             selectedValue={newStaff.type}
             onValueChange={type => setNewStaff({...newStaff, type})}

@@ -10,14 +10,16 @@ import SubmitOrderTabs from '../../../Reusables/Orders/SubmitOrderTabs';
 
 const Stack = createStackNavigator();
 
-export default UserNewOrder = ({title}) => (
+export default UserNewOrder = ({title, route}) => (
   <Stack.Navigator initialRouteName='UserNewOrderComponent'>
-    <Stack.Screen name='UserNewOrderComponent' component={UserNewOrderComponent} options={{title}}/>
+    <Stack.Screen name='UserNewOrderComponent' options={{title}}>
+      {props => <UserNewOrderComponent {...props} takeaway={route.params.takeaway} />}
+    </Stack.Screen>
     <Stack.Screen name='UserSubmitOrder' component={UserSubmitOrder} options={{title: 'Verify & Submit', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}}/>
   </Stack.Navigator>
 );
 
-function UserNewOrderComponent({navigation}) {
+function UserNewOrderComponent({navigation, takeaway}) {
   const [price, setPrice] = useState(0);
   const [order, setOrder] = useState({
     appetizer: [],
@@ -25,7 +27,8 @@ function UserNewOrderComponent({navigation}) {
     dessert: [],
     drink: [],
     alcohol: [],
-    price: 0
+    price: 0,
+    takeaway
   });
 
   return <>

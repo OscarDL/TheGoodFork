@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "TheGoodFork",
+    "name": "The Good Fork",
     "slug": "TheGoodFork",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,16 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.thegoodfork.application",
+      "buildNumber": "0.0.2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.thegoodfork.application",
+      "versionCode": 2
     }
   }
 }

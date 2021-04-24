@@ -53,7 +53,7 @@ export default function WaiterCheckOrders({navigation}) {
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
           />)
             :
-          <Text style={{textAlign: 'center', width: '100%', padding: 10, fontSize: 16}}>No orders yet</Text>}
+          <Text style={styles.emptySection}>No orders yet</Text>}
         </View>
 
         <View>
@@ -66,7 +66,7 @@ export default function WaiterCheckOrders({navigation}) {
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
           />)
             :
-          <Text style={{textAlign: 'center', width: '100%', padding: 10, fontSize: 16}}>No orders yet</Text>}
+          <Text style={styles.emptySection}>No orders yet</Text>}
         </View>
       </ScrollView>
     </View>

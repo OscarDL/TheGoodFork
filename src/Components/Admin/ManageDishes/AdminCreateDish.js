@@ -36,9 +36,9 @@ export default function AdminCreateDish({navigation}) {
       <View style={{alignItems: 'center'}}>
         <View style={{height: 10}}></View>
 
-        <View style={{width: '50%', height: 42, padding: 1, borderWidth: 1, borderColor: '#bbb', borderRadius: 4, backgroundColor: 'white'}}>
+        <View style={styles.pickerView}>
           <Picker
-            style={{height: 38}}
+            style={{height: 40}}
             prompt="Select a type"
             selectedValue={dish.type}
             onValueChange={type => setDish({...dish, type})}

@@ -37,7 +37,7 @@ export default function AdminRegisterStaff({navigation}) {
         <Text style={{marginVertical: 10}}>Choose your staff member's role</Text>
         <View style={styles.pickerView}>
           <Picker
-            style={{height: 38}}
+            style={{height: 40}}
             prompt="Select a role"
             selectedValue={staff.type}
             onValueChange={type => setStaff({...staff, type})}

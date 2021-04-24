@@ -50,7 +50,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   const [updatedOrder, setUpdatedOrder] = useState(order);
 
   useEffect(() => {
-    navigation.setOptions({title: updatedOrder.user.firstName + ' ' + updatedOrder.user.lastName});
+    navigation.setOptions({title: `${(updatedOrder.takeaway ? 'À emporter' : 'Sur place')} : ${updatedOrder.user.firstName} ${updatedOrder.user.lastName}`});
   }, []);
 
   useEffect(() => {

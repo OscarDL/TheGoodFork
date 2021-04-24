@@ -39,6 +39,7 @@ export default function UserOrderDetails({navigation, route}) {
   
   useEffect(() => {
     isFocused && getOrder(order._id, token).then(res => setUpdatedOrder(res.order));
+    navigation.setOptions({title: `${(updatedOrder.takeaway ? 'À emporter' : 'Sur place')}`});
   }, [isFocused]);
   
   return (

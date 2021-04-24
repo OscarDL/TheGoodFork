@@ -31,7 +31,8 @@ function WaiterNewOrderComponent({navigation}) {
     dessert: [],
     drink: [],
     alcohol: [],
-    price: 0
+    price: 0,
+    takeaway: false // Waiters only have to place orders for customers on site
   });
 
   return <>

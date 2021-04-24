@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert , TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { Button, Icon } from 'react-native-elements';
@@ -46,6 +46,11 @@ export default function UserSubmitOrder({navigation, route}) {
   
   const [details, setDetails] = useState(null);
   const [collapsed, setCollapsed] = useState(true);
+
+  useEffect(() => {
+    navigation.setOptions({title: 'Votre commande ' + !order.takeaway ? 'sur place' : 'à emporter'})
+  }, []);
+
 
   return (
     <View style={{...styles.container, justifyContent: 'space-between'}}>

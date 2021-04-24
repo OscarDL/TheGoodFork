@@ -36,7 +36,7 @@ import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
 import CookHome from './Cook/CookHome';
 
-import UserHome from './User/UserHome';
+import UserDishes from './User/UserDishes';
 import UserAccount from './User/UserAccount';
 import UserPlanning from './User/UserPlanning';
 import UserOrders from './User/Orders/UserOrders';
@@ -118,15 +118,15 @@ export default function Routes() {
 
   const userStack = () => (
     <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor='tomato'>
-      <Tabs.Screen name='UserHome' options={{ title: 'The Good Fork', tabBarLabel: 'Home', tabBarIcon: ({color}) => <Icon color={color} type='material' name='home' /> }}>
-        {props => <UserHome {...props} title='Home' />}
-      </Tabs.Screen>
-
       <Tabs.Screen name='UserPlanning' options={{ title: 'Check Availability', tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} type='material' name='event-available' /> }}>
         {props => <UserPlanning {...props} title='Planning' />}
       </Tabs.Screen>
       
-      <Tabs.Screen name='UserOrders' options={{ title: 'Manage Orders', tabBarLabel: 'Orders', tabBarIcon: ({color}) => <Icon color={color} type='material' name='restaurant' /> }}>
+      <Tabs.Screen name='UserDishes' options={{ title: 'View all dishes', tabBarLabel: 'Dishes', tabBarIcon: ({color}) => <Icon color={color} type='material' name='restaurant' /> }}>
+        {props => <UserDishes {...props} title='Dishes' />}
+      </Tabs.Screen>
+      
+      <Tabs.Screen name='UserOrders' options={{ title: 'Manage Orders', tabBarLabel: 'Orders', tabBarIcon: ({color}) => <Icon color={color} type='material' name='credit-card' /> }}>
         {props => <UserOrders {...props} title='Orders' />}
       </Tabs.Screen>
 

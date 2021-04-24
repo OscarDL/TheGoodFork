@@ -60,9 +60,9 @@ export default function AdminEditDish({route, navigation}) {
         <Text style={{marginVertical: 10}}>Modifiez votre menu</Text>
         <View style={{height: 10}}></View>
 
-        <View style={{...styles.pickerView, height: 42}}>
+        <View style={styles.pickerView}>
           <Picker
-            style={{height: 38}}
+            style={{height: 40}}
             prompt="Select a type"
             selectedValue={newDish.type}
             onValueChange={type => setNewDish({...newDish, type})}
