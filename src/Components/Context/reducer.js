@@ -1,6 +1,7 @@
 export const initialState = {
   user: null,
-  token: null
+  token: null,
+  order: null
 }
 
 export const reducer = (state, action) => {
@@ -15,6 +16,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         token: action.token
+      };
+    case 'SET_ORDER':
+      return {
+        ...state,
+        order: action.order
       };
     default:
       return state;

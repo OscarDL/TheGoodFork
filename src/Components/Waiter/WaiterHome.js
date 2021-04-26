@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 
+import BaseCard from '../../Reusables/BaseCard';
 import { styles } from '../../Reusables/Styles';
-import StaffHomeCard from '../../Reusables/StaffHomeCard';
 
 
 export default function WaiterHome({navigation}) {
@@ -10,11 +10,11 @@ export default function WaiterHome({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         <View style={{marginVertical: 5}}>
-          <StaffHomeCard icon='book-online' title='Manage table reservations' description='Description 1' screen='WaiterManageTables' navigation={navigation}/>
-          <StaffHomeCard icon='assignment-turned-in' title='Validate customer orders' description='Description 2' screen='WaiterValidateOrder' navigation={navigation} />
-          <StaffHomeCard icon='app-registration' title='Submit an order manually' description='Description 3' screen='WaiterNewOrder' navigation={navigation} />
-          <StaffHomeCard icon='alarm' title='Ongoing orders' description='Check the status of orders you placed.' screen='WaiterCheckOrders' navigation={navigation} />
-          <StaffHomeCard icon='credit-card' title='Create a table bill' description='Description 5' screen='WaiterCreateBill' navigation={navigation} />
+          <BaseCard icon='book-online' title='Tables disponibles' description='Modifier les réservations et disponibilités.' screen='WaiterManageTables' navigation={navigation}/>
+          <BaseCard icon='assignment-turned-in' title='Valider une commande' description='Valider ou supprimer une commande client.' screen='WaiterValidateOrder' navigation={navigation} />
+          <BaseCard icon='app-registration' title='Faire une commande' description='Passer commande pour un client non-enregistré.' screen='WaiterNewOrder' navigation={navigation} />
+          <BaseCard icon='alarm' title='Commandes en cours' description='Consulter le statut des commandes en cours.' screen='WaiterCheckOrders' navigation={navigation} />
+          <BaseCard icon='credit-card' title='Addition client' description="Faire l'addition pour un client sur place." screen='WaiterCreateBill' navigation={navigation} />
         </View>
       </ScrollView>
     </View>

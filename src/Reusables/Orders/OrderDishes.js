@@ -8,37 +8,30 @@ import { getDishes } from '../../Functions/dishes';
 import { formatGrid } from '../../Functions/utils';
 
 
-const failureAlert = (error, navigation, setFailed) => {
-  Alert.alert(
-    "Couldn't retrieve orders",
-    error,
-    [
-      {
-        text: 'CANCEL',
-        onPress: () => navigation.goBack()
-      },
-      {
-        text: 'RETRY',
-        onPress: () => setFailed(true)
-      }
-    ]
-  );
-}
-
+const failureAlert = (error, navigation, setRetry) => Alert.alert(
+  "Erreur d'affichage des plats", error,
+  [{
+    text: 'Annuler',
+    onPress: () => navigation.goBack()
+  },
+  {
+    text: 'Réessayer',
+    onPress: () => setRetry(true)
+  }]
+);
 
 export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
   const [dishes, setDishes] = useState(null);
-  const [failed, setFailed] = useState(true);
-  //const [sort, setSort] = useState({by: 'name', in: 'asc'});
+  const [retry, setRetry] = useState(true);
 
   useEffect(() => {
-    if (failed) {
+    if (retry) {
       getDishes(type).then(res => {
-        setFailed(false);
-        res.success ? setDishes(res.dishes) : failureAlert(res, navigation, setFailed);
+        setRetry(false);
+        res.success ? setDishes(res.dishes) : failureAlert(res, navigation, setRetry);
       });
     }
-  }, [failed, setFailed]);
+  }, [retry, setRetry]);
 
   const renderItem = ({item}) => (
     item.empty

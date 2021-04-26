@@ -6,14 +6,14 @@ import { styles } from '../Styles';
 
 export default OrderDetails = ({order, hideDetails}) => (
   <View>
-    {order.appetizer.length > 0 && <View style={{marginTop: 6}}>
+    {order.appetizer.length > 0 && <View style={{marginTop: 8}}>
       <Text style={styles.title}>Apéritifs</Text>
 
       <View style={styles.card}>
         {order.appetizer?.map((it, i) =>
-          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
+          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 8 : 0}}>
             <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
+            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))}</Text>
           </View>
         )}
       </View>
@@ -24,9 +24,9 @@ export default OrderDetails = ({order, hideDetails}) => (
 
       <View style={styles.card}>
         {order.mainDish?.map((it, i) =>
-          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
+          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 8 : 0}}>
             <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
+            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))}</Text>
           </View>
         )}
       </View>
@@ -37,9 +37,9 @@ export default OrderDetails = ({order, hideDetails}) => (
 
       <View style={styles.card}>
         {order.dessert?.map((it, i) =>
-          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
+          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 8 : 0}}>
             <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
+            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))}</Text>
           </View>
         )}
       </View>
@@ -50,9 +50,9 @@ export default OrderDetails = ({order, hideDetails}) => (
 
       <View style={styles.card}>
         {order.drink?.map((it, i) =>
-          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
+          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 8 : 0}}>
             <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
+            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))}</Text>
           </View>
         )}
       </View>
@@ -63,16 +63,16 @@ export default OrderDetails = ({order, hideDetails}) => (
 
       <View style={styles.card}>
         {order.alcohol?.map((it, i) =>
-          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 6 : 0}}>
+          <View key={i} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingTop: i > 0 ? 8 : 0}}>
             <Text style={{maxWidth: '75%'}}><Text style={{fontWeight: '700'}}>{it.quantity}x </Text> {it.name}</Text>
-            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))} {order.currency || 'EUR'}</Text>
+            <Text style={{maxWidth: '20%'}}>{Number((it.price * it.quantity).toFixed(2))}</Text>
           </View>
         )}
       </View>
     </View>}
 
     {(!hideDetails && order.details) && <View>
-      <Text style={styles.title}>Détails supplémentaires</Text>
+      <Text numberOfLines={1} style={styles.title}>Détails supplémentaires</Text>
 
       <View style={styles.card}>
         <Text>{order.details}</Text>
@@ -80,7 +80,7 @@ export default OrderDetails = ({order, hideDetails}) => (
     </View>}
     
     <Text style={{...styles.title, textAlign: 'center', marginTop: 20}}>
-      Total: {order.price} EUR
+      Total : {order.price} EUR
     </Text>
   </View>
 )

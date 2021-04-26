@@ -11,10 +11,10 @@ import { editDish, deleteDish } from '../../../Functions/dishes';
 
 const handleEdit = (token, id, dish, navigation) => {
   editDish(token, id, dish).then(res => Alert.alert(
-    res.success ? res.title : "Could not edit dish",
+    res.success ? res.title : 'Erreur lors de la modification',
     res.success ? res.desc : res,
     [{
-      text: res.success ? "DONE" : "RETRY",
+      text: res.success ? 'Terminé' : 'Réessayer',
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
@@ -22,16 +22,16 @@ const handleEdit = (token, id, dish, navigation) => {
 
 const handleDelete = (token, dish, navigation) => {
   Alert.alert(
-    "Are you sure?",
-    `You're about to delete ${dish.name}.`,
+    'Êtes-vous sûr ?',
+    `Vous êtes sur le point de supprimer "${dish.name}".`,
     [
-      { text: 'CANCEL' },
-      { text: 'CONTINUE',
+      { text: 'Annuler' },
+      { text: 'Supprimer',
         onPress: () => deleteDish(token, dish._id, dish).then(res => Alert.alert(
-          res.success ? res.title : "Could not delete dish",
+          res.success ? res.title : 'Erreur lors de la suppression',
           res.success ? res.desc : res,
           [{
-            text: res.success ? "DONE" : "RETRY",
+            text: res.success ? 'Terminé' : 'Réessayer',
             onPress: () => res.success ? navigation.goBack() : null
           }]
         ))
@@ -57,21 +57,20 @@ export default function AdminEditDish({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <Text style={{marginVertical: 10}}>Modifiez votre menu</Text>
         <View style={{height: 10}}></View>
 
         <View style={styles.pickerView}>
           <Picker
             style={{height: 40}}
-            prompt="Select a type"
+            prompt='Sélectionnez le type'
             selectedValue={newDish.type}
             onValueChange={type => setNewDish({...newDish, type})}
           >
-            <Picker.Item label="    Entrée"   value="appetizer"/>
-            <Picker.Item label="    Plat"     value="mainDish"/>
-            <Picker.Item label="    Dessert"  value="dessert"/>
-            <Picker.Item label="    Boisson"  value="drink"/>
-            <Picker.Item label="    Alcool"   value="alcohol"/>
+            <Picker.Item label='    Entrée'   value='appetizer'/>
+            <Picker.Item label='    Plat'     value='mainDish'/>
+            <Picker.Item label='    Dessert'  value='dessert'/>
+            <Picker.Item label='    Boisson'  value='drink'/>
+            <Picker.Item label='    Alcool'   value='alcohol'/>
           </Picker>
         </View>
       </View>
@@ -85,20 +84,18 @@ export default function AdminEditDish({route, navigation}) {
       <View style={{alignItems: 'center'}}>
         <Button
           buttonStyle={[styles.button]}
-          title='Update'
+          title='Sauvegarder'
           icon={<Icon
-            size={26}
-            name='edit'
+            name='save'
             color='white'
-            type='font-awesome-5'
-            style={{marginRight: 10, marginBottom: 3}}
+            style={{marginRight: 10}}
           />}
           onPress={() => handleEdit(token, params._id, newDish, navigation)}
         />
       </View>
       
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, params, navigation)}>
-        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.name}</Text>
+        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Supprimer</Text>
       </TouchableOpacity>
     </View>
   );

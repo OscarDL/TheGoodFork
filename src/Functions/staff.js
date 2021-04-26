@@ -18,7 +18,7 @@ export const getStaff = async (token) => {
 
     return data;
     
-  } catch (error) { return error.response?.data.error || 'Unkonwn error.'; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -37,11 +37,11 @@ export const registerStaff = async (staff, token) => {
     
     return {
       success: true,
-      title: "Registration successful",
-      desc: "Your new staff member is ready."
+      title: 'Création de compte',
+      desc: 'Votre nouveau membre a été ajouté avec succès.'
     };
     
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -65,7 +65,7 @@ export const editStaff = async (id, staff, token) => {
       desc: data?.data,
     };
 
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 }
 
 
@@ -89,5 +89,5 @@ export const deleteStaff = async (staff, token) => {
       desc: data?.data,
     };
 
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 }

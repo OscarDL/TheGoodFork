@@ -20,7 +20,7 @@ export const login = async (user) => {
     
     return data;
 
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -39,7 +39,7 @@ export const registerUser = async (user) => {
 
     return data;
     
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -58,7 +58,7 @@ export const dispatchUserInfo = async (token) => {
 
     return data;
     
-  } catch (error) { return error.response?.data.error || "Unkonwn error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -77,17 +77,17 @@ export const sendEmail = async (email) => {
     
     return {
       success: true,
-      title: "Password reset",
+      title: 'Récupération',
       desc: data.data
     };
 
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
 export const resetPassword = async (resetToken, password, passCheck) => {
   if (!resetToken)
-    return "Please type-in the reset code you received via email.";
+    return 'Veuillez entrer le code reçu par email.';
 
   const config = {
     headers: {
@@ -102,10 +102,10 @@ export const resetPassword = async (resetToken, password, passCheck) => {
     
     return {
       success: true,
-      title: 'Password reset',
+      title: 'Récupération',
       desc: data.data
     };
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 }
 
 
@@ -122,9 +122,9 @@ export const checkLogin = async (dispatch) => {
         dispatch({type: 'SET_USER', user: res.user});
         dispatch({type: 'SET_TOKEN', token});
       } else Alert.alert(
-        "Login error", "Could not retrieve your information. Please sign in again.",
+        'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
         [{
-          "text": "OKAY",
+          text: 'Compris',
           onPress: async () => {
             await AsyncStorage.removeItem('authToken');
             dispatch({type: 'SET_USER', user: null});
@@ -139,6 +139,6 @@ export const checkLogin = async (dispatch) => {
 
 
 export const logout = async (dispatch) => {
-  await AsyncStorage.removeItem('authToken', '')
+  await AsyncStorage.removeItem('authToken');
   checkLogin(dispatch);
 }

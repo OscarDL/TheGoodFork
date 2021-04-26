@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaView, Text } from 'react-native';
 
 import { styles } from '../../../Reusables/Styles';
-import WaiterSubmitOrder from './WaiterSubmitOrder';
 import SubmitOrderTabs from '../../../Reusables/Orders/SubmitOrderTabs';
 
 
-const Stack = createStackNavigator();
-
-export default WaiterNewOrder = () => (
-  <Stack.Navigator initialRouteName='UserNewOrderComponent'>
-    <Stack.Screen name='WaiterNewOrderComponent' component={WaiterNewOrderComponent} options={{title: 'New customer order'}}/>
-    <Stack.Screen name='WaiterSubmitOrder' component={WaiterSubmitOrder} options={{title: 'Verify & Submit', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}}/>
-  </Stack.Navigator>
-);
-
-function WaiterNewOrderComponent({navigation}) {
+export default function WaiterNewOrder({navigation}) {
   const [price, setPrice] = useState(0);
   const [order, setOrder] = useState({
     user: {
@@ -32,15 +21,16 @@ function WaiterNewOrderComponent({navigation}) {
     drink: [],
     alcohol: [],
     price: 0,
-    takeaway: false // Waiters only have to place orders for customers on site
+    type: {takeaway: false} // For now, waiters only have to place orders for customers on site
   });
 
   return <>
     <SubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
 
-    <View style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
-      <Button buttonStyle={[styles.button]} onPress={() => navigation.navigate('WaiterSubmitOrder', {order, type: 'submit'})} title='Place order'/>
-    </View>
+    <SafeAreaView style={styles.orderStrip}>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price}</Text>
+      <Button title='Confirmer' buttonStyle={[styles.button]}
+      onPress={() => navigation.navigate('WaiterSubmitOrder', {order, type: 'submit'})}/>
+    </SafeAreaView>
   </>
 }

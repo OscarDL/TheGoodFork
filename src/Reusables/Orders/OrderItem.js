@@ -42,20 +42,20 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
           bouncePadding={{left: 0, right: 0}}
           style={{...styles.roboto, paddingTop: 10}}
         >
-          {item?.detail || 'No details'}
+          {item?.detail || 'Aucun détail'}
         </TextTicker>
       </View>
 
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e3e3e3', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
-        <TouchableOpacity style={{minWidth: '33%', borderBottomLeftRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, -1)}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e3e3e3', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
+        <TouchableOpacity style={{minWidth: '35%', borderBottomLeftRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, -1)}>
           <Text style={{textAlign: 'center', fontSize: 20}}>-</Text>
         </TouchableOpacity>
 
-        <Text style={{minWidth: '33%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
+        <Text style={{minWidth: '30%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
           {quantity}
         </Text>
 
-        <TouchableOpacity style={{minWidth: '33%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>
+        <TouchableOpacity style={{minWidth: '35%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>
           <Text style={{textAlign: 'center', fontSize: 20}}>+</Text>
         </TouchableOpacity>
       </View>

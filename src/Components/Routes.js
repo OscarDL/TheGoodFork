@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Button, Icon } from 'react-native-elements';
-import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { View, ActivityIndicator, Platform } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Login from './Auth/Login';
 import Reset from './Auth/Reset';
@@ -11,16 +12,16 @@ import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
 
 import AdminHome from './Admin/AdminHome';
-import AdminDishes from './Admin/ManageDishes/AdminDishes';
-import AdminEditDish from './Admin/ManageDishes/AdminEditDish';
 import AdminSettings from './Admin/AdminSettings';
-import AdminStaffList from './Admin/ManageStaff/AdminStaffList';
-import AdminEditStaff from './Admin/ManageStaff/AdminEditStaff';
-import AdminCreateDish from './Admin/ManageDishes/AdminCreateDish';
 import AdminTablesList from './Admin/AdminTablesList';
 import AdminSalesStats from './Admin/AdminSalesStats';
 import AdminStocksStats from './Admin/AdminStocksStats';
 import AdminDailyRevenue from './Admin/AdminDailyRevenue';
+import AdminDishes from './Admin/ManageDishes/AdminDishes';
+import AdminEditDish from './Admin/ManageDishes/AdminEditDish';
+import AdminStaffList from './Admin/ManageStaff/AdminStaffList';
+import AdminEditStaff from './Admin/ManageStaff/AdminEditStaff';
+import AdminCreateDish from './Admin/ManageDishes/AdminCreateDish';
 import AdminRegisterStaff from './Admin/ManageStaff/AdminRegisterStaff';
 
 import BarmanHome from './Barman/BarmanHome';
@@ -30,8 +31,8 @@ import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
 import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
 import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
-import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterManageTables from './Waiter/ManageTables/WaiterManageTables';
+import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
 import CookHome from './Cook/CookHome';
@@ -41,13 +42,16 @@ import UserAccount from './User/UserAccount';
 import UserPlanning from './User/UserPlanning';
 import UserOrders from './User/Orders/UserOrders';
 
-import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
+import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
 
 
 const Stack = createStackNavigator();
-const Tabs = createMaterialBottomTabNavigator();
+const Tabs = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
+
+const iosV = CardStyleInterpolators.forVerticalIOS;
+const iosH = CardStyleInterpolators.forHorizontalIOS;
 
 
 export default function Routes() {
@@ -59,83 +63,103 @@ export default function Routes() {
 
   const authStack = () => (
     <Stack.Navigator initialRouteName='Login'>
-      <Stack.Screen name='Register' options={{title: 'Register'}} component={Register} />
-      <Stack.Screen name='Login' options={{title: 'Login', headerLeft: null}} component={Login} />
-      <Stack.Screen name='Reset' options={{title: 'Reset password', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={Reset} />
-      <Stack.Screen name='Forgot' options={{title: 'Forgot password', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={Forgot} />
+      <Stack.Screen name='Login' options={{title: 'Connexion'}} component={Login} />
+      <Stack.Screen name='Register' options={{title: "S'enregistrer", cardStyleInterpolator: iosH}} component={Register} />
+      <Stack.Screen name='Reset' options={{title: 'Récupération', cardStyleInterpolator: iosH}} component={Reset} />
+      <Stack.Screen name='Forgot' options={{title: 'Mot de passe oublié', cardStyleInterpolator: iosH}} component={Forgot} />
     </Stack.Navigator>
   );
 
   const adminStack = () => (
     <Stack.Navigator initialRouteName='AdminHome'>
       <Stack.Screen name='AdminHome' component={AdminHome} options={({navigation}) => ({
-        title: 'Admin',
-        headerRight: () => (<Button
-          type='clear'
-          icon={<Icon name='settings' size={26} type='material' />}
-          onPress={() => navigation.navigate('AdminSettings')} buttonStyle={{marginRight: 10}}
-        />)}
-      )}/>
-      <Stack.Screen name='AdminDishes' options={{title: 'Edit dishes', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminDishes} />
-      <Stack.Screen name='AdminEditDish' options={{title: 'Edit dish', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminEditDish} />
-      <Stack.Screen name='AdminStaffList' options={{title: 'Staff members', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={AdminStaffList} />
-      <Stack.Screen name='AdminSettings' options={{title: 'Settings', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}} component={AdminSettings} />
-      <Stack.Screen name='AdminCreateDish' options={{title: 'Create dish', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={AdminCreateDish} />
-      <Stack.Screen name='AdminTablesList' options={{title: 'Tables list', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminTablesList} />
-      <Stack.Screen name='AdminEditStaff' options={{title: 'Edit staff member', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminEditStaff} />
-      <Stack.Screen name='AdminSalesStats' options={{title: 'Sales statistics', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminSalesStats} />
-      <Stack.Screen name='AdminStocksStats' options={{title: 'Stocks statistics', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminStocksStats} />
-      <Stack.Screen name='AdminDailyRevenue' options={{title: 'Daily revenue', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminDailyRevenue} />
-      <Stack.Screen name='AdminRegisterStaff' options={{title: 'Register staff', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={AdminRegisterStaff} />
+        title: "Centre d'aministration",
+        headerRight: () => <Button type='clear'
+          buttonStyle={{marginRight: 10}}
+          icon={<Icon name='settings' size={26} />}
+          onPress={() => navigation.navigate('AdminSettings')}
+        />
+      })}/>
+      <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
+      <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
+      <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={AdminStaffList} />
+      <Stack.Screen name='AdminCreateDish' options={{title: 'Nouveau plat', cardStyleInterpolator: iosH}} component={AdminCreateDish} />
+      <Stack.Screen name='AdminTablesList' options={{title: 'Liste des tables', cardStyleInterpolator: iosH}} component={AdminTablesList} />
+      <Stack.Screen name='AdminEditStaff' options={{title: 'Modifier un membre', cardStyleInterpolator: iosH}} component={AdminEditStaff} />
+      <Stack.Screen name='AdminSalesStats' options={{title: 'Statistiques : ventes', cardStyleInterpolator: iosH}} component={AdminSalesStats} />
+      <Stack.Screen name='AdminStocksStats' options={{title: 'Statistiques : stock', cardStyleInterpolator: iosH}} component={AdminStocksStats} />
+      <Stack.Screen name='AdminDailyRevenue' options={{title: 'Revenu quotidien', cardStyleInterpolator: iosH}} component={AdminDailyRevenue} />
+      <Stack.Screen name='AdminRegisterStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosH}} component={AdminRegisterStaff} />
+      <Stack.Screen name='AdminSettings' options={{title: 'Réglages', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={AdminSettings}/>
     </Stack.Navigator>
   );
 
   const barmanStack = () => (
     <Stack.Navigator initialRouteName='BarmanHome'>
-      <Stack.Screen name='BarmanHome' options={{title: 'Barman', headerRight: () => <Button title='Log out' onPress={() => logout(dispatch)} buttonStyle={{...styles.button, marginRight: 10}} />}} component={BarmanHome} />
+      <Stack.Screen name='BarmanHome' component={BarmanHome} options={{
+        title: 'Centre barmans',
+        headerRight: () => <Button type='clear'
+          buttonStyle={{marginRight: 10}}
+          icon={<Icon name='logout' size={26} />}
+          onPress={() => logout(dispatch)}
+        />
+      }}/>
     </Stack.Navigator>
   );
 
   const waiterStack = () => (
     <Stack.Navigator initialRouteName='WaiterHome'>
-      <Stack.Screen name='WaiterHome' options={{title: 'Waiter', headerRight: () => <Button title='Log out' onPress={() => logout(dispatch)} buttonStyle={{...styles.button, marginRight: 10}} />}} component={WaiterHome} />
-      <Stack.Screen name='WaiterManageTables' options={{title: 'Manage table reservations', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterManageTables} />
-      <Stack.Screen name='WaiterValidateOrder' options={{title: 'Validate an order', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterValidateOrder} />
-      <Stack.Screen name='WaiterNewOrder' options={{headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterNewOrder} />
-      <Stack.Screen name='WaiterEditOrder' options={{headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterEditOrder} />
-      <Stack.Screen name='WaiterCheckOrders' options={{title: 'Ongoing orders', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCheckOrders} />
-      <Stack.Screen name='WaiterCreateBill' options={{title: 'Make a bill', cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS}} component={WaiterCreateBill} />
-      <Stack.Screen name='WaiterOrderDetails' options={{title: 'Order details', cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS}} component={WaiterOrderDetails} />
+      <Stack.Screen name='WaiterHome' component={WaiterHome} options={{
+        title: 'Centre serveurs',
+        headerRight: () => <Button type='clear'
+          buttonStyle={{marginRight: 10}}
+          icon={<Icon name='logout' size={26} />}
+          onPress={() => logout(dispatch)}
+        />
+      }}/>
+      <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={WaiterNewOrder}/>
+      <Stack.Screen name='WaiterEditOrder' options={{title: 'Modifier commande', cardStyleInterpolator: iosH}} component={WaiterEditOrder}/>
+      <Stack.Screen name='WaiterCreateBill' options={{title: 'Faire une addition', cardStyleInterpolator: iosH}} component={WaiterCreateBill}/>
+      <Stack.Screen name='WaiterCheckOrders' options={{title: 'Commandes en cours', cardStyleInterpolator: iosH}} component={WaiterCheckOrders}/>
+      <Stack.Screen name='WaiterOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={WaiterOrderDetails}/>
+      <Stack.Screen name='WaiterValidateOrder' options={{title: 'Valider une commande', cardStyleInterpolator: iosH}} component={WaiterValidateOrder}/>
+      <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Vérification', cardStyleInterpolator: iosH}} component={WaiterSubmitOrder}/>
+      <Stack.Screen name='WaiterManageTables' options={{title: 'Gérer les réservations', cardStyleInterpolator: iosH}} component={WaiterManageTables}/>
     </Stack.Navigator>
   );
 
   const cookStack = () => (
     <Stack.Navigator initialRouteName='CookHome'>
-      <Stack.Screen name='CookHome' options={{title: 'Cook', headerRight: () => <Button title='Log out' onPress={() => logout(dispatch)} buttonStyle={{...styles.button, marginRight: 10}} />}} component={CookHome} />
+      <Stack.Screen name='CookHome'  component={CookHome} options={{
+        title: 'Centre cuisiniers',
+        headerRight: () => <Button type='clear'
+          buttonStyle={{marginRight: 10}}
+          icon={<Icon name='logout' size={26} />}
+          onPress={() => logout(dispatch)}
+        />
+      }}/>
     </Stack.Navigator>
   );
 
-
   const userStack = () => (
-    <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor='tomato'>
-      <Tabs.Screen name='UserPlanning' options={{ title: 'Check Availability', tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} type='material' name='event-available' /> }}>
+    <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor='#39f' tabBarOptions={{activeTintColor: '#39f'}}>
+      <Tabs.Screen name='UserPlanning' options={{ title: 'Réservations et disponibilités', tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' /> }}>
         {props => <UserPlanning {...props} title='Planning' />}
       </Tabs.Screen>
       
-      <Tabs.Screen name='UserDishes' options={{ title: 'View all dishes', tabBarLabel: 'Dishes', tabBarIcon: ({color}) => <Icon color={color} type='material' name='restaurant' /> }}>
-        {props => <UserDishes {...props} title='Dishes' />}
+      <Tabs.Screen name='UserDishes' options={{ title: 'Tous les plats', tabBarLabel: 'Menu', tabBarIcon: ({color}) => <Icon color={color} name='restaurant' /> }}>
+        {props => <UserDishes {...props} title='Menu' />}
       </Tabs.Screen>
       
-      <Tabs.Screen name='UserOrders' options={{ title: 'Manage Orders', tabBarLabel: 'Orders', tabBarIcon: ({color}) => <Icon color={color} type='material' name='credit-card' /> }}>
-        {props => <UserOrders {...props} title='Orders' />}
+      <Tabs.Screen name='UserOrders' options={{ title: 'Vos commandes', tabBarLabel: 'Commandes', tabBarIcon: ({color}) => <Icon color={color} name='credit-card' /> }}>
+        {props => <UserOrders {...props} title='Commandes' />}
       </Tabs.Screen>
 
-      <Tabs.Screen name='UserAccount' options={{ title: 'Manage Your Account', tabBarLabel: 'Account', tabBarIcon: ({color}) => <Icon color={color} type='material' name='account-circle' /> }}>
-        {props => <UserAccount {...props} title='Account' />}
+      <Tabs.Screen name='UserAccount' options={{ title: 'Votre compte client', tabBarLabel: 'Compte', tabBarIcon: ({color}) => <Icon color={color} name='account-circle' /> }}>
+        {props => <UserAccount {...props} title='Compte' />}
       </Tabs.Screen>
     </Tabs.Navigator>
-  )
-
+  );
 
   const components = {
     'auth': authStack,
@@ -146,6 +170,7 @@ export default function Routes() {
     'user': userStack
   };
 
+  
   return (
     token === null ? <View><ActivityIndicator/></View> :
     <NavigationContainer>

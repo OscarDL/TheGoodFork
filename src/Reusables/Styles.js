@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,9 +7,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   button: {
-    borderRadius: 4,
     paddingHorizontal: 12,
-    backgroundColor: 'limegreen'
+    backgroundColor: 'limegreen',
+    borderRadius: Platform.OS === 'ios' ? 8 : 4
   },
   title: {
     fontSize: 24,
@@ -23,6 +23,14 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     marginVertical: 5,
     marginHorizontal: 10,
+    backgroundColor: 'white'
+  },
+  homeCard: {
+    flex: 1,
+    padding: 8,
+    borderRadius: 4,
+    alignItems: 'center',
+    flexDirection: 'row',
     backgroundColor: 'white'
   },
   fab: {
@@ -55,9 +63,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   orderStrip: {
-    flex: 1,
-    padding: 10,
-    maxHeight: 60,
+    margin: 10,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between'
@@ -80,7 +86,26 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center'
   },
+  searchBarBg: {
+    margin: 10,
+    flexShrink: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: Platform.OS === 'ios' ? 10 : 5
+  },
+  searchBarInput: {
+    flex: 1,
+    padding: 10,
+    color: '#444'
+  },
+  searchBarCancel: {
+    padding: 10,
+    fontSize: 16,
+    color: '#27e',
+    paddingLeft: 0
+  },
   roboto: {
-    fontFamily: 'Roboto'
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'Roboto'
   }
 });

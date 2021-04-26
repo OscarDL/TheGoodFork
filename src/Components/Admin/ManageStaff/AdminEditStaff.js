@@ -11,10 +11,10 @@ import { editStaff, deleteStaff } from '../../../Functions/staff';
 
 const handleEdit = (id, staff, token, navigation) => {
   editStaff(id, staff, token).then(res => Alert.alert(
-    res.success ? res.title : "Could not edit staff member",
+    res.success ? res.title : 'Erreur lors de la modification',
     res.success ? res.desc : res,
     [{
-      text: res.success ? "DONE" : "RETRY",
+      text: res.success ? 'Terminé' : 'Réessayer',
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
@@ -22,16 +22,16 @@ const handleEdit = (id, staff, token, navigation) => {
 
 const handleDelete = (staff, token, navigation) => {
   Alert.alert(
-    "Are you sure?",
-    `You're about to delete ${staff.firstName} ${staff.lastName}.`,
+    'Êtes-vous sûr ?',
+    `Vous êtes sur le point de supprimer ${staff.firstName} ${staff.lastName}.`,
     [
-      { text: 'CANCEL' },
-      { text: 'CONTINUE',
+      { text: 'Annuler' },
+      { text: 'Continuer',
         onPress: () => deleteStaff(staff, token).then(res => Alert.alert(
-          res.success ? res.title : "Could not delete staff member",
+          res.success ? res.title : 'Erreur lors de la suppression',
           res.success ? res.desc : res,
           [{
-            text: res.success ? "DONE" : "RETRY",
+            text: res.success ? 'Terminé' : 'Réessayer',
             onPress: () => res.success ? navigation.goBack() : null
           }]
         ))
@@ -57,20 +57,20 @@ export default function AdminEditStaff({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <Text style={{marginVertical: 10}}>Choose your staff member's role</Text>
+        <Text style={{marginVertical: 10}}>Choisissez un rôle</Text>
         <View style={{height: 10}}></View>
 
         <View style={styles.pickerView}>
           <Picker
             style={{height: 40}}
-            prompt="Select a role"
+            prompt='Sélectionnez le rôle'
             selectedValue={newStaff.type}
             onValueChange={type => setNewStaff({...newStaff, type})}
           >
-            <Picker.Item label="    admin" value="admin"/>
-            <Picker.Item label="    barman" value="barman"/>
-            <Picker.Item label="    cook" value="cook"/>
-            <Picker.Item label="    waiter" value="waiter"/>
+            <Picker.Item label='    Administrateur' value='admin'/>
+            <Picker.Item label='    Barman' value='barman'/>
+            <Picker.Item label='    Cuisinier' value='cook'/>
+            <Picker.Item label='    Serveur' value='waiter'/>
           </Picker>
         </View>
       </View>
@@ -79,26 +79,24 @@ export default function AdminEditStaff({route, navigation}) {
         <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
         <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
         <Input value={newStaff.email} autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
-        <Input placeholder='Change password' secureTextEntry onChangeText={password => setNewStaff({ ...newStaff, password })} />
+        <Input placeholder='Changer le mot de passe' secureTextEntry onChangeText={password => setNewStaff({ ...newStaff, password })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
           buttonStyle={[styles.button]}
-          title='Update'
+          title='Sauvegarder'
           icon={<Icon
-            size={26}
-            name='edit'
+            name='save'
             color='white'
-            type='font-awesome-5'
-            style={{marginRight: 10, marginBottom: 3}}
+            style={{marginRight: 10}}
           />}
           onPress={() => handleEdit(params._id, newStaff, token, navigation)}
         />
       </View>
       
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(params, token, navigation)}>
-        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Delete {params.firstName} {params.lastName}</Text>
+        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Supprimer</Text>
       </TouchableOpacity>
     </View>
   );

@@ -8,20 +8,20 @@ const Tabs = createMaterialTopTabNavigator();
 
 export default function SubmitOrderTabs({order, setOrder, setPrice}) {
   return (
-    <Tabs.Navigator initialRouteName='Appetizer' backBehavior='initialRoute' tabBarOptions={{scrollEnabled: true, pressColor: 'darkgrey'}}>
-      <Tabs.Screen name='Appetizer'>
+    <Tabs.Navigator initialRouteName='Entrées' backBehavior='initialRoute' tabBarOptions={{scrollEnabled: true, pressColor: 'darkgrey'}}>
+      <Tabs.Screen name='Entrées'>
         {props => <OrderDishes {...props} type='appetizer' order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
-      <Tabs.Screen name='MainDish'>
+      <Tabs.Screen name='Plats'>
         {props => <OrderDishes {...props} type='mainDish' order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
-      <Tabs.Screen name='Dessert'>
+      <Tabs.Screen name='Desserts'>
         {props => <OrderDishes {...props} type='dessert' order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
-      <Tabs.Screen name='Drink'>
+      <Tabs.Screen name='Boissons'>
         {props => <OrderDishes {...props} type='drink' order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
-      <Tabs.Screen name='Alcohol'>
+      <Tabs.Screen name='Alcools'>
         {props => <OrderDishes {...props} type='alcohol' order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
     </Tabs.Navigator>

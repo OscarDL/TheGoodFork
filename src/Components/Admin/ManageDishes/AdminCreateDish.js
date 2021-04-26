@@ -10,10 +10,10 @@ import { useDataLayerValue } from '../../Context/DataLayer';
 
 const handleCreate = (dish, token, navigation) => {
   createDish(dish, token).then(res => Alert.alert(
-    res.success ? res.title : "Could not create dish",
+    res.success ? res.title : 'Erreur lors de la création',
     res.success ? res.desc : res,
     [{
-      text: res.success ? "DONE" : "RETRY",
+      text: res.success ? 'Terminé' : 'Réessayer',
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
@@ -25,9 +25,9 @@ export default function AdminCreateDish({navigation}) {
   const [{token}, _] = useDataLayerValue();
   const [dish, setDish] = useState({
     type: 'appetizer',
-    price: 0,
-    name: '',
     detail: '',
+    price: 0,
+    name: ''
   });
 
 
@@ -39,15 +39,15 @@ export default function AdminCreateDish({navigation}) {
         <View style={styles.pickerView}>
           <Picker
             style={{height: 40}}
-            prompt="Select a type"
+            prompt='Sélectionnez le type'
             selectedValue={dish.type}
             onValueChange={type => setDish({...dish, type})}
           >
-            <Picker.Item label="    Entrée"   value="appetizer"/>
-            <Picker.Item label="    Plat"     value="mainDish"/>
-            <Picker.Item label="    Dessert"  value="dessert"/>
-            <Picker.Item label="    Boisson"  value="drink"/>
-            <Picker.Item label="    Alcool"   value="alcohol"/>
+            <Picker.Item label='    Entrée'   value='appetizer'/>
+            <Picker.Item label='    Plat'     value='mainDish'/>
+            <Picker.Item label='    Dessert'  value='dessert'/>
+            <Picker.Item label='    Boisson'  value='drink'/>
+            <Picker.Item label='    Alcool'   value='alcohol'/>
           </Picker>
         </View>
       </View>
@@ -63,10 +63,8 @@ export default function AdminCreateDish({navigation}) {
           buttonStyle={[styles.button]}
           title='Ajouter'
           icon={<Icon
-            size={28}
+            name='create'
             color='white'
-            type='material'
-            name='how-to-reg'
             style={{marginRight: 10}}
           />}
           onPress={() => handleCreate(dish, token, navigation)}

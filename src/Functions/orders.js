@@ -18,7 +18,7 @@ export const getOrder = async (id, token) => {
 
     return {success: true, order: data.order};
     
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -40,7 +40,7 @@ export const getOrders = async (user, token) => {
 
     return {success: true, orders: user.type === 'waiter' ? newOrders : data.orders};
     
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -95,10 +95,10 @@ export const validateOrder = async (order, token) => {
 
     return {
       success: true,
-      title: "Order validation",
-      desc: "Successfully validated this order."
+      title: 'Validation de commande',
+      desc: 'Commande validée avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -118,10 +118,10 @@ export const editOrder = async (order, token) => {
 
     return {
       success: true,
-      title: "Order successsful",
-      desc: "Your order was edited successfully."
+      title: 'Commande',
+      desc: 'Commande modifiée avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -142,10 +142,10 @@ export const submitOrder = async (order, token, email) => {
 
     return {
       success: true,
-      title: "Order successsful",
-      desc: "Your order was submitted successfully."
+      title: 'Nouvelle commande',
+      desc: 'Commande envoyée avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -164,10 +164,10 @@ export const deleteOrder = async (order, token) => {
 
     return {
       success: true,
-      title: "Order deletion",
-      desc: "Successfully deleted this order."
+      title: 'Suppression de commande',
+      desc: 'Commande supprimée avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 

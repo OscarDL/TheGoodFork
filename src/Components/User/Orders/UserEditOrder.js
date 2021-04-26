@@ -1,45 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native-paper';
+import { View, Text, SafeAreaView } from 'react-native';
 
-import UserSubmitOrder from './UserSubmitOrder';
 import { styles } from '../../../Reusables/Styles';
-//import { getOrder } from '../../../Functions/orders';
-//import { useDataLayerValue } from '../../Context/DataLayer';
+import { getOrder } from '../../../Functions/orders';
+import { useDataLayerValue } from '../../Context/DataLayer';
 import SubmitOrderTabs from '../../../Reusables/Orders/SubmitOrderTabs';
 
 
-const Stack = createStackNavigator();
+export default function UserEditOrder({navigation, route}) {
+  const [{token}, _] = useDataLayerValue();
 
-export default UserEditOrder = ({title, route}) => (
-  <Stack.Navigator initialRouteName='UserEditOrderComponent'>
-    <Stack.Screen name='UserEditOrderComponent' options={{title}}>
-      {props => <UserEditOrderComponent {...props} order={route.params.order}/>}
-    </Stack.Screen>
-    <Stack.Screen name='UserSubmitOrder' component={UserSubmitOrder} options={{title: 'Verify & Submit', cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS}}/>
-  </Stack.Navigator>
-);
-
-
-function UserEditOrderComponent({navigation, order}) {
-  const [price, setPrice] = useState(order.price);
-  const [newOrder, setNewOrder] = useState(order);
+  const [newOrder, setNewOrder] = useState(null);
+  const [price, setPrice] = useState(route.params.order.price);
   
-  /*const [{token}, _] = useDataLayerValue();
-
   useEffect(() => {
-    getOrder(order._id, token).then(res => {setNewOrder(res.order); setPrice(res.order.price)});
-    // Necessary, else for some reason the original order would get mutated when using newOrder state with order prop as default value
-  }, [setNewOrder, setPrice]);*/
+    getOrder(route.params.order._id, token).then(res => {
+      setNewOrder(res.success ? res.order : route.params.order);
+      setPrice(res.success ? res.order.price : route.params.order.price);
+    });
+    // Better - else for some reason the original order would get mutated
+    // when using the newOrder state with the order prop as default value
+  }, [setNewOrder, setPrice]);
 
-  return <>
+  
+  return newOrder ? <>
     <SubmitOrderTabs order={newOrder} setOrder={setNewOrder} setPrice={setPrice}/>
 
-    <View style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total: {price}</Text>
-      <Button title='Confirm edit' buttonStyle={[styles.button]} 
+    <SafeAreaView style={styles.orderStrip}>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price} {newOrder.currency}</Text>
+      <Button title='Confirmer' buttonStyle={[styles.button]} 
       onPress={() => navigation.navigate('UserSubmitOrder', {order: newOrder, type: 'edit'})}/>
-    </View>
-  </>
+    </SafeAreaView>
+  </> : <View style={styles.container}><ActivityIndicator size={60} color='#56aadb'/></View>
 };

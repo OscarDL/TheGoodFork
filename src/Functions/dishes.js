@@ -25,14 +25,14 @@ export const getDishes = async (type = null) => {
 
     return {success: true, dishes: newDishes};
     
-  } catch (error) { return error.response?.data.error || 'Unknown error.'; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
 export const createDish = async (dish, token) => {
   for (const [key, value] of Object.entries(dish)) {
     if (value === '' && key !== 'detail')
-      return "Please fill in all the required fields.";
+      return 'Veuillez remplir tous les champs nécessaires.';
   }
 
   const config = {
@@ -50,18 +50,18 @@ export const createDish = async (dish, token) => {
 
     return {
       success: true,
-      title: "Successfully created",
-      desc: "Your new dish is ready."
+      title: 'Création réussie',
+      desc: 'Votre nouveau plat est prêt.'
     };
     
-  } catch (error) { return error.response?.data.error || 'Unknown error.'; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
 export const editDish = async (token, id, dish) => {
   for (const [key, value] of Object.entries(dish)) {
     if (value === '' && key !== 'detail')
-      return "Please fill in all the required fields.";
+      return 'Veuillez remplir tous les champs nécessaires.';
   }
 
   const config = {
@@ -79,18 +79,13 @@ export const editDish = async (token, id, dish) => {
     return {
       success: true,
       title: dish.name,
-      desc: "Your dish was successfully edited."
+      desc: 'Votre plat a été modifié avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
 export const deleteDish = async (token, id, dish) => {
-  for (const [key, value] of Object.entries(dish)) {
-    if (value === '' && key !== 'detail')
-      return "Please fill in all the required fields.";
-  }
-
   const config = {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -106,7 +101,7 @@ export const deleteDish = async (token, id, dish) => {
     return {
       success: true,
       title: dish.name,
-      desc: "Your dish was successfully deleted."
+      desc: 'Votre plat a été supprimé avec succès.'
     }
-  } catch (error) { return error.response?.data.error || "Unknown error."; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };

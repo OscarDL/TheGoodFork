@@ -3,70 +3,66 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import BaseCard from '../../../Reusables/BaseCard';
 import { styles } from '../../../Reusables/Styles';
 import { getOrders } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import StaffHomeCard from '../../../Reusables/StaffHomeCard';
 
 
-const failureAlert = (error, user, token, navigation) => {
-  Alert.alert(
-    "Couldn't retrieve orders",
-    error,
-    [
-      {
-        text: 'CANCEL',
-        onPress: () => navigation.goBack()
-      },
-      {
-        text: 'RETRY',
-        onPress: () => getOrders(user, token)
-      }
-    ]
-  );
-}
-
+const failureAlert = (error, navigation, setRetry) => Alert.alert(
+  "Erreur d'affichage des commandes", error,
+  [{
+    text: 'Annuler',
+    onPress: () => navigation.goBack()
+  },
+  {
+    text: 'Réessayer',
+    onPress: () => setRetry(true)
+  }]
+);
 
 export default function WaiterCheckOrders({navigation}) {
 
   const isFocused = useIsFocused();
+  const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
   const [{user, token}, _] = useDataLayerValue();
 
   useEffect(() => {
-    if (isFocused && token) { // refresh data also when using navigation.goBack()
-      getOrders(user, token).then(res => res.success ? setOrders(res.orders) : failureAlert(res, user, token, navigation));
-    }
-  }, [isFocused]);
+    if (isFocused || retry) getOrders(user, token).then(res => {
+      res.success ? setOrders(res.orders) : failureAlert(res, navigation, setRetry);
+      setRetry(false);
+    });
+  }, [isFocused, retry, setRetry]);
 
 
   return (
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         <View>
-          <Text style={styles.title}>Ready</Text>
+          <Text style={styles.title}>Prêt à servir</Text>
           {orders?.filter(order => order.status === 'ready' && order.orderedBy === user.email)?.length > 0
             ?
-          orders.map((order, i) => <StaffHomeCard
+          orders.map((order, i) => <BaseCard
             key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
             description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
           />)
             :
-          <Text style={styles.emptySection}>No orders yet</Text>}
+          <Text style={styles.emptySection}>Aucune commande pour l'instant</Text>}
         </View>
 
         <View>
-          <Text style={styles.title}>Preparing</Text>
+          <Text style={styles.title}>En préparation</Text>
           {orders?.filter(order => order.status === 'preparing' && order.orderedBy === user.email)?.length > 0
             ?
-          orders.map((order, i) => <StaffHomeCard
+          orders.map((order, i) => <BaseCard
             key={i} icon='how-to-reg' title={order?.user?.firstName + ' ' + order?.user?.lastName} subtitle={order?.price + ' ' + order?.currency}
             description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
             screen='WaiterOrderDetails' params={{order, readOnly: true}} navigation={navigation}
           />)
             :
-          <Text style={styles.emptySection}>No orders yet</Text>}
+          <Text style={styles.emptySection}>Aucune commande pour l'instant</Text>}
         </View>
       </ScrollView>
     </View>

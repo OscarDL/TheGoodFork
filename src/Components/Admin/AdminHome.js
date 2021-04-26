@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 
+import BaseCard from '../../Reusables/BaseCard';
 import { styles } from '../../Reusables/Styles';
-import StaffHomeCard from '../../Reusables/StaffHomeCard';
 
 
 export default function AdminHome({navigation}) {
@@ -10,12 +10,12 @@ export default function AdminHome({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         <View style={{marginVertical: 5}}>
-          <StaffHomeCard icon='assignment-ind' title='Manage staff member accounts' description='Description 1' screen='AdminRegisterStaff' navigation={navigation}/>
-          <StaffHomeCard icon='event-available' title='Edit table capacity & availability' description='Description 2' screen='AdminTablesList' navigation={navigation} />
-          <StaffHomeCard icon='menu-book' title='Edit the dishes list for customers' description='Description 3' screen='AdminDishes' navigation={navigation} />
-          <StaffHomeCard icon='coins' type='font-awesome-5' title='Check daily revenue of each service' description='Description 4' screen='AdminDailyRevenue' navigation={navigation} />
-          <StaffHomeCard icon='tags' size={22} type='font-awesome-5' title='Check food & drinks sales statistics' description='Description 5' screen='AdminSalesStats' navigation={navigation} />
-          <StaffHomeCard icon='insights' title='Check food & drinks stocks statistics' description='Description 6' screen='AdminStocksStats' navigation={navigation} />
+          <BaseCard icon='assignment-ind' title='Comptes staffs' description='Création, modification et suppression de membres staff.' screen='AdminRegisterStaff' navigation={navigation}/>
+          <BaseCard icon='event-available' title='Tables disponibles' description='Modifier les réservations et disponibilités.' screen='AdminTablesList' navigation={navigation} />
+          <BaseCard icon='menu-book' title='Menu et plats' description='Création, modification et suppression des plats.' screen='AdminDishes' navigation={navigation} />
+          <BaseCard icon='coins' type='font-awesome-5' title='Revenu quotidien' description='Consulter les statistiques du revenu quotidien.' screen='AdminDailyRevenue' navigation={navigation} />
+          <BaseCard icon='tags' size={22} type='font-awesome-5' title='Détails des ventes' description='Consulter les statistiques de vente avancées.' screen='AdminSalesStats' navigation={navigation} />
+          <BaseCard icon='insights' title='Stocks disponibles' description='Vérifier la disponibilité du stock des plats.' screen='AdminStocksStats' navigation={navigation} />
         </View>
       </ScrollView>
     </View>
