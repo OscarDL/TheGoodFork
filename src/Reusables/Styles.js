@@ -105,6 +105,21 @@ export const styles = StyleSheet.create({
     color: '#27e',
     paddingLeft: 0
   },
+  iosDateBackdrop: {
+    zIndex: 99,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(255, 255, 255, 0.75)'
+  },
+  iosDateBg: {
+    shadowRadius: 4,
+    shadowOpacity: 1,
+    shadowColor: '#eee',
+    backgroundColor: '#eee',
+    shadowOffset: {height: -20}
+  },
   roboto: {
     fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'Roboto'
   }

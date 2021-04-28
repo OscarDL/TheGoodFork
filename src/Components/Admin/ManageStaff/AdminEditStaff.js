@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import Picker from 'react-native-picker-select';
+import { View, Text, Alert, Platform } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -8,6 +8,22 @@ import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import { editStaff, deleteStaff } from '../../../Functions/staff';
 
+
+const pickerStyle = {
+  inputIOS: {
+    height: '100%',
+    marginLeft: 12,
+    marginRight: 28
+  },
+  inputAndroid: {
+    height: '100%',
+    marginRight: 20
+  },
+  iconContainer: {
+    padding: 6,
+    height: '100%'
+  }
+};
 
 const handleEdit = (id, staff, token, navigation) => {
   editStaff(id, staff, token).then(res => Alert.alert(
@@ -18,7 +34,7 @@ const handleEdit = (id, staff, token, navigation) => {
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
-}
+};
 
 const handleDelete = (staff, token, navigation) => {
   Alert.alert(
@@ -38,7 +54,7 @@ const handleDelete = (staff, token, navigation) => {
       }
     ]
   );
-}
+};
 
 
 export default function AdminEditStaff({route, navigation}) {
@@ -57,21 +73,22 @@ export default function AdminEditStaff({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <Text style={{marginVertical: 10}}>Choisissez un rôle</Text>
-        <View style={{height: 10}}></View>
-
+        <Text style={{marginBottom: 10}}>Sélectionnez un rôle</Text>
+        
         <View style={styles.pickerView}>
           <Picker
-            style={{height: 40}}
-            prompt='Sélectionnez le rôle'
-            selectedValue={newStaff.type}
             onValueChange={type => setNewStaff({...newStaff, type})}
-          >
-            <Picker.Item label='    Administrateur' value='admin'/>
-            <Picker.Item label='    Barman' value='barman'/>
-            <Picker.Item label='    Cuisinier' value='cook'/>
-            <Picker.Item label='    Serveur' value='waiter'/>
-          </Picker>
+            items={[
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Administrateur', value: 'admin', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Barman', value: 'barman', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Cuisinier', value: 'cook', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Serveur', value: 'waiter', key: 3 }
+            ]}
+            placeholder={{}}
+            value={newStaff.type}
+            style={pickerStyle}
+            Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+          />
         </View>
       </View>
 

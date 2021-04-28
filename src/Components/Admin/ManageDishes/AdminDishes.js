@@ -1,14 +1,31 @@
 import { FAB } from 'react-native-paper';
+import { Icon } from 'react-native-elements';
+import Picker from 'react-native-picker-select';
 import React, { useEffect, useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView } from 'react-native';
+import { View, Text, Alert, SafeAreaView, Platform } from 'react-native';
 
 import BaseCard from '../../../Reusables/BaseCard';
 import { styles } from '../../../Reusables/Styles';
 import { getDishes } from '../../../Functions/dishes';
 
+
+const pickerStyle = {
+  inputIOS: {
+    height: '100%',
+    marginLeft: 12,
+    marginRight: 28
+  },
+  inputAndroid: {
+    height: '100%',
+    marginRight: 20
+  },
+  iconContainer: {
+    padding: 6,
+    height: '100%'
+  }
+};
 
 const failureAlert = (error, navigation, setRetry) => Alert.alert(
   "Erreur d'affichage des plats", error,
@@ -42,20 +59,24 @@ export default function AdminDishes({navigation}) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={{alignItems: 'center', marginTop: 30, marginBottom: 15}}>
+          <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
+          
           <View style={styles.pickerView}>
-            <Picker
-              style={{height: 40}}
-              prompt="Que souhaites-tu afficher ?"
-              selectedValue={dishType}
-              onValueChange={type => setDishType(type)}
-            >
-              <Picker.Item label="    Entrées"   value="appetizer"/>
-              <Picker.Item label="    Plats"     value="mainDish"/>
-              <Picker.Item label="    Desserts"  value="dessert"/>
-              <Picker.Item label="    Boissons"  value="drink"/>
-              <Picker.Item label="    Alcools"   value="alcohol"/>
-              <Picker.Item label="    Tout"      value="all"/>
-            </Picker>
+          <Picker
+            onValueChange={type => setDishType(type)}
+            prompt='Catégorie à afficher'
+            items={[
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrée', value: 'appetizer', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Plat', value: 'mainDish', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Dessert', value: 'dessert', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson', value: 'drink', key: 3 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+            ]}
+            placeholder={{}}
+            value={dishType}
+            style={pickerStyle}
+            Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+          />
           </View>
         </View>
 

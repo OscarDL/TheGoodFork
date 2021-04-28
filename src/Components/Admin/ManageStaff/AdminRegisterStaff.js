@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Platform } from 'react-native';
 
 import { styles } from '../../../Reusables/Styles';
 import { registerStaff } from '../../../Functions/staff';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
+
+const pickerStyle = {
+  inputIOS: {
+    height: '100%',
+    marginLeft: 12,
+    marginRight: 28
+  },
+  inputAndroid: {
+    height: '100%',
+    marginRight: 20
+  },
+  iconContainer: {
+    padding: 6,
+    height: '100%'
+  }
+};
 
 const handleRegister = (staff, token, navigation) => {
   registerStaff(staff, token).then(res => Alert.alert(
@@ -17,7 +33,7 @@ const handleRegister = (staff, token, navigation) => {
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
-}
+};
 
 
 export default function AdminRegisterStaff({navigation}) {
@@ -34,19 +50,22 @@ export default function AdminRegisterStaff({navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <Text style={{marginVertical: 10}}>Choisissez un rôle</Text>
+        <Text style={{marginBottom: 10}}>Sélectionnez un rôle</Text>
+        
         <View style={styles.pickerView}>
           <Picker
-            style={{height: 40}}
-            prompt='Sélectionnez un rôle'
-            selectedValue={staff.type}
             onValueChange={type => setStaff({...staff, type})}
-          >
-            <Picker.Item label='    Administrateur' value='admin'/>
-            <Picker.Item label='    Barman' value='barman'/>
-            <Picker.Item label='    Cuisinier' value='cook'/>
-            <Picker.Item label='    Serveur' value='waiter'/>
-          </Picker>
+            items={[
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Administrateur', value: 'admin', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Barman', value: 'barman', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Cuisinier', value: 'cook', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Serveur', value: 'waiter', key: 3 }
+            ]}
+            placeholder={{}}
+            value={staff.type}
+            style={pickerStyle}
+            Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+          />
         </View>
       </View>
 

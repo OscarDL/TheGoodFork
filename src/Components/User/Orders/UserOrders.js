@@ -1,9 +1,9 @@
 import { FAB } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { View, ScrollView, Text, Alert, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { View, ScrollView, Text, Alert, Platform, TouchableOpacity } from 'react-native';
 
 import UserNewOrder from './UserNewOrder';
 import UserEditOrder from './UserEditOrder';
@@ -37,9 +37,9 @@ export default function UserOrders({title}) {
     <Stack.Navigator initialRouteName='UserOrdersComponent'>
       <Stack.Screen options={{title}} name='UserOrdersComponent' component={UserOrdersComponent} />
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Nouvelle commande'}} name='UserNewOrder' component={UserNewOrder}/>
-      <Stack.Screen options={{title: 'Order details', cardStyleInterpolator: iosH}} name='UserOrderDetails' component={UserOrderDetails} />
+      <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Détails commande'}} name='UserOrderDetails' component={UserOrderDetails} />
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Modifier commande'}} name='UserEditOrder' component={UserEditOrder}/>
-      <Stack.Screen name='UserSubmitOrder' component={UserSubmitOrder} options={{title: 'Vérification', cardStyleInterpolator: iosH}}/>
+      <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Vérification'}} name='UserSubmitOrder' component={UserSubmitOrder}/>
     </Stack.Navigator>
   );
 }
@@ -82,18 +82,36 @@ function UserOrdersComponent({navigation}) {
     ]
   );
 
-  const onChange = (e) => {
+  const androidChange = (e) => {
     setShow(false);
     if (e.type === 'dismissed') return setMode('date');
 
     const newDate = new Date(e.nativeEvent.timestamp); setDate(newDate);
 
-    if (mode === 'date') {
-      setMode('time'); setShow(true);
-    } else {
-      setMode('date'); // if user goes back in navigation stack and wants to choose a new time
-      navigation.navigate('UserNewOrder', {type: {takeaway: true, date: newDate.toUTCString()}});
+    if (mode === 'time') {
+      setMode('date');
+      return navigation.navigate('UserNewOrder', {type: {takeaway: true, date: newDate.toUTCString()}});
     }
+    
+    setMode('time'); setShow(true);
+  };
+
+  const iosChange = () => {
+    if (mode === 'date') return setMode('time');
+    
+    setShow(false);
+    setMode('date');
+    const newDate = date; setDate(new Date(Date.now()));
+
+    navigation.navigate('UserNewOrder', {type: {takeaway: true, date: newDate.toUTCString()}});
+  };
+
+  const iosCancel = () => {
+    if (mode === 'time') return setMode('date');
+
+    setShow(false);
+    setMode('date');
+    setDate(new Date(Date.now()));
   };
 
 
@@ -123,13 +141,31 @@ function UserOrdersComponent({navigation}) {
         <Text style={{...styles.title, padding: 0, margin: 0}}>Vous n'avez pas de commandes.</Text>
       </View>)}
 
-      {show && <DateTimePicker
+      {show && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
+        <View style={styles.iosDateBg}>
+          <DateTimePicker
+            mode={mode}
+            value={date}
+            is24Hour={true}
+            display='spinner'
+            onChange={e => setDate(new Date(e.nativeEvent.timestamp))}
+          />
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <TouchableOpacity onPress={iosCancel}>
+              <Text style={{padding: 24, color: '#f22', fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={iosChange}>
+              <Text style={{padding: 24, color: '#28f', fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View> : <DateTimePicker
         mode={mode}
         value={date}
         is24Hour={true}
         display='default'
-        onChange={onChange}
-      />}
+        onChange={androidChange}
+      />)}
 
       <FAB style={styles.fab} animated label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
     </View>

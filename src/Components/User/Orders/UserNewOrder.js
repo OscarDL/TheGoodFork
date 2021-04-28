@@ -18,6 +18,8 @@ export default function UserNewOrder({navigation, route}) {
     type: route.params.type
   });
 
+  console.log(order.type);
+
   return <>
     <SubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
 

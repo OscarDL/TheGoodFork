@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import Picker from 'react-native-picker-select';
+import { View, Text, Alert, Platform } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -8,6 +8,22 @@ import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import { editDish, deleteDish } from '../../../Functions/dishes';
 
+
+const pickerStyle = {
+  inputIOS: {
+    height: '100%',
+    marginLeft: 12,
+    marginRight: 28
+  },
+  inputAndroid: {
+    height: '100%',
+    marginRight: 20
+  },
+  iconContainer: {
+    padding: 6,
+    height: '100%'
+  }
+};
 
 const handleEdit = (token, id, dish, navigation) => {
   editDish(token, id, dish).then(res => Alert.alert(
@@ -18,7 +34,7 @@ const handleEdit = (token, id, dish, navigation) => {
       onPress: () => res.success ? navigation.goBack() : null
     }]
   ));
-}
+};
 
 const handleDelete = (token, dish, navigation) => {
   Alert.alert(
@@ -38,7 +54,7 @@ const handleDelete = (token, dish, navigation) => {
       }
     ]
   );
-}
+};
 
 
 export default function AdminEditDish({route, navigation}) {
@@ -57,21 +73,23 @@ export default function AdminEditDish({route, navigation}) {
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
-        <View style={{height: 10}}></View>
-
+        <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
+        
         <View style={styles.pickerView}>
           <Picker
-            style={{height: 40}}
-            prompt='Sélectionnez le type'
-            selectedValue={newDish.type}
             onValueChange={type => setNewDish({...newDish, type})}
-          >
-            <Picker.Item label='    Entrée'   value='appetizer'/>
-            <Picker.Item label='    Plat'     value='mainDish'/>
-            <Picker.Item label='    Dessert'  value='dessert'/>
-            <Picker.Item label='    Boisson'  value='drink'/>
-            <Picker.Item label='    Alcool'   value='alcohol'/>
-          </Picker>
+            items={[
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrée', value: 'appetizer', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Plat', value: 'mainDish', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Dessert', value: 'dessert', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson', value: 'drink', key: 3 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+            ]}
+            placeholder={{}}
+            value={newDish.type}
+            style={pickerStyle}
+            Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+          />
         </View>
       </View>
 
