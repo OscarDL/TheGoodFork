@@ -36,12 +36,14 @@ import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
 import CookHome from './Cook/CookHome';
+import CookOrderDetails from './Cook/CookOrderDetails';
 
 import UserDishes from './User/UserDishes';
 import UserAccount from './User/UserAccount';
 import UserPlanning from './User/UserPlanning';
 import UserOrders from './User/Orders/UserOrders';
 
+import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
 import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
@@ -55,7 +57,6 @@ const iosH = CardStyleInterpolators.forHorizontalIOS;
 
 
 export default function Routes() {
-
   const [{user, token}, dispatch] = useDataLayerValue();
 
   useEffect(() => { checkLogin(dispatch); }, [dispatch]);
@@ -107,6 +108,20 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
+  const cookStack = () => (
+    <Stack.Navigator initialRouteName='CookHome'>
+      <Stack.Screen name='CookHome'  component={CookHome} options={{
+        title: 'Centre cuisiniers',
+        headerRight: () => <Button type='clear'
+          buttonStyle={{marginRight: 10}}
+          icon={<Icon name='logout' size={26} />}
+          onPress={() => logout(dispatch)}
+        />
+      }}/>
+      <Stack.Screen name='CookOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={CookOrderDetails}/>
+    </Stack.Navigator>
+  );
+
   const waiterStack = () => (
     <Stack.Navigator initialRouteName='WaiterHome'>
       <Stack.Screen name='WaiterHome' component={WaiterHome} options={{
@@ -125,19 +140,6 @@ export default function Routes() {
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Valider une commande', cardStyleInterpolator: iosH}} component={WaiterValidateOrder}/>
       <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Vérification', cardStyleInterpolator: iosH}} component={WaiterSubmitOrder}/>
       <Stack.Screen name='WaiterManageTables' options={{title: 'Gérer les réservations', cardStyleInterpolator: iosH}} component={WaiterManageTables}/>
-    </Stack.Navigator>
-  );
-
-  const cookStack = () => (
-    <Stack.Navigator initialRouteName='CookHome'>
-      <Stack.Screen name='CookHome'  component={CookHome} options={{
-        title: 'Centre cuisiniers',
-        headerRight: () => <Button type='clear'
-          buttonStyle={{marginRight: 10}}
-          icon={<Icon name='logout' size={26} />}
-          onPress={() => logout(dispatch)}
-        />
-      }}/>
     </Stack.Navigator>
   );
 
@@ -172,7 +174,7 @@ export default function Routes() {
 
   
   return (
-    token === null ? <View><ActivityIndicator/></View> :
+    token === null ? <View style={styles.container}><ActivityIndicator/></View> :
     <NavigationContainer>
       <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
         <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />

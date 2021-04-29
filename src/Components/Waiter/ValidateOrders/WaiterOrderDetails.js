@@ -56,7 +56,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         <OrderDetails order={updatedOrder}/>
         <View style={{alignItems: 'center', margin: 20}}>
           {readOnly

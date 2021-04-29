@@ -25,7 +25,7 @@ const pickerStyle = {
 };
 
 const handleCreate = (dish, token, navigation) => {
-  createDish(dish, token).then(res => Alert.alert(
+  createDish({...dish, stock: (!dish.stock ? null : dish.stock)}, token).then(res => Alert.alert(
     res.success ? res.title : 'Erreur lors de la création',
     res.success ? res.desc : res,
     [{
@@ -40,10 +40,11 @@ export default function AdminCreateDish({navigation}) {
 
   const [{token}, _] = useDataLayerValue();
   const [dish, setDish] = useState({
-    type: 'appetizer',
-    detail: '',
+    name: '',
     price: 0,
-    name: ''
+    detail: '',
+    stock: null,
+    type: 'appetizer'
   });
 
 
@@ -74,7 +75,8 @@ export default function AdminCreateDish({navigation}) {
       <View>
         <Input placeholder='Nom' onChangeText={name => setDish({...dish, name})}/>
         <Input placeholder='Détails' onChangeText={detail => setDish({...dish, detail})}/>
-        <Input placeholder='Prix en euro' keyboardType='number-pad' onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}/>
+        <Input placeholder='Prix (EUR)' keyboardType='number-pad' onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}/>
+        <Input placeholder='Stock (le cas échéant)' onChangeText={stock => setDish({...dish, stock})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>

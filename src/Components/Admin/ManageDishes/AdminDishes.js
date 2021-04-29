@@ -41,7 +41,6 @@ const failureAlert = (error, navigation, setRetry) => Alert.alert(
 
 
 export default function AdminDishes({navigation}) {
-
   const [retry, setRetry] = useState(false);
   const [dishes, setDishes] = useState(null);
   const [dishType, setDishType] = useState('all');
@@ -59,18 +58,19 @@ export default function AdminDishes({navigation}) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={{alignItems: 'center', marginTop: 30, marginBottom: 15}}>
-          <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
+          <Text style={{marginBottom: 10}}>Type de plat à afficher</Text>
           
           <View style={styles.pickerView}>
           <Picker
             onValueChange={type => setDishType(type)}
             prompt='Catégorie à afficher'
             items={[
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrée', value: 'appetizer', key: 0 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Plat', value: 'mainDish', key: 1 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Dessert', value: 'dessert', key: 2 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson', value: 'drink', key: 3 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Tous les plats', value: 'all', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrées', value: 'appetizer', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Plats', value: 'mainDish', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Desserts', value: 'dessert', key: 3 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boissons', value: 'drink', key: 4 },
+              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boissons alcoolisées', value: 'alcohol', key: 5 }
             ]}
             placeholder={{}}
             value={dishType}

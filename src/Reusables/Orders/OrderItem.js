@@ -13,7 +13,12 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
 
   const addItem = (item, num) => {
     setOrder(addToOrder(order, type, item, num, setPrice));
-    setQuantity(quantity => (quantity + 1*num < 0) ? 0 : quantity + 1*num);
+    setQuantity(quantity => {
+      if (quantity + num < 0) return 0;
+      if (item.stock === null) return quantity + num;
+      if (item.stock === 0 || quantity + num > item.stock) return quantity;
+      return quantity + num;
+    });
   };
 
   return (
@@ -52,7 +57,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
         </TouchableOpacity>
 
         <Text style={{minWidth: '30%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
-          {quantity}
+          {item.stock === 0 ? 'OOS' : (!item.stock ? quantity : (item.stock === 0 ? 'OOS' : quantity + ' / ' + item.stock))}
         </Text>
 
         <TouchableOpacity style={{minWidth: '35%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>

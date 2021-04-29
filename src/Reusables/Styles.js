@@ -75,6 +75,16 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  orderDetailsView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  orderDetailsRow: {
+    flexShrink: 1,
+    marginRight: 10,
+    fontWeight: '500'
+  },
   sectionText: {
     flexGrow: 1,
     fontSize: 20,

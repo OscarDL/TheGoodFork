@@ -38,7 +38,7 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
       ?
     <View style={[styles.item, styles.itemInvisible] /* Show an invisible item for impair dishes number */}/>
       :
-    <OrderItem item={item} type={type} order={order} setOrder={setOrder} setPrice={setPrice} />
+    <OrderItem item={item} type={type} order={order} setOrder={setOrder} setPrice={setPrice}/>
   );
 
 

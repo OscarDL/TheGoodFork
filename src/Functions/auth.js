@@ -106,7 +106,7 @@ export const resetPassword = async (resetToken, password, passCheck) => {
       desc: data.data
     };
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-}
+};
 
 
 export const checkLogin = async (dispatch) => {
@@ -141,4 +141,4 @@ export const checkLogin = async (dispatch) => {
 export const logout = async (dispatch) => {
   await AsyncStorage.removeItem('authToken');
   checkLogin(dispatch);
-}
+};

@@ -10,7 +10,7 @@ export default function AdminHome({navigation}) {
     <View style={{...styles.container, paddingHorizontal: 0}}>
       <ScrollView>
         <View style={{marginVertical: 5}}>
-          <BaseCard icon='assignment-ind' title='Comptes staffs' description='Création, modification et suppression de membres staff.' screen='AdminRegisterStaff' navigation={navigation}/>
+          <BaseCard icon='assignment-ind' title='Comptes staffs' description='Création, modification et suppression de staff.' screen='AdminRegisterStaff' navigation={navigation}/>
           <BaseCard icon='event-available' title='Tables disponibles' description='Modifier les réservations et disponibilités.' screen='AdminTablesList' navigation={navigation} />
           <BaseCard icon='menu-book' title='Menu et plats' description='Création, modification et suppression des plats.' screen='AdminDishes' navigation={navigation} />
           <BaseCard icon='coins' type='font-awesome-5' title='Revenu quotidien' description='Consulter les statistiques du revenu quotidien.' screen='AdminDailyRevenue' navigation={navigation} />

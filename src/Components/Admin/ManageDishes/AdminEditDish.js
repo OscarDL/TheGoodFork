@@ -26,7 +26,7 @@ const pickerStyle = {
 };
 
 const handleEdit = (token, id, dish, navigation) => {
-  editDish(token, id, dish).then(res => Alert.alert(
+  editDish(token, id, {...dish, stock: (!dish.stock ? null : dish.stock)}).then(res => Alert.alert(
     res.success ? res.title : 'Erreur lors de la modification',
     res.success ? res.desc : res,
     [{
@@ -64,9 +64,10 @@ export default function AdminEditDish({route, navigation}) {
 
   const [newDish, setNewDish] = useState({
     name: params.name,
-    detail: params.detail,
+    type: params.type,
     price: params.price,
-    type: params.type
+    stock: params.stock,
+    detail: params.detail
   });
 
 
@@ -94,9 +95,10 @@ export default function AdminEditDish({route, navigation}) {
       </View>
 
       <View>
-        <Input value={newDish.name} onChangeText={name => setNewDish({...newDish, name})}/>
+        <Input value={newDish.name} placeholder='Nom' onChangeText={name => setNewDish({...newDish, name})}/>
         <Input value={newDish.detail} placeholder='Aucun détail' onChangeText={detail => setNewDish({...newDish, detail})}/>
-        <Input value={newDish.price.toString()} keyboardType='number-pad' onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})} />
+        <Input value={newDish.price.toString()} placeholder='Prix (EUR)' keyboardType='number-pad' onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})} />
+        <Input value={newDish.stock?.toString()} placeholder='Stock (le cas échéant)' onChangeText={stock => setNewDish({...newDish, stock})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>

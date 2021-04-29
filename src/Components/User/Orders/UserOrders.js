@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { View, ScrollView, Text, Alert, Platform, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Alert, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import UserNewOrder from './UserNewOrder';
 import UserEditOrder from './UserEditOrder';
@@ -65,11 +65,11 @@ function UserOrdersComponent({navigation}) {
   }]);
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user, token).then(res => {
+    if ((isFocused || retry) && token) getOrders(user, token).then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
       setRetry(false);
     });
-  }, [isFocused, retry, setRetry]);
+  }, [isFocused, token, retry, setRetry]);
 
 
   const handleNavigation = () => Alert.alert(
@@ -117,7 +117,7 @@ function UserOrdersComponent({navigation}) {
 
   return (
     <View style={styles.container}>
-      {orders && (orders?.length > 0 ? <ScrollView contentContainerStyle={{paddingVertical: 5}}>
+      {orders ? (orders?.length > 0 ? <ScrollView contentContainerStyle={{paddingVertical: 5}}>
 
         <View>
           <Text style={{...styles.title, marginTop: 6}}>À payer</Text>
@@ -139,7 +139,7 @@ function UserOrdersComponent({navigation}) {
 
       </ScrollView> : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{...styles.title, padding: 0, margin: 0}}>Vous n'avez pas de commandes.</Text>
-      </View>)}
+      </View>) : <View style={styles.container}><ActivityIndicator size={60} color='#56aadb'/></View>}
 
       {show && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
         <View style={styles.iosDateBg}>

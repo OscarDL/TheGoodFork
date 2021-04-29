@@ -29,6 +29,7 @@ const handleCancel = (order, token, navigation) => Alert.alert(
   }]
 );
 
+
 export default function UserOrderDetails({navigation, route}) {
   const {order} = route.params.params;
   const [{token}, _] = useDataLayerValue();
@@ -43,7 +44,7 @@ export default function UserOrderDetails({navigation, route}) {
   
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{paddingVertical: 5}}>
 
         <OrderDetails order={updatedOrder}/>
         <View style={{alignItems: 'center', margin: 20}}>
