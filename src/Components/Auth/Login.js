@@ -83,8 +83,8 @@ export default function Login({navigation}) {
 
 import React, { useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
 
 import { login } from '../../Functions/auth';
 import { styles } from '../../Reusables/Styles';
@@ -94,7 +94,7 @@ import { useDataLayerValue } from '../Context/DataLayer';
 const loginUser = (user, dispatch) => {
   login(user).then(async (res) => {
     if (!res.success)
-      return Alert.alert("User login", res, [{text: "RETRY"}]);
+      return Alert.alert('Erreur lors de la connexion', res, [{text: 'Réessayer'}]);
 
     dispatch({ type: 'SET_USER', user: res.user });
     dispatch({ type: 'SET_TOKEN', token: res.token });
@@ -110,37 +110,40 @@ export default function Login({navigation}) {
     password: ''
   });
 
-
   return (
     <View style={styles.container}>
-      <View style={{width: '100%'}}><Text style={{...styles.roboto, textAlign: 'center'}}>LOGO THE GOOD FORK</Text></View>
+      <View style={{width: '100%'}}>
+        <Image
+          style={{ width: 180, height: 180, alignSelf: 'center' }}
+          source={{ uri: 'https://res.cloudinary.com/thegoodfork/image/upload/v1620079806/TGF_jrfhd0.png' }}
+        />
+      </View>
 
       <View>
-        <Input style={styles.roboto} autoCapitalize='none' keyboardType='email-address' placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
-        <Input style={{...styles.roboto, marginBottom: 0}} autoCapitalize='none' placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
+        <Input autoCapitalize='none' keyboardType='email-address' placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
+        <Input autoCapitalize='none' placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
 
-        <TouchableOpacity style={{padding: 10, paddingTop: 0}} onPress={() => navigation.navigate('Forgot')}>
-          <Text style={styles.roboto}>Forgot password?</Text>
+        <TouchableOpacity style={{alignSelf: 'flex-end'}} onPress={() => navigation.navigate('Forgot')}>
+          <Text style={{padding: 10, paddingTop: 0, color: '#805A48'}}>Mot de passe oublié ?</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={{alignItems: 'center', marginVertical: 10}}>
+      <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title='Login'
+          title='Connexion'
           icon={<Icon
             size={28}
             color='white'
-            type='material'
             name='lock-open'
             style={{marginRight: 10}}
-          />}
+            />}
           onPress={() => loginUser(userLogin, dispatch)}
+          buttonStyle={[{...styles.button, marginVertical: 20}]}
         />
       </View>
-        
+      <View></View>
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.roboto}>Don't have an account? Register</Text>
+        <Text style={styles.link}>Je n'ai pas encore de compte</Text>
       </TouchableOpacity>
     </View>
   );

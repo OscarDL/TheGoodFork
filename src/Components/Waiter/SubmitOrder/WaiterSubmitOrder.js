@@ -81,11 +81,15 @@ export default function WaiterSubmitOrder({navigation, route}) {
         </TouchableOpacity>
 
         <Collapsible collapsed={collapsed.order}>
-          <OrderDetails order={order} hideDetails={true}/>
+          <OrderDetails order={order} hideDetails={true} showPrice={false}/>
         </Collapsible>
       </ScrollView>
 
       <View style={{padding: 5}}>
+        <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>
+          Total : {order.price} EUR
+        </Text>
+
         <Button title='Commander' buttonStyle={[styles.button]}
           onPress={() => type === 'edit' ? handleEdit({...order, details}, customer, token, navigation)
           : handleSubmit({...order, details}, customer, token, navigation, user)}

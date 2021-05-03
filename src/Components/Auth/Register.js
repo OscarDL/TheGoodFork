@@ -136,26 +136,26 @@ export default function Register({navigation}) {
 
 
 import React, { useState } from 'react';
+import { View, Text, Alert } from 'react-native';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '../../Reusables/Styles';
-import { useDataLayerValue } from '../Context/DataLayer';
 import { registerUser } from '../../Functions/auth';
+import { useDataLayerValue } from '../Context/DataLayer';
 
 
 const handleRegister = (user, dispatch) => {
   registerUser(user).then(res => Alert.alert(
-    res.success ? "Registration successful" : "Could not validate order",
-    res.success ? "Welcome to The Good Fork!" : res,
+    res.success ? 'Compte créé avec succès' : 'Erreur de création de compte',
+    res.success ? 'Bienvenue à The Good Fork!' : res,
     [{
-      text: res.success ? 'LET ME IN' : 'RETRY',
+      text: res.success ? 'Entrer' : 'Réessayer',
       onPress: async () => { if (res.success) {
         await AsyncStorage.setItem('authToken', res.token);
         dispatch({ type: 'SET_TOKEN', token: res.token });
         dispatch({ type: 'SET_USER', user: res.user }); // Routes stack will change once user context changes
-      }}
+      } else null }
     }]
   ));
 }
@@ -175,36 +175,34 @@ export default function Register({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={{...styles.roboto, textAlign: 'center'}}>
-        I am {`(${userRegister?.firstName || 'a'} ${userRegister?.lastName || 'user'})`} with {userRegister?.password ? 'a' : 'no'} password set
+      <Text style={{textAlign: 'center'}}>Sécurité du mot de passe :
+        <Text style={{color: userRegister.password.length < 8 ? '#f22' : (userRegister.password.length < 12 ? 'orange' : 'limegreen')}}>
+          {userRegister.password.length < 8 ? ' FAIBLE' : (userRegister.password.length < 12 ? ' MOYENNE' : ' HAUTE')}
+        </Text>
       </Text>
       
       <View>
-        <Input style={styles.roboto} placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
-        <Input style={styles.roboto} placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
-        <Input style={styles.roboto} placeholder='Email address' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setUserRegister({ ...userRegister, email })} />
-        <Input style={styles.roboto} placeholder='Password' autoCapitalize='none' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
-        <Input style={styles.roboto} placeholder='Confirm password' autoCapitalize='none' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
+        <Input placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
+        <Input placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
+        <Input placeholder='Email address' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setUserRegister({ ...userRegister, email })} />
+        <Input placeholder='Password' autoCapitalize='none' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
+        <Input placeholder='Confirm password' autoCapitalize='none' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
           buttonStyle={[styles.button]}
-          title='Register'
+          title="S'enregistrer"
           icon={<Icon
             size={28}
             color='white'
-            type='material'
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
           onPress={() => handleRegister(userRegister, dispatch)}
         />
       </View>
-
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.roboto}>Already have an account? Sign in</Text>
-      </TouchableOpacity>
+      <View></View>
     </View>
   );
 }

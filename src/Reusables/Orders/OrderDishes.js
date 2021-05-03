@@ -1,5 +1,5 @@
-import { View, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { View, Alert, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 import { styles } from '../Styles';
@@ -20,6 +20,9 @@ const failureAlert = (error, navigation, setRetry) => Alert.alert(
   }]
 );
 
+const cols = Dimensions.get('window').width > 375 ? 2 : 1;
+
+
 export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
   const [dishes, setDishes] = useState(null);
   const [retry, setRetry] = useState(true);
@@ -38,13 +41,25 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
       ?
     <View style={[styles.item, styles.itemInvisible] /* Show an invisible item for impair dishes number */}/>
       :
-    <OrderItem item={item} type={type} order={order} setOrder={setOrder} setPrice={setPrice}/>
+    <OrderItem
+      item={item}
+      type={type}
+      order={order}
+      setOrder={setOrder}
+      setPrice={setPrice}
+      small={cols > 1 ? true : false}
+    />
   );
 
 
   return (
     <View style={{...styles.container, flex: 1}}>
-      {dishes && <FlatList contentContainerStyle={{padding: 5}} data={formatGrid(dishes, 2)} renderItem={renderItem} numColumns={2}/>}
+      {dishes && <FlatList
+        numColumns={cols}
+        renderItem={renderItem}
+        data={formatGrid(dishes, cols)}
+        contentContainerStyle={{padding: 5}}
+      />}
     </View>
   );
 }

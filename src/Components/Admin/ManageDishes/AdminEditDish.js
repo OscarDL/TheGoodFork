@@ -115,7 +115,7 @@ export default function AdminEditDish({route, navigation}) {
       </View>
       
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, params, navigation)}>
-        <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Supprimer</Text>
+        <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
     </View>
   );

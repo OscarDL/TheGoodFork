@@ -15,7 +15,7 @@ const logout = async (dispatch) => {
 export default function AdminSettings() {
   const [_, dispatch] = useDataLayerValue();
   return (
-    <View style={[styles.container]}>
+    <View style={{...styles.container, alignItems: 'center'}}>
       <Text>SETTINGS</Text>
       <Button title='Log out' buttonStyle={[styles.button]} onPress={() => logout(dispatch)} />
     </View>

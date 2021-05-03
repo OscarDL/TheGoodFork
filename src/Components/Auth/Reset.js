@@ -27,15 +27,15 @@ export default function Reset({navigation}) {
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <View>
-        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Reset your password</Text>
-        <Text style={{...styles.roboto, margin: 10, textAlign: 'center'}}>Please fill-in the reset code we sent you via email, as well as your new password, to reset your credentials.</Text>
+        <Text style={{margin: 10, textAlign: 'center'}}>Réinitialisation du mot de passe</Text>
+        <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer le code qui vous a été envoyé par email, ainsi que votre nouveau mot de passe.</Text>
       </View>
       <View style={{width: '100%'}}>
-        <Input style={styles.roboto} placeholder='Reset code' onChangeText={token => setToken(token)} />
-        <Input style={styles.roboto} placeholder='New password' secureTextEntry onChangeText={password => setPassword(password)} />
-        <Input style={styles.roboto} placeholder='Confirm new password' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
+        <Input placeholder='Code secret' onChangeText={token => setToken(token)} />
+        <Input placeholder='Nouveau mot de passe' secureTextEntry onChangeText={password => setPassword(password)} />
+        <Input placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
       </View>
-      <Button buttonStyle={[styles.button]} title='Request password reset' onPress={() => handleReset(token, password, passCheck, navigation)} />
+      <Button buttonStyle={[styles.button]} title='Réinitialiser' onPress={() => handleReset(token, password, passCheck, navigation)} />
     </View>
   );
 }

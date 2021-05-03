@@ -61,10 +61,10 @@ export default function WaiterOrderDetails({navigation, route}) {
         <View style={{alignItems: 'center', margin: 20}}>
           {readOnly
             ?
-          <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
             :
           <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(updatedOrder, token, navigation)}>
-            <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Supprimer cette commande</Text>
+            <Text style={styles.delete}>Supprimer cette commande</Text>
           </TouchableOpacity>}
         </View>
       </ScrollView>

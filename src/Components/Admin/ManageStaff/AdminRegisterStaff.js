@@ -91,7 +91,7 @@ export default function AdminRegisterStaff({navigation}) {
       </View>
       
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('AdminStaffList')}>
-        <Text style={styles.roboto}>Modifier un membre existant</Text>
+        <Text style={styles.link}>Modifier un membre existant</Text>
       </TouchableOpacity>
     </View>
   );

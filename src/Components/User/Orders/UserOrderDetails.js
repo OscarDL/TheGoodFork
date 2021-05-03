@@ -1,8 +1,8 @@
 import { FAB } from 'react-native-paper';
-import { View, Text, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Alert, SafeAreaView, ActivityIndicator } from 'react-native';
 
 import { styles } from '../../../Reusables/Styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
@@ -43,21 +43,21 @@ export default function UserOrderDetails({navigation, route}) {
   }, [isFocused]);
   
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
 
         <OrderDetails order={updatedOrder}/>
+
         <View style={{alignItems: 'center', margin: 20}}>
-
-          <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          
           <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={() => handleCancel(updatedOrder, token, navigation)}>
-            <Text style={{...styles.roboto, color: '#f22', fontSize: 16}}>Annuler ma commande</Text>
+            <Text style={styles.delete}>Annuler ma commande</Text>
           </TouchableOpacity>
-
         </View>
 
       </ScrollView>
       <FAB style={styles.fab} icon='pencil' color='white' onPress={() => navigation.navigate('UserEditOrder', {order: updatedOrder})}/>
-    </View>
+    </SafeAreaView>
   );
 }

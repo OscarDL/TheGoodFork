@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 12,
-    backgroundColor: 'limegreen',
+    backgroundColor: '#805A48',
     borderRadius: Platform.OS === 'ios' ? 8 : 4
   },
   title: {
@@ -17,6 +17,14 @@ export const styles = StyleSheet.create({
     paddingBottom: 4,
     fontWeight: '700',
     paddingHorizontal: 20,
+  },
+  link: {
+    color: '#28e'
+  },
+  delete: {
+    fontSize: 16,
+    color: '#f22',
+    fontWeight: '600'
   },
   card: {
     padding: 10,
@@ -38,7 +46,7 @@ export const styles = StyleSheet.create({
     bottom: 0,
     margin: 16,
     position: 'absolute',
-    backgroundColor: '#56aadb'
+    backgroundColor: '#ac9680'
   },
   pickerView: {
     height: 45,
@@ -129,8 +137,5 @@ export const styles = StyleSheet.create({
     shadowColor: '#eee',
     backgroundColor: '#eee',
     shadowOffset: {height: -20}
-  },
-  roboto: {
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'Roboto'
   }
 });

@@ -46,7 +46,7 @@ export default function CookOrderDetails({navigation, route}) {
 
         <OrderDetails order={order}/>
         <View style={{alignItems: 'center', margin: 20}}>
-          <Text style={{...styles.roboto, fontSize: 16, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
         </View>
 
       </ScrollView>

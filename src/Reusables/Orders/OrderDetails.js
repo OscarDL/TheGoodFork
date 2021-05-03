@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { styles } from '../Styles';
 
 
-export default OrderDetails = ({order, hideDetails}) => (
+export default OrderDetails = ({order, hideDetails, showPrice = true}) => (
   <View>
     {order.appetizer.length > 0 && <View>
       <Text style={styles.title}>Apéritifs</Text>
@@ -79,8 +79,8 @@ export default OrderDetails = ({order, hideDetails}) => (
       </View>
     </View>}
     
-    <Text style={{...styles.title, textAlign: 'center', marginTop: 15}}>
+    {showPrice && <Text style={{...styles.title, textAlign: 'center', marginTop: 15}}>
       Total : {order.price} EUR
-    </Text>
+    </Text>}
   </View>
 )

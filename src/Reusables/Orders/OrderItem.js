@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Icon } from 'react-native-elements';
-import { View, Text, Easing } from 'react-native';
 import TextTicker from 'react-native-text-ticker';
+import { View, Text, Easing } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../Styles';
 import { addToOrder } from '../../Functions/orders';
 
 
-export default function OrderItem({item, type, order, setOrder, setPrice}) {
+export default function OrderItem({item, type, order, setOrder, setPrice, small}) {
   const [quantity, setQuantity] = useState(order[type]?.find(dish => dish && dish._id === item._id)?.quantity || 0);
 
   const addItem = (item, num) => {
@@ -23,32 +23,34 @@ export default function OrderItem({item, type, order, setOrder, setPrice}) {
 
   return (
     <View style={styles.item}>
-      <Icon name='how-to-reg' type='material' style={{paddingTop: 8}}/>
+      <View style={small ? {flexDirection: 'column'} : {flexDirection: 'row', alignItems: 'center'}}>
+        <Icon name='how-to-reg' type='material' style={{paddingTop: 8}}/>
 
-      <View style={{padding: 8}}>
-        <TextTicker loop
-          scrollSpeed={200}
-          bounceSpeed={100}
-          bounceDelay={1000}
-          marqueeDelay={1000}
-          easing={Easing.linear}
-          bouncePadding={{left: 0, right: 0}}
-          style={{...styles.roboto, fontSize: 15, fontWeight: '600', paddingVertical: 10}}
-        >
-          {item?.name}
-        </TextTicker>
-        <Text style={{...styles.roboto}}>{item?.price + ' ' + item?.currency}</Text>
-        <TextTicker loop
-          scrollSpeed={200}
-          bounceSpeed={100}
-          bounceDelay={1000}
-          marqueeDelay={1000}
-          easing={Easing.linear}
-          bouncePadding={{left: 0, right: 0}}
-          style={{...styles.roboto, paddingTop: 10}}
-        >
-          {item?.detail || 'Aucun détail'}
-        </TextTicker>
+        <View style={{padding: 8, flexGrow: small ? 0 : 1}}>
+          <TextTicker loop
+            scrollSpeed={200}
+            bounceSpeed={100}
+            bounceDelay={1000}
+            marqueeDelay={1000}
+            easing={Easing.linear}
+            bouncePadding={{left: 0, right: 0}}
+            style={{fontSize: 15, fontWeight: '600', paddingVertical: 10}}
+          >
+            {item?.name}
+          </TextTicker>
+          <Text>{item?.price + ' ' + item?.currency}</Text>
+          <TextTicker loop
+            scrollSpeed={200}
+            bounceSpeed={100}
+            bounceDelay={1000}
+            marqueeDelay={1000}
+            easing={Easing.linear}
+            bouncePadding={{left: 0, right: 0}}
+            style={{paddingTop: 10}}
+          >
+            {item?.detail || 'Aucun détail'}
+          </TextTicker>
+        </View>
       </View>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e3e3e3', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
