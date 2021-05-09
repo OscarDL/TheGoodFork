@@ -64,12 +64,12 @@ export default function AdminDishes({navigation}) {
             <Picker
               onValueChange={type => setDishType(type)}
               items={[
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Tous les plats', value: 'all', key: 0 },
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrées', value: 'appetizer', key: 1 },
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Plats', value: 'mainDish', key: 2 },
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Desserts', value: 'dessert', key: 3 },
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boissons', value: 'drink', key: 4 },
-                { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boissons alcoolisées', value: 'alcohol', key: 5 }
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Tous les plats', value: 'all', key: 0 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrées', value: 'appetizer', key: 1 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plats', value: 'mainDish', key: 2 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Desserts', value: 'dessert', key: 3 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons', value: 'drink', key: 4 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons alcoolisées', value: 'alcohol', key: 5 }
               ]}
               placeholder={{}}
               value={dishType}

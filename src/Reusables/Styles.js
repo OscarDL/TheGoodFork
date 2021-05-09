@@ -125,10 +125,12 @@ export const styles = StyleSheet.create({
     paddingLeft: 0
   },
   iosDateBackdrop: {
+    top: 0,
     zIndex: 99,
     width: '100%',
     height: '100%',
     position: 'absolute',
+    alignItems: 'center',
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(255, 255, 255, 0.75)'
   },

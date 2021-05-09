@@ -79,10 +79,10 @@ export default function AdminEditStaff({route, navigation}) {
           <Picker
             onValueChange={type => setNewStaff({...newStaff, type})}
             items={[
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Administrateur', value: 'admin', key: 0 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Barman', value: 'barman', key: 1 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Cuisinier', value: 'cook', key: 2 },
-              { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Serveur', value: 'waiter', key: 3 }
+              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Administrateur', value: 'admin', key: 0 },
+              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Barman', value: 'barman', key: 1 },
+              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Cuisinier', value: 'cook', key: 2 },
+              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Serveur', value: 'waiter', key: 3 }
             ]}
             placeholder={{}}
             value={newStaff.type}

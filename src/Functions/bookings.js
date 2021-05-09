@@ -22,15 +22,16 @@ export const getBookings = async (token) => {
 };
 
 
-export const getDayBookings = async (day) => {
+export const getDayBookings = async (day, token) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   }
 
   try {
-    const {data} = await axios.get(apiUrl + 'bookings/day/' + day.timestamp, config);
+    const {data} = await axios.get(apiUrl + 'bookings/day/' + day, config);
 
     if (!data.success) return data?.error;
     
