@@ -87,8 +87,8 @@ export default function AdminEditDish({route, navigation}) {
               { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
             ]}
             placeholder={{}}
-            value={newDish.type}
             style={pickerStyle}
+            value={newDish.type}
             Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
           />
         </View>

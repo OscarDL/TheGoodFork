@@ -55,7 +55,6 @@ export default function AdminCreateDish({navigation}) {
         
         <View style={styles.pickerView}>
           <Picker
-            prompt='Sélectionnez le type'
             onValueChange={type => setDish({...dish, type})}
             items={[
               { label: (Platform.OS !== 'ios' ? '  ' : '') + 'Entrée', value: 'appetizer', key: 0 },

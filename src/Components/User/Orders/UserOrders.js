@@ -139,7 +139,9 @@ function UserOrdersComponent({navigation}) {
 
       </ScrollView> : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{...styles.title, padding: 0, margin: 0}}>Vous n'avez pas de commandes.</Text>
-      </View>) : <View style={styles.container}><ActivityIndicator size={60} color='#56aadb'/></View>}
+      </View>) : <View style={styles.container}>
+        <ActivityIndicator size={60} color='#56aadb'/>
+      </View>}
 
       {show && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
         <View style={styles.iosDateBg}>

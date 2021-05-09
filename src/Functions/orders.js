@@ -3,25 +3,6 @@ import axios from 'axios';
 import { apiUrl } from '../../config';
 
 
-export const getOrder = async (id, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
-  try {
-    const {data} = await axios.get(apiUrl + 'orders/' + id, config);
-
-    if (!data.success) return data?.error;
-
-    return {success: true, order: data.order};
-    
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
 export const getOrders = async (user, token) => {
   const config = {
     headers: {
@@ -39,6 +20,25 @@ export const getOrders = async (user, token) => {
     data.orders?.map(order => order.validated === false && newOrders.push(order));
 
     return {success: true, orders: user.type === 'waiter' ? newOrders : data.orders};
+    
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const getOrder = async (id, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }
+
+  try {
+    const {data} = await axios.get(apiUrl + 'orders/' + id, config);
+
+    if (!data.success) return data?.error;
+
+    return {success: true, order: data.order};
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
@@ -99,7 +99,7 @@ export const validateOrder = async (order, token) => {
 
     return {
       success: true,
-      title: 'Validation de commande',
+      title: 'Validation',
       desc: 'Commande validée avec succès.'
     }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -116,13 +116,13 @@ export const editOrder = async (order, token) => {
   
   try {
     order.price = totalPrice(order); // For security
-    const {data} = await axios.put(apiUrl + 'orders/edit/' + order._id, order, config);
+    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
     
     if (!data.success) return data?.error;
 
     return {
       success: true,
-      title: 'Commande',
+      title: 'Modification',
       desc: 'Commande modifiée avec succès.'
     }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -168,8 +168,8 @@ export const deleteOrder = async (order, token) => {
 
     return {
       success: true,
-      title: 'Suppression de commande',
-      desc: 'Commande supprimée avec succès.'
+      title: 'Annulation',
+      desc: 'Commande anulée avec succès.'
     }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };

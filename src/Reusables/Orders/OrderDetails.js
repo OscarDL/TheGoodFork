@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { styles } from '../Styles';
 
 
-export default OrderDetails = ({order, hideDetails, showPrice = true}) => (
+export default OrderDetails = ({order, hideDetails = false, showPrice = true}) => (
   <View>
     {order.appetizer.length > 0 && <View>
       <Text style={styles.title}>Apéritifs</Text>

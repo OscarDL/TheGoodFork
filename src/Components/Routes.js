@@ -31,6 +31,7 @@ import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
 import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
 import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
+import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
 import WaiterManageTables from './Waiter/ManageTables/WaiterManageTables';
 import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
@@ -40,13 +41,12 @@ import CookOrderDetails from './Cook/CookOrderDetails';
 
 import UserDishes from './User/UserDishes';
 import UserAccount from './User/UserAccount';
-import UserPlanning from './User/UserPlanning';
 import UserOrders from './User/Orders/UserOrders';
+import UserPlanning from './User/Booking/UserPlanning';
 
 import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
-import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
 
 
 const Stack = createStackNavigator();

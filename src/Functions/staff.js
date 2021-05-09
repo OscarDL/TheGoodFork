@@ -55,7 +55,7 @@ export const editStaff = async (id, staff, token) => {
 
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.put(apiUrl + 'admin/accounts/updateStaff/' + id, staff, config);
+    const {data} = await axios.put(apiUrl + 'admin/accounts/update/' + id, staff, config);
 
     if (!data.success) return data?.error;
 
@@ -66,7 +66,7 @@ export const editStaff = async (id, staff, token) => {
     };
 
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-}
+};
 
 
 export const deleteStaff = async (staff, token) => {
@@ -90,4 +90,4 @@ export const deleteStaff = async (staff, token) => {
     };
 
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-}
+};

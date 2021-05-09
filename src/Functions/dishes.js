@@ -72,7 +72,7 @@ export const editDish = async (token, id, dish) => {
   }
 
   try {
-    const {data} = await axios.put(apiUrl + 'dishes/edit/' + id, dish, config);
+    const {data} = await axios.put(apiUrl + 'dishes/update/' + id, dish, config);
 
     if (!data.success) return data?.error;
 

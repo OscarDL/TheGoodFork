@@ -43,8 +43,8 @@ export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
   const [{user, token}, _] = useDataLayerValue();
   
-  const [details, setDetails] = useState(null);
   const [collapsed, setCollapsed] = useState(true);
+  const [details, setDetails] = useState(order.details);
 
   useEffect(() => {
     navigation.setOptions({title: 'Commande ' + (!order.takeaway ? 'sur place' : 'à emporter')})
@@ -56,8 +56,8 @@ export default function UserSubmitOrder({navigation, route}) {
       <ScrollView contentContainerStyle={{padding: 5}}>
         <View style={{marginTop: 6}}>
           <Text numberOfLines={1} style={styles.title}>Détails supplémentaires</Text>
-          <TextInput placeholder='Ajoutez une précision sur votre commande...' defaultValue={order.details} multiline
-          onChangeText={setDetails} style={{margin: 10, padding: 10, paddingTop: 10, borderRadius: 5, backgroundColor: 'white'}}/>
+          <TextInput placeholder='Ajoutez une précision sur votre commande...' onChangeText={setDetails} multiline
+          value={details} style={{margin: 10, padding: 10, paddingTop: 10, borderRadius: 5, backgroundColor: 'white'}}/>
         </View>
         
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed(!collapsed)}>

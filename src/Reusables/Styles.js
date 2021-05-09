@@ -19,7 +19,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   link: {
-    color: '#28e'
+    color: '#28e',
+    fontSize: 16
   },
   delete: {
     fontSize: 16,

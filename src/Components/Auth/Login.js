@@ -138,7 +138,7 @@ export default function Login({navigation}) {
             style={{marginRight: 10}}
             />}
           onPress={() => loginUser(userLogin, dispatch)}
-          buttonStyle={[{...styles.button, marginVertical: 20}]}
+          buttonStyle={[styles.button]}
         />
       </View>
       <View></View>
