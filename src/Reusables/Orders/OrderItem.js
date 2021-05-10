@@ -59,7 +59,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
         </TouchableOpacity>
 
         <Text style={{minWidth: '30%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
-          {item.stock === 0 ? 'OOS' : (!item.stock ? quantity : (item.stock === 0 ? 'OOS' : quantity + ' / ' + item.stock))}
+          {item.stock === 0 ? '---' : (!item.stock ? quantity : quantity + ' / ' + item.stock)}
         </Text>
 
         <TouchableOpacity style={{minWidth: '35%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>

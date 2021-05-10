@@ -7,11 +7,13 @@ import { styles } from '../../../../Reusables/Styles';
 export default function BookingPeriod({bookings, period}) {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{paddingBottom: 60 /* Avoid FAB overlap */}}>
+      <ScrollView>
         {[1,2,3,4,5,6,7,8,9,10].map(table => (
           <View key={table} style={{
-            padding: 20,
+            paddingVertical: 20,
+            marginHorizontal: 20,
             flexDirection: 'row',
+            borderBottomColor: '#805a48',
             justifyContent: 'space-between',
             borderBottomWidth: table === 10 ? 0 : 0.5
           }}>

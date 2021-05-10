@@ -75,11 +75,11 @@ export default OrderDetails = ({order, hideDetails = false, showPrice = true}) =
       <Text numberOfLines={1} style={styles.title}>Détails supplémentaires</Text>
 
       <View style={styles.card}>
-        <Text style={{fontWeight: '500'}}>{order.details}</Text>
+        <Text style={{fontWeight: '400'}}>{order.details}</Text>
       </View>
     </View>}
     
-    {showPrice && <Text style={{...styles.title, textAlign: 'center', marginTop: 15}}>
+    {showPrice && <Text style={{...styles.title, textAlign: 'center', marginTop: 30}}>
       Total : {order.price} EUR
     </Text>}
   </View>

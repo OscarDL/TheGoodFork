@@ -37,10 +37,10 @@ export const styles = StyleSheet.create({
   homeCard: {
     flex: 1,
     padding: 8,
-    borderRadius: 4,
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: Platform.OS === 'ios' ? 10 : 5
   },
   fab: {
     right: 0,
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
   orderDetailsRow: {
     flexShrink: 1,
     marginRight: 10,
-    fontWeight: '500'
+    fontWeight: '400'
   },
   sectionText: {
     flexGrow: 1,
@@ -100,7 +100,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center'
   },
   emptySection: {
-    padding: 10,
+    padding: 20,
     fontSize: 16,
     width: '100%',
     textAlign: 'center'
@@ -130,7 +130,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    alignItems: 'center',
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(255, 255, 255, 0.75)'
   },

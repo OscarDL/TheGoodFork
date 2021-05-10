@@ -3,12 +3,15 @@ import { Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 
-import TablePicker from './TablePicker';
-import PeriodPicker from './PeriodPicker';
+import TablePicker from '../New/TablePicker';
+import PeriodPicker from '../New/PeriodPicker';
 import { styles } from '../../../../Reusables/Styles';
 import { useDataLayerValue } from '../../../Context/DataLayer';
-import { getDayBookings, submitBooking } from '../../../../Functions/bookings';
+import { getDayBookings, editBooking, deleteBooking } from '../../../../Functions/bookings';
 
+
+const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 const circle = {
   width: '100%',
@@ -25,20 +28,14 @@ const circleZone = {
 
 
 export default function UserNewBooking({navigation, route}) {
-  const day = route.params.day;
-  const [{user, token}] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [show, setShow] = useState(null);
+  
   const [loading, setLoading] = useState(false);
+  const [booking, setBooking] = useState(route.params.booking);
   const [bookings, setBookings] = useState(route.params.bookings);
-
-  const [booking, setBooking] = useState({
-    user,
-    period: 1,
-    table: null,
-    dateBooked: day
-  });
 
 
   const androidChange = (e) => {
@@ -50,8 +47,8 @@ export default function UserNewBooking({navigation, route}) {
 
     getDayBookings(e.nativeEvent.timestamp, token).then(bookings => {
       setStep(1);
-      setLoading(false);
       setBookings(bookings);
+      setTimeout(() => setLoading(false), 500);
     });
   };
 
@@ -61,21 +58,42 @@ export default function UserNewBooking({navigation, route}) {
 
     getDayBookings(booking.dateBooked, token).then(bookings => {
       setStep(1);
-      setLoading(false);
       setBookings(bookings);
+      setTimeout(() => setLoading(false), 500);
     });
   };
 
 
-  const handleSubmit = () => {
-    submitBooking(booking, token).then(res => Alert.alert(
-      res.success ? res.title : 'Erreur de réservation',
+  const handleEdit = () => {
+    editBooking(booking, token).then(res => Alert.alert(
+      res.success ? res.title : 'Erreur de modification',
       res.success ? res.desc : res,
       [{
         text: res.success ? 'Terminé' : 'Réesayer',
         onPress: () => res.success ? navigation.goBack() : null
       }]
     ));
+  };
+
+  const handleCancel = () => {
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      "Vous êtes sur le point d'annuler votre réservation pour le "
+      + `${days[new Date(booking.dateBooked).getDay()]} ${new Date(booking.dateBooked).getDate()} ${months[new Date(booking.dateBooked).getMonth()]}.`,
+      [
+        { text: 'Revenir' },
+        { text: 'Continuer',
+          onPress: () => deleteBooking(booking, token).then(res => Alert.alert(
+            res.success ? res.title : "Erreur d'annulation",
+            res.success ? res.desc : res,
+            [{
+              text: res.success ? 'Terminé' : 'Réesayer',
+              onPress: () => res.success ? navigation.goBack() : null
+            }]
+          ))
+        }
+      ]
+    );
   };
 
 
@@ -175,15 +193,18 @@ export default function UserNewBooking({navigation, route}) {
       <View style={{alignItems: 'center'}}>
         <Button
           icon={<Icon
+            name='save'
             color='white'
-            name='restaurant'
             style={{marginRight: 10}}
           />}
-          title="Réserver"
+          title="Modifier"
           disabled={step < 3}
-          onPress={handleSubmit}
+          onPress={handleEdit}
           buttonStyle={styles.button}
         />
+        <TouchableOpacity style={{alignItems: 'center', padding: 10, marginTop: 20}} onPress={handleCancel}>
+          <Text style={styles.delete}>Annuler ma réservation</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -83,42 +83,42 @@ export default function AdminDishes({navigation}) {
           <View style={{marginVertical: 5}}>
             
             {(dishType === 'appetizer' || dishType === 'all') && <>
-              <Text style={{...styles.title, marginTop: 6}}>Entrées</Text>
+              <Text style={styles.title}>Entrées</Text>
               {dishes?.map((dish, i) => dish.type === 'appetizer' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={dish} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
               />)}
             </>}
 
             {(dishType === 'mainDish' || dishType === 'all') && <>
-              <Text style={{...styles.title, marginTop: 6}}>Plats</Text>
+              <Text style={styles.title}>Plats</Text>
               {dishes?.map((dish, i) => dish.type === 'mainDish' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={dish} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
               />)}
             </>}
 
             {(dishType === 'dessert' || dishType === 'all') && <>
-              <Text style={{...styles.title, marginTop: 6}}>Desserts</Text>
+              <Text style={styles.title}>Desserts</Text>
               {dishes?.map((dish, i) => dish.type === 'dessert' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={dish} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
               />)}
             </>}
 
             {(dishType === 'drink' || dishType === 'all') && <>
-              <Text style={{...styles.title, marginTop: 6}}>Boissons</Text>
+              <Text style={styles.title}>Boissons</Text>
               {dishes?.map((dish, i) => dish.type === 'drink' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={dish} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
               />)}
             </>}
 
             {(dishType === 'alcohol' || dishType === 'all') && <>
-              <Text style={{...styles.title, marginTop: 6}}>Boissons alcoolisées</Text>
+              <Text style={styles.title}>Boissons alcoolisées</Text>
               {dishes?.map((dish, i) => dish.type === 'alcohol' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={dish} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock || 'non défini'}`}
               />)}
             </>}
           </View>

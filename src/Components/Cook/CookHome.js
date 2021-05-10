@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
-import { View, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, Alert, Platform, SafeAreaView } from 'react-native';
 
 import BaseCard from '../../Reusables/BaseCard';
 import { styles } from '../../Reusables/Styles';
@@ -35,13 +35,13 @@ export default function CookHome({navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {orders ?
 
         (orders?.filter(order => order.validated).length > 0
           ?
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-          <Text style={styles.title}>Commandes validées</Text>
+          <Text style={styles.title}>Commandes à préparer</Text>
 
           {orders.map((order, i) => order.validated && <BaseCard
             key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
@@ -54,7 +54,9 @@ export default function CookHome({navigation}) {
           <Text style={{...styles.title, padding: 0, margin: 0}}>Aucune commande à préparer pour l'instant.</Text>
         </View>)
 
-      : <View style={styles.container}><ActivityIndicator size={60} color='#56aadb'/></View>}
-    </View>
+      : <View style={styles.container}>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+      </View>}
+    </SafeAreaView>
   );
 }

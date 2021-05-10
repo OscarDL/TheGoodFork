@@ -47,6 +47,7 @@ import UserPlanning from './User/Booking/UserPlanning';
 import { styles } from '../Reusables/Styles';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
+import { StatusBar } from 'expo-status-bar';
 
 
 const Stack = createStackNavigator();
@@ -174,11 +175,17 @@ export default function Routes() {
 
   
   return (
-    token === null ? <View style={styles.container}><ActivityIndicator/></View> :
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
-        <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    token === null ? (
+      <View style={styles.container}>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+      </View>
+    ) : (<>
+      <StatusBar style='dark'/>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
+          <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>)
   );
 }

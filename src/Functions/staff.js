@@ -31,7 +31,7 @@ export const registerStaff = async (staff, token) => {
   }
   
   try {
-    const {data} = await axios.post(apiUrl + 'admin/accounts/registerStaff', staff, config);
+    const {data} = await axios.post(apiUrl + 'admin/accounts/register', staff, config);
 
     if (!data.success) return data?.error;
     
@@ -65,7 +65,7 @@ export const editStaff = async (id, staff, token) => {
       desc: data?.data,
     };
 
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+  } catch (error) { console.log(error); return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
@@ -79,7 +79,7 @@ export const deleteStaff = async (staff, token) => {
 
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.delete(apiUrl + 'admin/accounts/deleteStaff/' + staff._id, config);
+    const {data} = await axios.delete(apiUrl + 'admin/accounts/delete/' + staff._id, config);
 
     if (!data.success) return data?.error;
 

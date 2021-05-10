@@ -48,7 +48,7 @@ const tables = [
 
 export default function TablePicker({setStep, setShow, booking, bookings, setBooking}) {
   return (
-    <View style={{...styles.iosDateBackdrop, justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.25)'}}>
+    <View style={{...styles.iosDateBackdrop, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.25)'}}>
       <View style={pickerBg}>
         <View style={styles.pickerView}>
           <Picker
@@ -71,13 +71,13 @@ export default function TablePicker({setStep, setShow, booking, bookings, setBoo
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
           <TouchableOpacity onPress={() => setShow(null)}>
-            <Text style={{fontWeight: 'bold', color: '#f22', fontSize: 18, padding: 20}}>Annuler</Text>
+            <Text style={{color: '#f22', fontSize: 18, padding: 20}}>Annuler</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             setStep(3);
             setShow(null);
           }}>
-            <Text style={{fontWeight: 'bold', color: '#28f', fontSize: 18, padding: 20}}>Terminé</Text>
+            <Text style={{color: '#28f', fontSize: 18, padding: 20}}>Terminé</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -58,14 +58,14 @@ const handleDelete = (staff, token, navigation) => {
 
 
 export default function AdminEditStaff({route, navigation}) {
-  const {params} = route.params;
+  const {staff} = route.params;
 
   const [{token},] = useDataLayerValue();
   const [newStaff, setNewStaff] = useState({
-    firstName: params.firstName,
-    lastName: params.lastName,
-    email: params.email,
-    type: params.type,
+    firstName: staff.firstName,
+    lastName: staff.lastName,
+    email: staff.email,
+    type: staff.type,
     password: null
   });
 
@@ -108,11 +108,11 @@ export default function AdminEditStaff({route, navigation}) {
             color='white'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleEdit(params._id, newStaff, token, navigation)}
+          onPress={() => handleEdit(staff._id, newStaff, token, navigation)}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(params, token, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(staff, token, navigation)}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
     </View>

@@ -76,7 +76,7 @@ export default function UserSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title='Commander' buttonStyle={[styles.button]}
+        <Button title='Commander' buttonStyle={[{...styles.button, margin: 10}]}
         onPress={() => type === 'edit' ? handleEdit({...order, details}, token, navigation) : handleSubmit({...order, details}, user, token, navigation)} />
       </View>
     </SafeAreaView>

@@ -1,7 +1,7 @@
 import { FAB } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { ActivityIndicator, SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, Platform, SafeAreaView, View } from 'react-native';
 
 import PeriodTabs from './PeriodTabs';
 import { styles } from '../../../../Reusables/Styles';
@@ -10,7 +10,7 @@ import { getDayBookings } from '../../../../Functions/bookings';
 
 
 export default function Bookings({navigation, route}) {
-  const day = route.params.day.timestamp;
+  const day = route.params.date.timestamp;
   
   const isFocused = useIsFocused();
   const [{token}] = useDataLayerValue();
@@ -28,12 +28,11 @@ export default function Bookings({navigation, route}) {
           animated
           icon='plus'
           color='white'
-          label='Réserver'
           style={styles.fab}
           onPress={() => navigation.navigate('NewBooking', {bookings, day})}
         />
       </> : <View style={styles.container}>
-        <ActivityIndicator size={60} color='#56aadb'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
       </View>}
     </SafeAreaView>
   );

@@ -34,7 +34,7 @@ const informWaiters = (order, token, navigation) => {
 
 
 export default function CookOrderDetails({navigation, route}) {
-  const {order} = route.params.params;
+  const {order} = route.params;
   
   useEffect(() => {
     navigation.setOptions({title: `${order.user.firstName} ${order.user.lastName} : ${(order.takeaway ? 'À emporter' : 'Sur place')}`});

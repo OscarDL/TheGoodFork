@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { Button, Input } from 'react-native-elements';
 import { resetPassword } from '../../Functions/auth';
+import { Button, Input } from 'react-native-elements';
+import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Reusables/Styles';
 
@@ -25,7 +25,10 @@ export default function Reset({navigation}) {
 
 
   return (
-    <View style={{...styles.container, alignItems: 'center'}}>
+    <KeyboardAvoidingView
+      style={{...styles.container, alignItems: 'center'}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View>
         <Text style={{margin: 10, textAlign: 'center'}}>Réinitialisation du mot de passe</Text>
         <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer le code qui vous a été envoyé par email, ainsi que votre nouveau mot de passe.</Text>
@@ -36,6 +39,6 @@ export default function Reset({navigation}) {
         <Input placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
       </View>
       <Button buttonStyle={[styles.button]} title='Réinitialiser' onPress={() => handleReset(token, password, passCheck, navigation)} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }

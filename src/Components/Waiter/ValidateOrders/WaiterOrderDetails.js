@@ -39,7 +39,7 @@ const handleDelete = (order, token, navigation) => Alert.alert(
 );
 
 export default function WaiterOrderDetails({navigation, route}) {
-  const {order, readOnly} = route.params.params;
+  const {order, readOnly} = route.params;
 
   const isFocused = useIsFocused();
   const [{token}, _] = useDataLayerValue();

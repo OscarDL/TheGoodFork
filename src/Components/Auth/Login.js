@@ -84,7 +84,7 @@ export default function Login({navigation}) {
 import React, { useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { login } from '../../Functions/auth';
 import { styles } from '../../Reusables/Styles';
@@ -111,7 +111,10 @@ export default function Login({navigation}) {
   });
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={{width: '100%'}}>
         <Image
           style={{ width: 180, height: 180, alignSelf: 'center' }}
@@ -145,6 +148,6 @@ export default function Login({navigation}) {
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Je n'ai pas encore de compte</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

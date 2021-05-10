@@ -59,15 +59,15 @@ const handleDelete = (token, dish, navigation) => {
 
 export default function AdminEditDish({route, navigation}) {
 
-  const {params} = route.params;
+  const {dish} = route.params;
   const [{token}, _] = useDataLayerValue();
 
   const [newDish, setNewDish] = useState({
-    name: params.name,
-    type: params.type,
-    price: params.price,
-    stock: params.stock,
-    detail: params.detail
+    name: dish.name,
+    type: dish.type,
+    price: dish.price,
+    stock: dish.stock,
+    detail: dish.detail
   });
 
 
@@ -110,7 +110,7 @@ export default function AdminEditDish({route, navigation}) {
             color='white'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleEdit(token, params._id, newDish, navigation)}
+          onPress={() => handleEdit(token, dish._id, newDish, navigation)}
         />
       </View>
       

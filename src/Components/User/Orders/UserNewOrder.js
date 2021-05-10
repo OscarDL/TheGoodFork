@@ -22,7 +22,7 @@ export default function UserNewOrder({navigation, route}) {
     <SubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
 
     <SafeAreaView style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price}</Text>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price} EUR</Text>
       <Button title='Confirmer' buttonStyle={[styles.button]}
       onPress={() => navigation.navigate('UserSubmitOrder', {order, type: 'submit'})}/>
     </SafeAreaView>

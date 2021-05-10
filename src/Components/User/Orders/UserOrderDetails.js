@@ -31,7 +31,7 @@ const handleCancel = (order, token, navigation) => Alert.alert(
 
 
 export default function UserOrderDetails({navigation, route}) {
-  const {order} = route.params.params;
+  const {order} = route.params;
   const [{token}, _] = useDataLayerValue();
 
   const isFocused = useIsFocused();

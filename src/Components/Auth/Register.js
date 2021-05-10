@@ -136,9 +136,9 @@ export default function Register({navigation}) {
 
 
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
 import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Reusables/Styles';
 import { registerUser } from '../../Functions/auth';
@@ -174,7 +174,10 @@ export default function Register({navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <Text style={{textAlign: 'center'}}>Sécurité du mot de passe :
         <Text style={{color: userRegister.password.length < 8 ? '#f22' : (userRegister.password.length < 12 ? 'orange' : 'limegreen')}}>
           {userRegister.password.length < 8 ? ' FAIBLE' : (userRegister.password.length < 12 ? ' MOYENNE' : ' HAUTE')}
@@ -203,6 +206,6 @@ export default function Register({navigation}) {
         />
       </View>
       <View></View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
