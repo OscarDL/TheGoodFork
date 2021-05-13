@@ -6,8 +6,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
 import Bookings from './Day/Bookings';
-import NewBooking from './New/Booking';
-import MyBookings from './Edit/MyBookings';
+import MyBookings from './MyBookings';
 import EditBooking from './Edit/EditBooking';
 import { styles } from '../../../Reusables/Styles';
 import { getBookings } from '../../../Functions/bookings';
@@ -27,7 +26,6 @@ export default function UserPlanning({title}) {
       <Stack.Screen options={{title}} name='UserPlanningComponent' component={UserPlanningComponent}/>
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Réservations'}} name='Bookings' component={Bookings}/>
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Mes réservations'}} name='MyBookings' component={MyBookings}/>
-      <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Nouvelle réservation'}} name='NewBooking' component={NewBooking}/>
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Modifier réservation'}} name='EditBooking' component={EditBooking}/>
     </Stack.Navigator>
   );

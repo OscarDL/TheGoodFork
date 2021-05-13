@@ -3,9 +3,10 @@ import { Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 
-import TablePicker from '../New/TablePicker';
-import PeriodPicker from '../New/PeriodPicker';
+import TablePicker from './TablePicker';
+import PeriodPicker from './PeriodPicker';
 import { styles } from '../../../../Reusables/Styles';
+import { getPeriod } from '../../../../Functions/utils';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings, editBooking, deleteBooking } from '../../../../Functions/bookings';
 
@@ -76,10 +77,13 @@ export default function UserNewBooking({navigation, route}) {
   };
 
   const handleCancel = () => {
+    const day = new Date(booking.dateBooked);
+
     Alert.alert(
       'Êtes-vous sûr ?',
-      "Vous êtes sur le point d'annuler votre réservation pour le "
-      + `${days[new Date(booking.dateBooked).getDay()]} ${new Date(booking.dateBooked).getDate()} ${months[new Date(booking.dateBooked).getMonth()]}.`,
+      "Vous êtes sur le point d'annuler votre réservation du "
+      + `${days[day.getDay()]} ${day.getDate()} ${months[day.getMonth()]} `
+      + `${booking.period === 3 ? "dans l'" : "au "}` + getPeriod(booking.period) + '.',
       [
         { text: 'Revenir' },
         { text: 'Continuer',
@@ -125,7 +129,7 @@ export default function UserNewBooking({navigation, route}) {
           <View style={{...circle, backgroundColor: step > 1 ? '#2b4d' : '#ea0'}}>
             <Icon name={step > 1 ? 'schedule' : 'more-time'} color='white' size={48}/>
           </View>
-          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Périodes</Text>
+          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Période</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -137,7 +141,7 @@ export default function UserNewBooking({navigation, route}) {
           <View style={{...circle, opacity: step > 1 ? 1 : 0.5, backgroundColor: step > 2 ? '#2b4d' : '#ea0'}}>
             <Icon name={step > 2 ? 'restaurant' : 'no-meals'} color='white' size={48}/>
           </View>
-          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Tables</Text>
+          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Table</Text>
         </TouchableOpacity>
       </View>
 
@@ -192,15 +196,11 @@ export default function UserNewBooking({navigation, route}) {
 
       <View style={{alignItems: 'center'}}>
         <Button
-          icon={<Icon
-            name='save'
-            color='white'
-            style={{marginRight: 10}}
-          />}
           title="Modifier"
           disabled={step < 3}
           onPress={handleEdit}
           buttonStyle={styles.button}
+          icon={<Icon name='save' color='white' style={{marginRight: 10}}/>}
         />
         <TouchableOpacity style={{alignItems: 'center', padding: 10, marginTop: 20}} onPress={handleCancel}>
           <Text style={styles.delete}>Annuler ma réservation</Text>

@@ -71,6 +71,15 @@ export const styles = StyleSheet.create({
     color: 'transparent',
     backgroundColor: 'transparent'
   },
+  bookingRow: {
+    paddingVertical: 4,
+    marginHorizontal: 16,
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#805a48',
+    justifyContent: 'space-between'
+  },
   orderStrip: {
     margin: 10,
     alignItems: 'center',

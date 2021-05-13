@@ -17,3 +17,11 @@ export const matchesOrder = (order, search) => (
     ||
   (order.user.firstName.toLowerCase() + ' ' + order.user.lastName.toLowerCase()).includes(search.toLowerCase())
 );
+
+
+export const getPeriod = (period) => {
+  if (period === 1) return 'matin';
+  if (period === 2) return 'midi';
+  if (period === 3) return 'après-midi';
+  if (period === 4) return 'soir';
+};

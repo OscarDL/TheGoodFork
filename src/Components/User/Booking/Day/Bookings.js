@@ -9,29 +9,24 @@ import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings } from '../../../../Functions/bookings';
 
 
-export default function Bookings({navigation, route}) {
+export default function Bookings({route}) {
   const day = route.params.date.timestamp;
   
   const isFocused = useIsFocused();
   const [{token}] = useDataLayerValue();
+  const [refresh, setRefresh] = useState(true);
   const [bookings, setBookings] = useState(null);
 
   useEffect(() => {
-    isFocused && getDayBookings(day, token).then(bookings => setBookings(bookings));
-  }, [isFocused, setBookings]);
+    if (refresh && isFocused) getDayBookings(day, token).then(bookings => {
+      setRefresh(false);
+      setBookings(bookings);
+    });
+  }, [refresh, isFocused, setBookings]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {bookings ? <>
-        <PeriodTabs bookings={bookings}/>
-        <FAB
-          animated
-          icon='plus'
-          color='white'
-          style={styles.fab}
-          onPress={() => navigation.navigate('NewBooking', {bookings, day})}
-        />
-      </> : <View style={styles.container}>
+      {bookings ? <PeriodTabs bookings={bookings} setRefresh={setRefresh} day={day}/> : <View style={styles.container}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
       </View>}
     </SafeAreaView>
