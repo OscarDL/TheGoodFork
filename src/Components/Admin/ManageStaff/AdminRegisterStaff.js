@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Alert, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { registerStaff } from '../../../Functions/staff';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
@@ -48,7 +48,9 @@ export default function AdminRegisterStaff({navigation}) {
   });
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
       <View style={{alignItems: 'center'}}>
         <Text style={{marginBottom: 10}}>Sélectionnez un rôle</Text>
         
@@ -72,7 +74,7 @@ export default function AdminRegisterStaff({navigation}) {
       <View>
         <Input placeholder='Prénom' onChangeText={firstName => setStaff({ ...staff, firstName })} />
         <Input placeholder='Nom' onChangeText={lastName => setStaff({ ...staff, lastName })} />
-        <Input placeholder='Adresse email' autoCapitalize='none' onChangeText={email => setStaff({ ...staff, email })} />
+        <Input placeholder='Adresse email' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setStaff({ ...staff, email })} />
         <Input placeholder='Mot de passe' secureTextEntry onChangeText={password => setStaff({ ...staff, password })} />
         <Input placeholder='Confirmer mot de passe' secureTextEntry onChangeText={passCheck => setStaff({ ...staff, passCheck })} />
       </View>
@@ -93,6 +95,6 @@ export default function AdminRegisterStaff({navigation}) {
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('AdminStaffList')}>
         <Text style={styles.link}>Modifier un membre existant</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

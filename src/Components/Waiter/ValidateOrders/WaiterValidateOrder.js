@@ -3,9 +3,9 @@ import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Alert, SafeAreaView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
-import BaseCard from '../../../Reusables/BaseCard';
-import SearchBar from '../../../Reusables/SearchBar';
+import { styles } from '../../../Shared/styles';
+import BaseCard from '../../../Shared/BaseCard';
+import SearchBar from '../../../Shared/SearchBar';
 import { getOrders } from '../../../Functions/orders';
 import { matchesOrder } from '../../../Functions/utils';
 import { useDataLayerValue } from '../../Context/DataLayer';

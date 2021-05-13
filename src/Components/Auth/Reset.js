@@ -3,7 +3,7 @@ import { resetPassword } from '../../Functions/auth';
 import { Button, Input } from 'react-native-elements';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 
 
 const handleReset = (token, password, passCheck, navigation) => {
@@ -27,7 +27,7 @@ export default function Reset({navigation}) {
   return (
     <KeyboardAvoidingView
       style={{...styles.container, alignItems: 'center'}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
       <View>
         <Text style={{margin: 10, textAlign: 'center'}}>Réinitialisation du mot de passe</Text>

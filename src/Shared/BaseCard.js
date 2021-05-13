@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import { styles } from './Styles';
+import { styles } from './styles';
 
 
 export default function BaseCard({

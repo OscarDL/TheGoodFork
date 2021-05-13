@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 
-import BaseCard from '../../Reusables/BaseCard';
-import { styles } from '../../Reusables/Styles';
+import BaseCard from '../../Shared/BaseCard';
+import { styles } from '../../Shared/styles';
 
 
 export default function AdminHome({navigation}) {

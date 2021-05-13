@@ -10,8 +10,9 @@ import UserNewOrder from './UserNewOrder';
 import UserEditOrder from './UserEditOrder';
 import UserSubmitOrder from './UserSubmitOrder';
 import UserOrderDetails from './UserOrderDetails';
-import BaseCard from '../../../Reusables/BaseCard';
-import { styles } from '../../../Reusables/Styles';
+import BaseCard from '../../../Shared/BaseCard';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
@@ -32,6 +33,13 @@ const failureAlert = (error, setRetry) => Alert.alert(
     onPress: () => setRetry(true)
   }]
 );
+
+const style = {
+  pressColor: 'darkgrey',
+  activeTintColor: colors.accentPrimary,
+  labelStyle: {fontSize: 14, fontWeight: 'bold'},
+  indicatorStyle: {backgroundColor: colors.accentSecondary}
+};
 
 
 export default function UserOrders({title}) {
@@ -118,11 +126,15 @@ function UserOrdersTabs({navigation}) {
 
 
   return orders ? <View style={styles.container}>
-    <Tabs.Navigator initialRouteName='A Payer' backBehavior='initialRoute' tabBarOptions={{pressColor: 'darkgrey'}}>
+    <Tabs.Navigator
+      tabBarOptions={style}
+      initialRouteName='A Payer'
+      backBehavior='initialRoute'
+    >
       <Tabs.Screen name='A payer'>
         {props => <UserOrdersComponent {...props} paid={false} orders={orders}/>}
       </Tabs.Screen>
-      <Tabs.Screen name='Historique'>
+      <Tabs.Screen name='Payées'>
         {props => <UserOrdersComponent {...props} paid={true} orders={orders}/>}
       </Tabs.Screen>
     </Tabs.Navigator>
@@ -158,7 +170,7 @@ function UserOrdersTabs({navigation}) {
 
     <FAB style={styles.fab} animated label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
   </View> : <View style={styles.container}>
-    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
   </View>
 }
 
@@ -178,7 +190,7 @@ function UserOrdersComponent({navigation, paid, orders}) {
       </ScrollView> : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{...styles.title, padding: 0, margin: 0}}>Vous n'avez pas de commandes.</Text>
       </View>) : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
     </View>
   );

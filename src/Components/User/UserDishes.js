@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 
 const Stack = createStackNavigator();
 

@@ -4,7 +4,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator, Platform, SafeAreaView, View } from 'react-native';
 
 import PeriodTabs from './PeriodTabs';
-import { styles } from '../../../../Reusables/Styles';
+import { colors } from '../../../../Shared/colors';
+import { styles } from '../../../../Shared/styles';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings } from '../../../../Functions/bookings';
 
@@ -27,7 +28,7 @@ export default function Bookings({route}) {
   return (
     <SafeAreaView style={styles.container}>
       {bookings ? <PeriodTabs bookings={bookings} setRefresh={setRefresh} day={day}/> : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
     </SafeAreaView>
   );

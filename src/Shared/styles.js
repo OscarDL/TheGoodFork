@@ -1,5 +1,8 @@
 import { Platform, StyleSheet } from 'react-native';
 
+import { colors } from './colors';
+
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -47,7 +50,7 @@ export const styles = StyleSheet.create({
     bottom: 0,
     margin: 16,
     position: 'absolute',
-    backgroundColor: '#ac9680'
+    backgroundColor: colors.accentSecondary
   },
   pickerView: {
     height: 45,
@@ -77,8 +80,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 0.5,
-    borderBottomColor: '#805a48',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderBottomColor: colors.accentPrimary
+  },
+  orderItemRow: {
+    minHeight: 50,
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    backgroundColor: '#e3e3e3',
+    justifyContent: 'space-evenly'
   },
   orderStrip: {
     margin: 10,

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Picker from 'react-native-picker-select';
-import { View, Alert, Text, Platform } from 'react-native';
 import { Button, Input, Icon } from 'react-native-elements';
+import { View, Alert, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { createDish } from '../../../Functions/dishes';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
@@ -37,7 +37,6 @@ const handleCreate = (dish, token, navigation) => {
 
 
 export default function AdminCreateDish({navigation}) {
-
   const [{token}, _] = useDataLayerValue();
   const [dish, setDish] = useState({
     name: '',
@@ -49,7 +48,9 @@ export default function AdminCreateDish({navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
       <View style={{alignItems: 'center'}}>
         <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
         
@@ -90,6 +91,6 @@ export default function AdminCreateDish({navigation}) {
           onPress={() => handleCreate(dish, token, navigation)}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

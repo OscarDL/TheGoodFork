@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { View, Text, Alert, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { styles } from '../../Reusables/Styles';
-import OrderDetails from '../../Reusables/Orders/OrderDetails';
+import { styles } from '../../Shared/styles';
+import OrderDetails from '../../Shared/Orders/OrderDetails';
 
 
 const informWaiters = (order, token, navigation) => {
@@ -50,7 +50,7 @@ export default function CookOrderDetails({navigation, route}) {
         </View>
 
       </ScrollView>
-      <FAB style={styles.fab} label='Ready' icon='check' color='white' onPress={() => informWaiters(order)}/>
+      <FAB style={styles.fab} label='Prête' icon='check' color='white' onPress={() => informWaiters(order)}/>
     </View>
   );
 }

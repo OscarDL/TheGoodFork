@@ -2,13 +2,26 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import BookingPeriod from './BookingPeriod';
+import { colors } from '../../../../Shared/colors';
 
 
 const Tabs = createMaterialTopTabNavigator();
 
+const style = {
+  pressColor: 'darkgrey',
+  activeTintColor: colors.accentPrimary,
+  labelStyle: {fontSize: 14, fontWeight: 'bold'},
+  indicatorStyle: {backgroundColor: colors.accentSecondary}
+};
+
+
 export default function SubmitOrderTabs({bookings, setRefresh, day}) {
   return (
-    <Tabs.Navigator initialRouteName='Matin' backBehavior='initialRoute' tabBarOptions={{pressColor: 'darkgrey'}}>
+    <Tabs.Navigator
+      backBehavior='none'
+      tabBarOptions={style}
+      initialRouteName='Matin'
+    >
       <Tabs.Screen name='Matin'>
         {props => <BookingPeriod {...props} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={1}/>}
       </Tabs.Screen>

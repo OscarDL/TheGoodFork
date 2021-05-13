@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'react-native-elements';
 import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
 
-import { styles } from '../../../../Reusables/Styles';
+import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';
 import { submitBooking } from '../../../../Functions/bookings';
 import { useDataLayerValue } from '../../../Context/DataLayer';

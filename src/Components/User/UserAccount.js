@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { logout } from '../../Functions/auth';
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 import { createStackNavigator } from '@react-navigation/stack';
 

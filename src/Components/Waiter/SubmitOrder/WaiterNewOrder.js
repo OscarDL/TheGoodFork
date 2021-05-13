@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button } from 'react-native-elements';
 import { SafeAreaView, Text } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
-import SubmitOrderTabs from '../../../Reusables/Orders/SubmitOrderTabs';
+import { styles } from '../../../Shared/styles';
+import SubmitOrderTabs from '../../../Shared/Orders/SubmitOrderTabs';
 
 
 export default function WaiterNewOrder({navigation}) {

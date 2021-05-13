@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { View, Text, ScrollView, ActivityIndicator, Alert, Platform, SafeAreaView } from 'react-native';
 
-import BaseCard from '../../Reusables/BaseCard';
-import { styles } from '../../Reusables/Styles';
+import BaseCard from '../../Shared/BaseCard';
+import { colors } from '../../Shared/colors';
+import { styles } from '../../Shared/styles';
 import { getOrders } from '../../Functions/orders';
 import { useDataLayerValue } from '../Context/DataLayer';
 
@@ -55,7 +56,7 @@ export default function CookHome({navigation}) {
         </View>)
 
       : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
     </SafeAreaView>
   );

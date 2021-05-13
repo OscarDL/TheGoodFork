@@ -4,7 +4,8 @@ import TextTicker from 'react-native-text-ticker';
 import { View, Text, Easing } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../Styles';
+import { colors } from '../colors';
+import { styles } from '../styles';
 import { addToOrder } from '../../Functions/orders';
 
 
@@ -53,19 +54,25 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
         </View>
       </View>
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#e3e3e3', borderBottomLeftRadius: 6, borderBottomRightRadius: 6}}>
-        <TouchableOpacity style={{minWidth: '35%', borderBottomLeftRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, -1)}>
-          <Text style={{textAlign: 'center', fontSize: 20}}>-</Text>
-        </TouchableOpacity>
+      {item.stock !== 0 ? (
+        <View style={styles.orderItemRow}>
+          <TouchableOpacity style={{minWidth: '30%', borderBottomLeftRadius: 6}} onPress={() => addItem(item, -1)}>
+            <Icon name='remove' color={colors.accentPrimary} style={{width: '100%'}}/>
+          </TouchableOpacity>
 
-        <Text style={{minWidth: '30%', textAlign: 'center', paddingVertical: 10, fontSize: 20}}>
-          {item.stock === 0 ? '---' : (!item.stock ? quantity : quantity + ' / ' + item.stock)}
-        </Text>
+          <Text style={{minWidth: '40%', textAlign: 'center', fontSize: 20}}>
+            {item.stock === 0 ? 'Rupture' : (!item.stock ? quantity : quantity + ' / ' + item.stock)}
+          </Text>
 
-        <TouchableOpacity style={{minWidth: '35%', borderBottomRightRadius: 6, paddingVertical: 10}} onPress={() => addItem(item, 1)}>
-          <Text style={{textAlign: 'center', fontSize: 20}}>+</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={{minWidth: '30%', borderBottomRightRadius: 6}} onPress={() => addItem(item, 1)}>
+            <Icon name='add' color={colors.accentPrimary} style={{width: '100%'}}/>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.orderItemRow}>
+          <Text style={{minWidth: '100%', textAlign: 'center', fontSize: 20}}>Rupture</Text>
+        </View>
+      )}
     </View>
   );
 }

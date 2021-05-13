@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
 
 import { login } from '../../Functions/auth';
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
@@ -87,7 +87,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Alert, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { login } from '../../Functions/auth';
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
@@ -113,7 +113,7 @@ export default function Login({navigation}) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
       <View style={{width: '100%'}}>
         <Image

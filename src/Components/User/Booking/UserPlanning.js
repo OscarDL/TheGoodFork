@@ -8,7 +8,8 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react
 import Bookings from './Day/Bookings';
 import MyBookings from './MyBookings';
 import EditBooking from './Edit/EditBooking';
-import { styles } from '../../../Reusables/Styles';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getBookings } from '../../../Functions/bookings';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
@@ -108,7 +109,7 @@ function UserPlanningComponent({navigation}) {
           onPress={() => navigation.navigate('MyBookings', {bookings})}
         />
       </> : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
     </View>
   );

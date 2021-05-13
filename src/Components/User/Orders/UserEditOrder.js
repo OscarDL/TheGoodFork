@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native-paper';
 import { View, Text, SafeAreaView, Platform } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import SubmitOrderTabs from '../../../Reusables/Orders/SubmitOrderTabs';
+import SubmitOrderTabs from '../../../Shared/Orders/SubmitOrderTabs';
 
 
 export default function UserEditOrder({navigation, route}) {
@@ -34,6 +35,6 @@ export default function UserEditOrder({navigation, route}) {
       onPress={() => navigation.navigate('UserSubmitOrder', {order: newOrder, type: 'edit'})}/>
     </SafeAreaView>
   </> : <View style={styles.container}>
-    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
   </View>
 };

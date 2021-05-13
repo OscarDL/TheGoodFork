@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Alert, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
-import { styles } from '../Styles';
+import { styles } from '../styles';
 import OrderItem from './OrderItem';
 import { getDishes } from '../../Functions/dishes';
 import { formatGrid } from '../../Functions/utils';

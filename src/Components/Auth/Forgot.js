@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { sendEmail } from '../../Functions/auth';
 
 
@@ -24,7 +24,7 @@ export default function Forgot({navigation}) {
   return (
     <KeyboardAvoidingView
       style={{...styles.container, alignItems: 'center'}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
       <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer votre adresse email pour la réinitialisation.</Text>
       <Input autoCapitalize='none' placeholder='Adresse email' onChangeText={email => setEmail(email)} />

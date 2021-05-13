@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Picker from 'react-native-picker-select';
-import { View, Text, Alert, Platform } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import { editStaff, deleteStaff } from '../../../Functions/staff';
 
@@ -71,7 +71,9 @@ export default function AdminEditStaff({route, navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
       <View style={{alignItems: 'center'}}>
         <Text style={{marginBottom: 10}}>Sélectionnez un rôle</Text>
         
@@ -95,8 +97,8 @@ export default function AdminEditStaff({route, navigation}) {
       <View>
         <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
         <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
-        <Input value={newStaff.email} autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
-        <Input placeholder='Changer le mot de passe' secureTextEntry onChangeText={password => setNewStaff({ ...newStaff, password })} />
+        <Input value={newStaff.email} keyboardType='email-address' autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
+        <Input placeholder='Changer le mot de passe' secureTextEntry type='password' onChangeText={password => setNewStaff({ ...newStaff, password })} />
       </View>
 
       <View style={{alignItems: 'center'}}>
@@ -115,6 +117,6 @@ export default function AdminEditStaff({route, navigation}) {
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(staff, token, navigation)}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Picker from 'react-native-picker-select';
-import { View, Text, Alert, Platform } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import { editDish, deleteDish } from '../../../Functions/dishes';
 
@@ -58,7 +58,6 @@ const handleDelete = (token, dish, navigation) => {
 
 
 export default function AdminEditDish({route, navigation}) {
-
   const {dish} = route.params;
   const [{token}, _] = useDataLayerValue();
 
@@ -72,7 +71,9 @@ export default function AdminEditDish({route, navigation}) {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
       <View style={{alignItems: 'center'}}>
         <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
         
@@ -117,6 +118,6 @@ export default function AdminEditDish({route, navigation}) {
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, params, navigation)}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Alert, TextInput, Platform } from 'react-native';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { registerUser } from '../../Functions/auth';
 import { useDataLayerValue } from '../Context/DataLayer';
 
@@ -140,7 +140,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
-import { styles } from '../../Reusables/Styles';
+import { styles } from '../../Shared/styles';
 import { registerUser } from '../../Functions/auth';
 import { useDataLayerValue } from '../Context/DataLayer';
 
@@ -176,7 +176,7 @@ export default function Register({navigation}) {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
       <Text style={{textAlign: 'center'}}>Sécurité du mot de passe :
         <Text style={{color: userRegister.password.length < 8 ? '#f22' : (userRegister.password.length < 12 ? 'orange' : 'limegreen')}}>

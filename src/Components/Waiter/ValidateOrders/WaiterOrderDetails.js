@@ -4,9 +4,9 @@ import { useIsFocused } from '@react-navigation/core';
 import { View, Text, Alert, SafeAreaView } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import OrderDetails from '../../../Reusables/Orders/OrderDetails';
+import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { deleteOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
 
@@ -68,7 +68,7 @@ export default function WaiterOrderDetails({navigation, route}) {
           </TouchableOpacity>}
         </View>
       </ScrollView>
-      <FAB style={styles.fab} icon={readOnly ? 'pencil' : 'check'} color='white'
+      <FAB style={styles.fab} icon={readOnly ? 'pencil' : 'check'} label={readOnly ? 'Modifier' : 'Valider'} color='white'
         onPress={() => readOnly ? navigation.navigate('WaiterEditOrder', {order: updatedOrder}) : handleValidate(updatedOrder, token, navigation)}
       />
     </SafeAreaView>

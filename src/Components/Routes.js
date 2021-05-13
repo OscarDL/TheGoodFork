@@ -44,14 +44,15 @@ import UserAccount from './User/UserAccount';
 import UserOrders from './User/Orders/UserOrders';
 import UserPlanning from './User/Booking/UserPlanning';
 
-import { styles } from '../Reusables/Styles';
+import { colors } from '../Shared/colors';
+import { styles } from '../Shared/styles';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
 import { StatusBar } from 'expo-status-bar';
 
 
 const Stack = createStackNavigator();
-const Tabs = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
+const Nav = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
 
 const iosV = CardStyleInterpolators.forVerticalIOS;
 const iosH = CardStyleInterpolators.forHorizontalIOS;
@@ -145,23 +146,23 @@ export default function Routes() {
   );
 
   const userStack = () => (
-    <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor='#39f' tabBarOptions={{activeTintColor: '#39f'}}>
-      <Tabs.Screen name='UserPlanning' options={{ title: 'Réservations et disponibilités', tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' /> }}>
-        {props => <UserPlanning {...props} title='Planning' />}
-      </Tabs.Screen>
+    <Nav.Navigator barStyle={{backgroundColor: 'white'}} activeColor={colors.accentPrimary} tabBarOptions={{activeTintColor: colors.accentSecondary}}>
+      <Nav.Screen name='UserPlanning' options={{tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' />}}>
+        {props => <UserPlanning {...props} title='Réservations'/>}
+      </Nav.Screen>
       
-      <Tabs.Screen name='UserDishes' options={{ title: 'Tous les plats', tabBarLabel: 'Menu', tabBarIcon: ({color}) => <Icon color={color} name='restaurant' /> }}>
-        {props => <UserDishes {...props} title='Menu' />}
-      </Tabs.Screen>
+      <Nav.Screen name='UserDishes' options={{tabBarLabel: 'Menu', tabBarIcon: ({color}) => <Icon color={color} name='restaurant' />}}>
+        {props => <UserDishes {...props} title='Tous les plats'/>}
+      </Nav.Screen>
       
-      <Tabs.Screen name='UserOrders' options={{ title: 'Vos commandes', tabBarLabel: 'Commandes', tabBarIcon: ({color}) => <Icon color={color} name='credit-card' /> }}>
-        {props => <UserOrders {...props} title='Commandes' />}
-      </Tabs.Screen>
+      <Nav.Screen name='UserOrders' options={{tabBarLabel: 'Commandes', tabBarIcon: ({color}) => <Icon color={color} name='shopping-cart' />}}>
+        {props => <UserOrders {...props} title='Vos commandes'/>}
+      </Nav.Screen>
 
-      <Tabs.Screen name='UserAccount' options={{ title: 'Votre compte client', tabBarLabel: 'Compte', tabBarIcon: ({color}) => <Icon color={color} name='account-circle' /> }}>
-        {props => <UserAccount {...props} title='Compte' />}
-      </Tabs.Screen>
-    </Tabs.Navigator>
+      <Nav.Screen name='UserAccount' options={{tabBarLabel: 'Compte', tabBarIcon: ({color}) => <Icon color={color} name='account-circle' />}}>
+        {props => <UserAccount {...props} title='Votre compte client'/>}
+      </Nav.Screen>
+    </Nav.Navigator>
   );
 
   const components = {
@@ -177,7 +178,7 @@ export default function Routes() {
   return (
     token === null ? (
       <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>
     ) : (<>
       <StatusBar style='dark'/>

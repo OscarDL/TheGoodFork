@@ -4,12 +4,20 @@ import { View, ActivityIndicator, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import BookingsTab from './Edit/BookingsTab';
-import { styles } from '../../../Reusables/Styles';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getBookings } from '../../../Functions/bookings';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
 const Tabs = createMaterialTopTabNavigator();
+
+const style = {
+  pressColor: 'darkgrey',
+  activeTintColor: colors.accentPrimary,
+  labelStyle: {fontSize: 14, fontWeight: 'bold'},
+  indicatorStyle: {backgroundColor: colors.accentSecondary}
+};
 
 
 export default function MyBookings({route}) {
@@ -22,7 +30,7 @@ export default function MyBookings({route}) {
   }, [isFocused, setBookings]);
 
   return (
-    bookings ? <Tabs.Navigator initialRouteName='A Venir' backBehavior='none' tabBarOptions={{pressColor: 'darkgrey'}}>
+    bookings ? <Tabs.Navigator backBehavior='none' tabBarOptions={style} initialRouteName='A Venir'>
       <Tabs.Screen name='A Venir'>
         {props => <BookingsTab {...props} bookings={bookings} future={true}/>}
       </Tabs.Screen>
@@ -30,7 +38,7 @@ export default function MyBookings({route}) {
         {props => <BookingsTab {...props} bookings={bookings} future={false}/>}
       </Tabs.Screen>
     </Tabs.Navigator> : <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
     </View>
   );
 }

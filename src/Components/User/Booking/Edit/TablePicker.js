@@ -3,7 +3,7 @@ import { Icon } from 'react-native-elements';
 import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
-import { styles } from '../../../../Reusables/Styles';
+import { styles } from '../../../../Shared/styles';
 
 
 const pickerStyle = {

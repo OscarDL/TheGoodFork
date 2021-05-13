@@ -5,7 +5,8 @@ import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity,
 
 import TablePicker from './TablePicker';
 import PeriodPicker from './PeriodPicker';
-import { styles } from '../../../../Reusables/Styles';
+import { colors } from '../../../../Shared/colors';
+import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings, editBooking, deleteBooking } from '../../../../Functions/bookings';
@@ -191,7 +192,7 @@ export default function UserNewBooking({navigation, route}) {
       />}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color='#805a48'/>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
 
       <View style={{alignItems: 'center'}}>

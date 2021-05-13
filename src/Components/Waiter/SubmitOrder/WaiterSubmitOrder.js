@@ -5,9 +5,9 @@ import { Button, Input, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, ScrollView, Text, TextInput, SafeAreaView } from 'react-native';
 
-import { styles } from '../../../Reusables/Styles';
+import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import OrderDetails from '../../../Reusables/Orders/OrderDetails';
+import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { submitOrder, editOrder } from '../../../Functions/orders';
 
 
