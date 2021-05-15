@@ -57,7 +57,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
       {item.stock !== 0 ? (
         <View style={styles.orderItemRow}>
           <TouchableOpacity style={{minWidth: '30%', borderBottomLeftRadius: 6}} onPress={() => addItem(item, -1)}>
-            <Icon name='remove' color={colors.accentPrimary} style={{width: '100%'}}/>
+            <Icon name='remove' color={colors.accentPrimary} style={styles.orderItemButton}/>
           </TouchableOpacity>
 
           <Text style={{minWidth: '40%', textAlign: 'center', fontSize: 20}}>
@@ -65,7 +65,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
           </Text>
 
           <TouchableOpacity style={{minWidth: '30%', borderBottomRightRadius: 6}} onPress={() => addItem(item, 1)}>
-            <Icon name='add' color={colors.accentPrimary} style={{width: '100%'}}/>
+            <Icon name='add' color={colors.accentPrimary} style={styles.orderItemButton}/>
           </TouchableOpacity>
         </View>
       ) : (

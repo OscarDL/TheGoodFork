@@ -84,13 +84,18 @@ export const styles = StyleSheet.create({
     borderBottomColor: colors.accentPrimary
   },
   orderItemRow: {
-    minHeight: 50,
+    height: 50,
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
     backgroundColor: '#e3e3e3',
     justifyContent: 'space-evenly'
+  },
+  orderItemButton: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center'
   },
   orderStrip: {
     margin: 10,
