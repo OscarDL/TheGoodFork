@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -26,14 +27,17 @@ const pickerStyle = {
 };
 
 const handleEdit = (id, staff, token, navigation) => {
-  editStaff(id, staff, token).then(res => Alert.alert(
-    res.success ? res.title : 'Erreur lors de la modification',
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? 'Terminé' : 'Réessayer',
-      onPress: () => res.success ? navigation.goBack() : null
-    }]
-  ));
+  editStaff(id, staff, token).then(res => {
+    Toast.show({
+      text1: res.title ?? 'Erreur de supression',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+    res.success && navigation.goBack();
+  });
 };
 
 const handleDelete = (staff, token, navigation) => {
@@ -43,14 +47,17 @@ const handleDelete = (staff, token, navigation) => {
     [
       { text: 'Annuler' },
       { text: 'Continuer',
-        onPress: () => deleteStaff(staff, token).then(res => Alert.alert(
-          res.success ? res.title : 'Erreur lors de la suppression',
-          res.success ? res.desc : res,
-          [{
-            text: res.success ? 'Terminé' : 'Réessayer',
-            onPress: () => res.success ? navigation.goBack() : null
-          }]
-        ))
+        onPress: () => deleteStaff(staff, token).then(res => {
+          Toast.show({
+            text1: res.title ?? 'Erreur de supression',
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+          res.success && navigation.goBack();
+        })
       }
     ]
   );
@@ -60,7 +67,7 @@ const handleDelete = (staff, token, navigation) => {
 export default function AdminEditStaff({route, navigation}) {
   const {staff} = route.params;
 
-  const [{token},] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
   const [newStaff, setNewStaff] = useState({
     firstName: staff.firstName,
     lastName: staff.lastName,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
 import { View, Alert, Text, Platform, KeyboardAvoidingView } from 'react-native';
@@ -25,19 +26,24 @@ const pickerStyle = {
 };
 
 const handleCreate = (dish, token, navigation) => {
-  createDish({...dish, stock: (!dish.stock ? null : dish.stock)}, token).then(res => Alert.alert(
-    res.success ? res.title : 'Erreur lors de la création',
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? 'Terminé' : 'Réessayer',
-      onPress: () => res.success ? navigation.goBack() : null
-    }]
-  ));
+  if (!dish.stock) dish.stock = null;
+
+  createDish(dish, token).then(res => {
+    Toast.show({
+      text1: res.title ?? 'Erreur de création',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+    res.success && navigation.goBack();
+  });
 };
 
 
 export default function AdminCreateDish({navigation}) {
-  const [{token}, _] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
   const [dish, setDish] = useState({
     name: '',
     price: 0,

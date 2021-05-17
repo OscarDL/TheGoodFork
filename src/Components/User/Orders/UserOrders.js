@@ -7,6 +7,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { View, ScrollView, Text, Alert, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import UserNewOrder from './UserNewOrder';
+import UserPayOrder from './UserPayOrder';
 import UserEditOrder from './UserEditOrder';
 import UserSubmitOrder from './UserSubmitOrder';
 import UserOrderDetails from './UserOrderDetails';
@@ -44,17 +45,18 @@ const style = {
 
 export default function UserOrders({title}) {
   return (
-    <Stack.Navigator initialRouteName='UserOrdersTabs'>
-      <Stack.Screen options={{title}} name='UserOrdersTabs' component={UserOrdersTabs} />
+    <Stack.Navigator initialRouteName='UserOrderTabs'>
+      <Stack.Screen options={{title}} name='UserOrderTabs' component={UserOrderTabs} />
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Nouvelle commande'}} name='UserNewOrder' component={UserNewOrder}/>
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Détails commande'}} name='UserOrderDetails' component={UserOrderDetails} />
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Modifier commande'}} name='UserEditOrder' component={UserEditOrder}/>
+      <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Payer commande'}} name='UserPayOrder' component={UserPayOrder}/>
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Vérification'}} name='UserSubmitOrder' component={UserSubmitOrder}/>
     </Stack.Navigator>
   );
 }
 
-function UserOrdersTabs({navigation}) {
+function UserOrderTabs({navigation}) {
   const isFocused = useIsFocused();
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -188,7 +190,7 @@ function UserOrdersComponent({navigation, paid, orders}) {
         </View>
 
       </ScrollView> : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{...styles.title, padding: 0, margin: 0}}>Vous n'avez pas de commandes.</Text>
+        <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Vous n'avez pas de commandes.</Text>
       </View>) : <View style={styles.container}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}

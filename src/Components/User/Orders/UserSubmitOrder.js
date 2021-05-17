@@ -1,9 +1,10 @@
+import Toast from 'react-native-toast-message';
 import { Alert , TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Collapsible from 'react-native-collapsible';
 import { Button, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, ScrollView, Text, SafeAreaView } from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Platform } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import OrderDetails from '../../../Shared/Orders/OrderDetails';
@@ -13,35 +14,64 @@ import { useDataLayerValue } from '../../../Components/Context/DataLayer';
 
 const handleEdit = (order, token, navigation) => {
   editOrder(order, token).then(res => {
-    res.success && navigation.goBack();
-    Alert.alert(
-      res.success ? res.title : 'Erreur lors de la modification',
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Compris',
-        onPress: () => res.success ? navigation.navigate('UserOrderDetails', {order}) : (order.price === 0 ? navigation.goBack() : null)
-      }]
-    );
+    Toast.show({
+      text1: res.title ?? 'Erreur de commande',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+
+    if (res.success) return navigation.navigate('UserOrderDetails');
+
+    order.price === 0 && navigation.goBack();
   });
 };
-  
+
 const handleSubmit = (order, user, token, navigation) => {
   submitOrder({...order, user}, token, user.email).then(res => {
-    res.success && navigation.goBack();
-    Alert.alert(
-      res.success ? res.title : 'Erreur lors de la commande',
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Compris',
-        onPress: () => res.success || order.price === 0 ? navigation.goBack() : null
-      }]
-    );
+    Toast.show({
+      text1: res.title ?? 'Erreur de commande',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+
+    if (res.success) return navigation.navigate('UserOrderTabs');
+
+    order.price === 0 && navigation.goBack();
   });
 };
+
+const handlePay = (order, user, token, navigation) => {
+  const actions = [
+    {
+      text: 'Annuler'
+    }, {
+      text: 'Plus tard',
+      onPress: () => handleSubmit(order, user, token, navigation)
+    }, {
+      text: 'Payer',
+      onPress: () => navigation.navigate('UserPayOrder', {order})
+    }
+  ];
+  
+  Alert.alert(
+    'Paiement',
+    "Voulez-vous payer maintenant ? Vous ne pourrez ni modifier ni annuler votre commande sans l'aide d'un serveur.",
+    [
+      actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]
+    ]
+  );
+};
+
   
 export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
-  const [{user, token}, _] = useDataLayerValue();
+  const [{user, token}] = useDataLayerValue();
   
   const [collapsed, setCollapsed] = useState(true);
   const [details, setDetails] = useState(order.details);
@@ -61,9 +91,9 @@ export default function UserSubmitOrder({navigation, route}) {
         </View>
         
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed(!collapsed)}>
-            <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
-            <Text style={styles.sectionText}>Commande</Text>
-            <Icon style={{paddingHorizontal: 10}} name={collapsed ? 'expand-more' : 'expand-less'}/>
+          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+          <Text style={styles.sectionText}>Commande</Text>
+          <Icon style={{paddingHorizontal: 10}} name={collapsed ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
         <Collapsible collapsed={collapsed}>
@@ -76,8 +106,8 @@ export default function UserSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title='Commander' buttonStyle={[{...styles.button, margin: 10}]}
-        onPress={() => type === 'edit' ? handleEdit({...order, details}, token, navigation) : handleSubmit({...order, details}, user, token, navigation)} />
+        <Button title={type === 'edit' ? 'Modifier' : 'Commander'} buttonStyle={[{...styles.button, margin: 10}]}
+        onPress={() => type === 'edit' ? handleEdit({...order, details}, token, navigation) : handlePay({...order, details}, user, token, navigation)}/>
       </View>
     </SafeAreaView>
   );

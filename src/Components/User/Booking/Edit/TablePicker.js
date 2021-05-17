@@ -4,6 +4,7 @@ import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
+import { totalTables } from '../../../../../config';
 
 
 const pickerStyle = {
@@ -32,18 +33,9 @@ const pickerBg = {
   borderRadius: Platform.OS === 'ios' ? 10 : 5
 };
 
-const tables = [
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 1', value: 1, key: 0 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 2', value: 2, key: 1 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 3', value: 3, key: 2 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 4', value: 4, key: 3 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 5', value: 5, key: 4 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 6', value: 6, key: 5 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 7', value: 7, key: 6 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 8', value: 8, key: 7 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 9', value: 9, key: 8 },
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table 10', value: 10, key: 9 },
-];
+const tables = Array.from(Array(totalTables), (_, i) => ( // Tables picker list initialization
+  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table ' + (i + 1), value: i + 1, key: i }
+));
 
 
 export default function TablePicker({setStep, setShow, booking, bookings, setBooking}) {
@@ -73,10 +65,7 @@ export default function TablePicker({setStep, setShow, booking, bookings, setBoo
           <TouchableOpacity onPress={() => setShow(null)}>
             <Text style={{color: '#f22', fontSize: 18, padding: 20}}>Annuler</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            setStep(3);
-            setShow(null);
-          }}>
+          <TouchableOpacity onPress={() => { setStep(3); setShow(null); }}>
             <Text style={{color: '#28f', fontSize: 18, padding: 20}}>Terminé</Text>
           </TouchableOpacity>
         </View>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView } from 'react-native';
+import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
+import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import BaseCard from '../../../Shared/BaseCard';
 import SearchBar from '../../../Shared/SearchBar';
@@ -24,12 +25,11 @@ const failureAlert = (error, navigation, setRetry) => Alert.alert(
 );
 
 export default function WaiterValidateOrder({navigation}) {
-
   const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}, _] = useDataLayerValue();
+  const [{user, token}] = useDataLayerValue();
 
   useEffect(() => {
     if (isFocused || retry) getOrders(user, token).then(res => {
@@ -39,12 +39,12 @@ export default function WaiterValidateOrder({navigation}) {
   }, [isFocused, retry, setRetry]);
 
 
-  return (
+  return orders ? (
     <SafeAreaView style={styles.container}>
-      <SearchBar search={search} setSearch={setSearch} placeholder='Rechercher un client'/>
+      {orders?.length > 0 ? <>
+        <SearchBar search={search} setSearch={setSearch} placeholder='Rechercher un client'/>
 
-      <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-        {orders?.length > 0 && <>
+        <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <View>
             <Text style={styles.title}>Commandes</Text>
 
@@ -54,8 +54,16 @@ export default function WaiterValidateOrder({navigation}) {
               screen='WaiterOrderDetails' params={{order, readOnly: false}} navigation={navigation}
             />)}
           </View>
-        </>}
-      </ScrollView>
+        </ScrollView>
+      </> : (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Aucune commande à valider pour l'instant.</Text>
+        </View>
+      )}
     </SafeAreaView>
+  ) : (
+    <View style={styles.container}>
+      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+    </View>
   );
 }

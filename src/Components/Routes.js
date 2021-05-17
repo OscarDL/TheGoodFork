@@ -86,7 +86,7 @@ export default function Routes() {
       <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
       <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
       <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={AdminStaffList} />
-      <Stack.Screen name='AdminCreateDish' options={{title: 'Nouveau plat', cardStyleInterpolator: iosH}} component={AdminCreateDish} />
+      <Stack.Screen name='AdminCreateDish' options={{title: 'Nouveau plat', cardStyleInterpolator: iosV}} component={AdminCreateDish} />
       <Stack.Screen name='AdminTablesList' options={{title: 'Liste des tables', cardStyleInterpolator: iosH}} component={AdminTablesList} />
       <Stack.Screen name='AdminEditStaff' options={{title: 'Modifier un membre', cardStyleInterpolator: iosH}} component={AdminEditStaff} />
       <Stack.Screen name='AdminSalesStats' options={{title: 'Statistiques : ventes', cardStyleInterpolator: iosH}} component={AdminSalesStats} />

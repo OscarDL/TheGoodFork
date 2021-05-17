@@ -24,7 +24,7 @@ export default function BookingsTab({navigation, bookings, future}) {
             return <BaseCard
               key={i} icon='book-online' title={`${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`}
               subtitle={'Période : ' + getPeriod(booking.period).toUpperCase()} description={'Table : N°' + booking.table}
-              screen='EditBooking' navigation={future ? navigation : null} params={{bookings, booking}}
+              screen='EditBooking' navigation={future ? navigation : null} params={{booking}} // can edit future bookings only
             />})
           }
       </ScrollView>

@@ -110,30 +110,28 @@ export const resetPassword = async (resetToken, password, passCheck) => {
 
 
 export const checkLogin = async (dispatch) => {
-  AsyncStorage.getItem('authToken').then(token => {
+  const token = await AsyncStorage.getItem('authToken');
 
-    if (!token) {
-      dispatch({type: 'SET_USER', user: null});
-      return dispatch({type: 'SET_TOKEN', token: ''});
-    }
+  if (!token) {
+    dispatch({type: 'SET_USER', user: null});
+    return dispatch({type: 'SET_TOKEN', token: ''});
+  }
 
-    dispatchUserInfo(token).then(async (res) => {
-      if (res.success) {
-        dispatch({type: 'SET_USER', user: res.user});
-        dispatch({type: 'SET_TOKEN', token});
-      } else Alert.alert(
-        'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
-        [{
-          text: 'Compris',
-          onPress: async () => {
-            await AsyncStorage.removeItem('authToken');
-            dispatch({type: 'SET_USER', user: null});
-            dispatch({type: 'SET_TOKEN', token: ''});
-          }
-        }]
-      );
-    });
-
+  dispatchUserInfo(token).then(async (res) => {
+    if (res.success) {
+      dispatch({type: 'SET_USER', user: res.user});
+      dispatch({type: 'SET_TOKEN', token});
+    } else Alert.alert(
+      'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
+      [{
+        text: 'Compris',
+        onPress: async () => {
+          await AsyncStorage.removeItem('authToken');
+          dispatch({type: 'SET_USER', user: null});
+          dispatch({type: 'SET_TOKEN', token: ''});
+        }
+      }]
+    );
   });
 };
 

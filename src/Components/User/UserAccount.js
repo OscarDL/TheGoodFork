@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 
 
 export default function UserAccount({title}) {
-  const [_, dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   return (
     <Stack.Navigator>
       <Stack.Screen options={{title, headerRight: () => <Button title='Log out' onPress={() => logout(dispatch)} buttonStyle={{...styles.button, marginRight: 10}} />}} name='UserAccountComponent' component={UserAccountComponent} />

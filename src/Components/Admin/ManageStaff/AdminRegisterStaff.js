@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, TouchableOpacity, Alert, Platform, KeyboardAvoidingView } from 'react-native';
@@ -24,20 +25,22 @@ const pickerStyle = {
   }
 };
 
-const handleRegister = (staff, token, navigation) => {
-  registerStaff(staff, token).then(res => Alert.alert(
-    res.success ? res.title : 'Erreur lors de la création',
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? 'Terminé' : 'Réessayer',
-      onPress: () => res.success ? navigation.goBack() : null
-    }]
+const handleRegister = (staff, token) => {
+  registerStaff(staff, token).then(res => (
+    Toast.show({
+      text1: res.title ?? 'Erreur de création',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    })
   ));
 };
 
 
 export default function AdminRegisterStaff({navigation}) {
-  const [{token},] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
   const [staff, setStaff] = useState({
     email: '',
     firstName: '',
@@ -88,7 +91,7 @@ export default function AdminRegisterStaff({navigation}) {
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleRegister(staff, token, navigation)}
+          onPress={() => handleRegister(staff, token)}
         />
       </View>
       

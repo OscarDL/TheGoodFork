@@ -25,7 +25,7 @@ export default function CookHome({navigation}) {
   const isFocused = useIsFocused();
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}, _] = useDataLayerValue();
+  const [{user, token}] = useDataLayerValue();
 
   useEffect(() => {
     if ((isFocused || retry) && token) getOrders(user, token).then(res => {
@@ -52,7 +52,7 @@ export default function CookHome({navigation}) {
         </ScrollView>
           :
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{...styles.title, padding: 0, margin: 0}}>Aucune commande à préparer pour l'instant.</Text>
+          <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Aucune commande à préparer pour l'instant.</Text>
         </View>)
 
       : <View style={styles.container}>

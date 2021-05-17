@@ -65,7 +65,7 @@ export const editStaff = async (id, staff, token) => {
       desc: data?.data,
     };
 
-  } catch (error) { console.log(error); return error.response?.data.error || 'Erreur inconnue.'; }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 

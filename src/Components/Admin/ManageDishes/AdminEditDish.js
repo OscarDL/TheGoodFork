@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -26,14 +27,19 @@ const pickerStyle = {
 };
 
 const handleEdit = (token, id, dish, navigation) => {
-  editDish(token, id, {...dish, stock: (!dish.stock ? null : dish.stock)}).then(res => Alert.alert(
-    res.success ? res.title : 'Erreur lors de la modification',
-    res.success ? res.desc : res,
-    [{
-      text: res.success ? 'Terminé' : 'Réessayer',
-      onPress: () => res.success ? navigation.goBack() : null
-    }]
-  ));
+  if (!dish.stock) dish.stock = null;
+
+  editDish(token, id, dish).then(res => {
+    Toast.show({
+      text1: res.title ?? 'Erreur de modification',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+    res.success && navigation.goBack();
+  });
 };
 
 const handleDelete = (token, dish, navigation) => {
@@ -43,14 +49,17 @@ const handleDelete = (token, dish, navigation) => {
     [
       { text: 'Annuler' },
       { text: 'Supprimer',
-        onPress: () => deleteDish(token, dish._id, dish).then(res => Alert.alert(
-          res.success ? res.title : 'Erreur lors de la suppression',
-          res.success ? res.desc : res,
-          [{
-            text: res.success ? 'Terminé' : 'Réessayer',
-            onPress: () => res.success ? navigation.goBack() : null
-          }]
-        ))
+        onPress: () => deleteDish(token, dish._id, dish).then(res => {
+          Toast.show({
+            text1: res.title ?? 'Erreur de supression',
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+          res.success && navigation.goBack();
+        })
       }
     ]
   );
@@ -59,7 +68,7 @@ const handleDelete = (token, dish, navigation) => {
 
 export default function AdminEditDish({route, navigation}) {
   const {dish} = route.params;
-  const [{token}, _] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
 
   const [newDish, setNewDish] = useState({
     name: dish.name,
@@ -115,7 +124,7 @@ export default function AdminEditDish({route, navigation}) {
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, params, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, dish, navigation)}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

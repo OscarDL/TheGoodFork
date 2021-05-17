@@ -93,7 +93,7 @@ export const validateOrder = async (order, token) => {
 
   try {
     order.validated = true;
-    const {data} = await axios.put(apiUrl + 'orders/edit/' + order._id, order, config);
+    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
 
     if (!data.success) return data?.error;
 

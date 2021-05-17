@@ -4,6 +4,7 @@ import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
+import { totalTables } from '../../../../../config';
 
 
 const pickerStyle = {
@@ -60,7 +61,9 @@ export default function PeriodPicker({setStep, setShow, booking, bookings, setBo
             setStep(2);
             setShow(null);
 
-            const tables = [1,2,3,4,5,6,7,8,9,10];
+            console.log(bookings);
+
+            const tables = Array.from(Array(totalTables), (_, i) => i + 1);
             bookings
               .filter(thisBooking => thisBooking.period === booking.period)
               .forEach(thisBooking => tables.splice(tables.indexOf(thisBooking.table), 1));
@@ -73,5 +76,5 @@ export default function PeriodPicker({setStep, setShow, booking, bookings, setBo
         </View>
       </View>
     </View>
-  )
+  );
 }

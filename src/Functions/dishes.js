@@ -30,11 +30,6 @@ export const getDishes = async (type = null) => {
 
 
 export const createDish = async (dish, token) => {
-  for (const [key, value] of Object.entries(dish)) {
-    if (value === '' && key !== 'detail')
-      return 'Veuillez remplir tous les champs nécessaires.';
-  }
-
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -59,11 +54,6 @@ export const createDish = async (dish, token) => {
 
 
 export const editDish = async (token, id, dish) => {
-  for (const [key, value] of Object.entries(dish)) {
-    if (value === '' && key !== 'detail')
-      return 'Veuillez remplir tous les champs nécessaires.';
-  }
-
   const config = {
     headers: {
       'Authorization': `Bearer ${token}`,

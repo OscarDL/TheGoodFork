@@ -13,7 +13,7 @@ const logout = async (dispatch) => {
 }
 
 export default function AdminSettings() {
-  const [_, dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <Text>SETTINGS</Text>

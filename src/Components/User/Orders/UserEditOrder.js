@@ -11,7 +11,7 @@ import SubmitOrderTabs from '../../../Shared/Orders/SubmitOrderTabs';
 
 
 export default function UserEditOrder({navigation, route}) {
-  const [{token}, _] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
 
   const [newOrder, setNewOrder] = useState(null);
   const [price, setPrice] = useState(route.params.order.price);

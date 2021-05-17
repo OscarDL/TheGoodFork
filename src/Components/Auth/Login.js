@@ -23,7 +23,7 @@ const loginUser = (user, dispatch) => {
 
 
 export default function Login({navigation}) {
-  const [_, dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   const [userLogin, setUserLogin] = useState({email: '', password: ''});
 
   return (
@@ -82,9 +82,10 @@ export default function Login({navigation}) {
 
 
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, TouchableOpacity, Alert, Image, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { login } from '../../Functions/auth';
 import { styles } from '../../Shared/styles';
@@ -93,8 +94,16 @@ import { useDataLayerValue } from '../Context/DataLayer';
 
 const loginUser = (user, dispatch) => {
   login(user).then(async (res) => {
-    if (!res.success)
-      return Alert.alert('Erreur lors de la connexion', res, [{text: 'Réessayer'}]);
+    if (!res.success) return (
+      Toast.show({
+        text1: 'Erreur de connexion',
+        text2: res,
+        
+        type: 'error',
+        position: 'bottom',
+        visibilityTime: 1500
+      })
+    );
 
     dispatch({ type: 'SET_USER', user: res.user });
     dispatch({ type: 'SET_TOKEN', token: res.token });
@@ -104,7 +113,7 @@ const loginUser = (user, dispatch) => {
 
 
 export default function Login({navigation}) {
-  const [,dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   const [userLogin, setUserLogin] = useState({
     email: '',
     password: ''
@@ -144,6 +153,7 @@ export default function Login({navigation}) {
           buttonStyle={[styles.button]}
         />
       </View>
+      
       <View></View>
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Je n'ai pas encore de compte</Text>

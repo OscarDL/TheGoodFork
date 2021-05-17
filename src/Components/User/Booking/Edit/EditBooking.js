@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 import { Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -35,9 +36,9 @@ export default function UserNewBooking({navigation, route}) {
   const [step, setStep] = useState(3);
   const [show, setShow] = useState(null);
   
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState(null);
   const [booking, setBooking] = useState(route.params.booking);
-  const [bookings, setBookings] = useState(route.params.bookings);
 
 
   const androidChange = (e) => {
@@ -49,8 +50,8 @@ export default function UserNewBooking({navigation, route}) {
 
     getDayBookings(e.nativeEvent.timestamp, token).then(bookings => {
       setStep(1);
+      setLoading(false);
       setBookings(bookings);
-      setTimeout(() => setLoading(false), 500);
     });
   };
 
@@ -60,21 +61,24 @@ export default function UserNewBooking({navigation, route}) {
 
     getDayBookings(booking.dateBooked, token).then(bookings => {
       setStep(1);
+      setLoading(false);
       setBookings(bookings);
-      setTimeout(() => setLoading(false), 500);
     });
   };
 
 
   const handleEdit = () => {
-    editBooking(booking, token).then(res => Alert.alert(
-      res.success ? res.title : 'Erreur de modification',
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Réesayer',
-        onPress: () => res.success ? navigation.goBack() : null
-      }]
-    ));
+    editBooking(booking, token).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de modification',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+      res.success && navigation.goBack();
+    });
   };
 
   const handleCancel = () => {
@@ -88,18 +92,29 @@ export default function UserNewBooking({navigation, route}) {
       [
         { text: 'Revenir' },
         { text: 'Continuer',
-          onPress: () => deleteBooking(booking, token).then(res => Alert.alert(
-            res.success ? res.title : "Erreur d'annulation",
-            res.success ? res.desc : res,
-            [{
-              text: res.success ? 'Terminé' : 'Réesayer',
-              onPress: () => res.success ? navigation.goBack() : null
-            }]
-          ))
+          onPress: () => deleteBooking(booking, token).then(res => {
+            Toast.show({
+              text1: res.title ?? "Erreur d'annulation",
+              text2: res.desc ?? res,
+              
+              position: 'bottom',
+              visibilityTime: 1500,
+              type: res.success ? 'success' : 'error'
+            });
+            res.success && navigation.goBack();
+          })
         }
       ]
     );
   };
+
+  
+  useEffect(() => {
+    getDayBookings(booking.dateBooked, token).then(bookings => {
+      setLoading(false);
+      setBookings(bookings);
+    });
+  }, [setLoading, setBookings]);
 
 
   return (

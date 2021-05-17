@@ -28,7 +28,7 @@ const handleRegister = (user, dispatch) => {
 
 
 export default function Register({navigation}) {
-  const [_, dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   const [userRegister, setUserRegister] = useState({
     email: '',
     firstName: '',
@@ -136,9 +136,10 @@ export default function Register({navigation}) {
 
 
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
 import { registerUser } from '../../Functions/auth';
@@ -146,23 +147,27 @@ import { useDataLayerValue } from '../Context/DataLayer';
 
 
 const handleRegister = (user, dispatch) => {
-  registerUser(user).then(res => Alert.alert(
-    res.success ? 'Compte créé avec succès' : 'Erreur de création de compte',
-    res.success ? 'Bienvenue à The Good Fork!' : res,
-    [{
-      text: res.success ? 'Entrer' : 'Réessayer',
-      onPress: async () => { if (res.success) {
-        await AsyncStorage.setItem('authToken', res.token);
-        dispatch({ type: 'SET_TOKEN', token: res.token });
-        dispatch({ type: 'SET_USER', user: res.user }); // Routes stack will change once user context changes
-      } else null }
-    }]
-  ));
+  registerUser(user).then(async (res) => {
+    if (!res.success) return (
+      Toast.show({
+        text1: "Erreur d'inscription",
+        text2: res,
+        
+        type: 'error',
+        position: 'bottom',
+        visibilityTime: 1500
+      })
+    );
+
+    dispatch({ type: 'SET_USER', user: res.user });
+    dispatch({ type: 'SET_TOKEN', token: res.token });
+    await AsyncStorage.setItem('authToken', res.token);
+  });
 }
 
 
 export default function Register({navigation}) {
-  const [_, dispatch] = useDataLayerValue();
+  const [{}, dispatch] = useDataLayerValue();
   const [userRegister, setUserRegister] = useState({
     email: '',
     firstName: '',

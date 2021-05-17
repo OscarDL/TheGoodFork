@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import React, { useState } from 'react';
+import Toast from 'react-native-toast-message';
 import Collapsible from 'react-native-collapsible';
 import { Button, Input, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -11,37 +12,44 @@ import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { submitOrder, editOrder } from '../../../Functions/orders';
 
 
-const handleEdit = (order, customer, token, navigation) => {
+const handleEdit = (order, customer, token, navigation) => (
   editOrder({...order, user: customer}, token).then(res => {
-    res.success && navigation.goBack();
-    Alert.alert(
-      res.success ? res.title : 'Erreur lors de la modificiation',
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Compris',
-        onPress: () => res.success ? navigation.navigate('WaiterOrderDetails', {order}) : (order.price === 0 ? navigation.goBack() : null)
-      }]
-    );
-  });
-};
+    Toast.show({
+      text1: res.title ?? 'Erreur de modification',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+
+    if (res.success) return navigation.navigate('WaiterOrderDetails', {order});
+
+    order.price === 0 && navigation.goBack();
+  })
+);
 
 const handleSubmit = (order, customer, token, navigation, user) => {
   submitOrder({...order, user: customer}, token, user.email).then(res => {
-    res.success && navigation.goBack();
-    Alert.alert(
-      res.success ? res.title : 'Erreur lors de la commande',
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Compris',
-        onPress: () => res.success || order.price === 0 ? navigation.goBack() : null
-      }]
-    );
+    Toast.show({
+      text1: res.title ?? 'Erreur de commande',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+
+    if (res.success) return navigation.navigate('WaiterHome');
+
+    order.price === 0 && navigation.goBack();
   });
 };
 
+
 export default function WaiterSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
-  const [{token, user}, _] = useDataLayerValue();
+  const [{token, user}] = useDataLayerValue();
 
   const [details, setDetails] = useState(order.details);
   const [collapsed, setCollapsed] = useState({order: true, customer: false});
@@ -63,21 +71,21 @@ export default function WaiterSubmitOrder({navigation, route}) {
         </View>
         
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, customer: !collapsed.customer})}>
-            <Icon style={{opacity: 0, paddingHorizontal: 10 /* Center title */}}  name={'expand-less'}/>
-            <Text style={styles.sectionText}>Infos client</Text>
-            <Icon style={{paddingHorizontal: 10}} name={collapsed.customer ? 'expand-more' : 'expand-less'}/>
+          <Icon style={{opacity: 0, paddingHorizontal: 10 /* Center title */}}  name={'expand-less'}/>
+          <Text style={styles.sectionText}>Infos client</Text>
+          <Icon style={{paddingHorizontal: 10}} name={collapsed.customer ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
         <Collapsible collapsed={collapsed.customer}>
           <Input placeholder='First name' defaultValue={order?.user?.firstName} onChangeText={firstName => setCustomer({ ...customer, firstName })} />
           <Input placeholder='Last name' defaultValue={order?.user?.lastName} onChangeText={lastName => setCustomer({ ...customer, lastName })} />
-          <Input placeholder='Email address' defaultValue={order?.user?.email} autoCapitalize='none' onChangeText={email => setCustomer({ ...customer, email })} />
+          <Input placeholder='Email address' keyboardType='email-address' defaultValue={order?.user?.email} autoCapitalize='none' onChangeText={email => setCustomer({ ...customer, email })} />
         </Collapsible>
 
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, order: !collapsed.order})}>
-            <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
-            <Text style={styles.sectionText}>Commande</Text>
-            <Icon style={{paddingHorizontal: 10}} name={collapsed.order ? 'expand-more' : 'expand-less'}/>
+          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+          <Text style={styles.sectionText}>Commande</Text>
+          <Icon style={{paddingHorizontal: 10}} name={collapsed.order ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
         <Collapsible collapsed={collapsed.order}>

@@ -1,4 +1,5 @@
 import { FAB } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { View, Text, Alert, SafeAreaView } from 'react-native';
@@ -10,14 +11,19 @@ import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { deleteOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
 
-const handleValidate = (order, token, navigation) => validateOrder(order, token).then(res => Alert.alert(
-  res.success ? res.title : 'Erreur lors de la validation',
-  res.success ? res.desc : res,
-  [{
-    text: res.success ? 'Terminé' : 'Réessayer',
-    onPress: () => res.success ? navigation.goBack() : null
-  }]
-));
+const handleValidate = (order, token, navigation) => (
+  validateOrder(order, token).then(res => {
+    Toast.show({
+      text1: res.title ?? 'Erreur de validation',
+      text2: res.desc ?? res,
+      
+      position: 'bottom',
+      visibilityTime: 1500,
+      type: res.success ? 'success' : 'error'
+    });
+    res.success && navigation.goBack();
+  })
+);
 
 const handleDelete = (order, token, navigation) => Alert.alert(
   'Êtes-vous sûr ?',
@@ -27,22 +33,26 @@ const handleDelete = (order, token, navigation) => Alert.alert(
   },
   {
     text: 'Continuer',
-    onPress: () => deleteOrder(order, token).then(res => Alert.alert(
-      res.success ? res.title : "Erreur lors de l'annulation",
-      res.success ? res.desc : res,
-      [{
-        text: res.success ? 'Terminé' : 'Réessayer',
-        onPress: () => res.success ? navigation.goBack() : null
-      }]
-    ))
+    onPress: () => deleteOrder(order, token).then(res => {
+      Toast.show({
+        text1: res.title ?? "Erreur d'annulation",
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+      res.success && navigation.goBack();
+    })
   }]
 );
+
 
 export default function WaiterOrderDetails({navigation, route}) {
   const {order, readOnly} = route.params;
 
   const isFocused = useIsFocused();
-  const [{token}, _] = useDataLayerValue();
+  const [{token}] = useDataLayerValue();
   const [updatedOrder, setUpdatedOrder] = useState(order);
 
   useEffect(() => {
@@ -61,11 +71,12 @@ export default function WaiterOrderDetails({navigation, route}) {
         <View style={{alignItems: 'center', margin: 20}}>
           {readOnly
             ?
-          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
             :
+          null}          
           <TouchableOpacity style={{padding: 10}} onPress={() => handleDelete(updatedOrder, token, navigation)}>
             <Text style={styles.delete}>Supprimer cette commande</Text>
-          </TouchableOpacity>}
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <FAB style={styles.fab} icon={readOnly ? 'pencil' : 'check'} label={readOnly ? 'Modifier' : 'Valider'} color='white'

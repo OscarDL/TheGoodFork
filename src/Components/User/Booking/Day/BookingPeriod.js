@@ -1,8 +1,10 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
+import Toast from 'react-native-toast-message';
 import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
+import { totalTables } from '../../../../../config';
 import { getPeriod } from '../../../../Functions/utils';
 import { submitBooking } from '../../../../Functions/bookings';
 import { useDataLayerValue } from '../../../Context/DataLayer';
@@ -30,15 +32,15 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
       {
         text: 'Réserver',
         onPress: () => submitBooking(booking, token).then(res => {
+          Toast.show({
+            text1: res.title ?? 'Erreur de validation',
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
           res.success && setRefresh(true);
-          Alert.alert(
-            res.success ? res.title : 'Erreur de réservation',
-            res.success ? res.desc : res,
-            [{
-              text: res.success ? 'Terminé' : 'Réesayer',
-              onPress: () => res.success ? null : handleSubmit(table)
-            }]
-          );
         })
       }]
     ) 
@@ -47,7 +49,7 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
   return (
     <View style={styles.container}>
       <ScrollView>
-        {[1,2,3,4,5,6,7,8,9,10].map(table => (
+        {Array.from(Array(totalTables), (_, i) => i + 1).map(table => (
           <View key={table} style={styles.bookingRow}>
             <Text style={{fontSize: 16}}>Table {table}</Text>
 
