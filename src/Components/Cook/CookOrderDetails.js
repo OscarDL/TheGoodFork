@@ -14,7 +14,7 @@ const informWaiters = (order, token, navigation) => {
     },
     {
       text: 'Informer',
-      onPress: () => null /*deleteOrder(order, token).then(res => Alert.alert(
+      onPress: () => null /*cancelOrder(order, token).then(res => Alert.alert(
         res.success ? res.title : "Erreur lors de l'annulation",
         res.success ? res.desc : res,
         [{

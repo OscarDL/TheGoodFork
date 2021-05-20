@@ -11,63 +11,6 @@ import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { editOrder, submitOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../../Components/Context/DataLayer';
 
-
-const handleEdit = (order, token, navigation) => {
-  editOrder(order, token).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de commande',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-
-    if (res.success) return navigation.navigate('UserOrderDetails');
-
-    order.price === 0 && navigation.goBack();
-  });
-};
-
-const handleSubmit = (order, user, token, navigation) => {
-  submitOrder({...order, user}, token, user.email).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de commande',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-
-    if (res.success) return navigation.navigate('UserOrderTabs');
-
-    order.price === 0 && navigation.goBack();
-  });
-};
-
-const handlePay = (order, user, token, navigation) => {
-  const actions = [
-    {
-      text: 'Annuler'
-    }, {
-      text: 'Plus tard',
-      onPress: () => handleSubmit(order, user, token, navigation)
-    }, {
-      text: 'Payer',
-      onPress: () => navigation.navigate('UserPayOrder', {order})
-    }
-  ];
-  
-  Alert.alert(
-    'Paiement',
-    "Voulez-vous payer maintenant ? Vous ne pourrez ni modifier ni annuler votre commande sans l'aide d'un serveur.",
-    [
-      actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]
-    ]
-  );
-};
-
   
 export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
@@ -79,6 +22,87 @@ export default function UserSubmitOrder({navigation, route}) {
   useEffect(() => {
     navigation.setOptions({title: 'Commande ' + (!order.takeaway ? 'sur place' : 'à emporter')})
   }, []);
+
+
+  const handleEdit = () => {
+    editOrder(order, token).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de modification',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+
+      if (!order.price) navigation.goBack();
+      if (res.success) navigation.navigate('UserOrderDetails');
+    });
+  };
+  
+  const handleSubmit = () => {
+    submitOrder({...order, user}, token, user.email).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de commande',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+
+      if (!order.price) navigation.goBack();
+      if (res.success) navigation.navigate('UserOrderTabs');
+    });
+  };
+  
+  const handleChoice = () => {
+    if (!order.price) {
+      return Alert.alert(
+        'Erreur de commande',
+        'Votre commande ne peut pas être vide.',
+        [{
+          text: 'Compris',
+          onPress: () => navigation.goBack()
+        }]
+      );
+    }
+  
+    if (order.type?.takeaway) {
+      const actions = [{
+        text: 'Payer',
+        onPress: () => navigation.navigate('UserPayOrder', {order, type})
+      }, {
+        text: 'Annuler'
+      }];
+  
+      return Alert.alert(
+        'Procédure de paiement',
+        "Vous devez payer les commandes à emporter en avance. Vous ne pourrez ni annuler ni modifier ultérieurement. Continuer ?",
+        [
+          actions[Platform.OS === 'ios' ? 0 : 1], actions[Platform.OS === 'ios' ? 1 : 0]
+        ]
+      );
+    }
+  
+    const actions = [
+      {
+        text: 'Annuler'
+      }, {
+        text: 'Plus tard',
+        onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
+      }, {
+        text: 'Payer',
+        onPress: () => navigation.navigate('UserPayOrder', {order, type})
+      }
+    ];
+    
+    Alert.alert(
+      'Procédure de paiement',
+      "Voulez-vous payer maintenant ? Vous ne pourrez plus modifier votre commande sans l'aide d'un serveur.",
+      [actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]]
+    );
+  };
 
 
   return (
@@ -106,8 +130,7 @@ export default function UserSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title={type === 'edit' ? 'Modifier' : 'Commander'} buttonStyle={[{...styles.button, margin: 10}]}
-        onPress={() => type === 'edit' ? handleEdit({...order, details}, token, navigation) : handlePay({...order, details}, user, token, navigation)}/>
+        <Button title={type === 'edit' ? 'Modifier' : 'Commander'} buttonStyle={[{...styles.button, margin: 10}]} onPress={handleChoice}/>
       </View>
     </SafeAreaView>
   );

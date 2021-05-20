@@ -7,31 +7,8 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
-import { getOrder, deleteOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Orders/OrderDetails';
-
-
-const handleCancel = (order, token, navigation) => Alert.alert(
-  'Êtes-vous sûr ?',
-  "Vous êtes sur le point d'annuler votre commande.",
-  [{
-    text: 'Revenir'
-  },
-  {
-    text: 'Continuer',
-    onPress: () => deleteOrder(order, token).then(res => {
-      Toast.show({
-        text1: res.title ?? "Erreur d'annulation",
-        text2: res.desc ?? res,
-        
-        position: 'bottom',
-        visibilityTime: 1500,
-        type: res.success ? 'success' : 'error'
-      });
-      res.success && navigation.goBack();
-    })
-  }]
-);
+import { getOrder, cancelOrder } from '../../../Functions/orders';
 
 
 export default function UserOrderDetails({navigation, route}) {
@@ -43,8 +20,35 @@ export default function UserOrderDetails({navigation, route}) {
   
   useEffect(() => {
     isFocused && getOrder(order._id, token).then(res => res.success && setUpdatedOrder(res.order));
-    navigation.setOptions({title: `${(updatedOrder.takeaway ? 'À emporter' : 'Sur place')}`});
+    navigation.setOptions({title: `Commande ${(updatedOrder.takeaway ? 'à emporter' : 'sur place')}`});
   }, [isFocused]);
+
+
+  const handleCancel = () => (
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      "Vous êtes sur le point d'annuler votre commande.",
+      [{
+        text: 'Revenir'
+      },
+      {
+        text: 'Continuer',
+        onPress: () => cancelOrder(order, token).then(res => {
+          Toast.show({
+            text1: res.title ?? "Erreur d'annulation",
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+
+          if (res.success) navigation.goBack();
+        })
+      }]
+    )
+  );
+
   
   return (
     <SafeAreaView style={styles.container}>
@@ -55,8 +59,8 @@ export default function UserOrderDetails({navigation, route}) {
         <View style={{alignItems: 'center', margin: 20}}>
           <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
           
-          {!updatedOrder.validated && !updatedOrder.paid && (
-            <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={() => handleCancel(updatedOrder, token, navigation)}>
+          {!updatedOrder.validated && (
+            <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={handleCancel}>
               <Text style={styles.delete}>Annuler ma commande</Text>
             </TouchableOpacity>
           )}

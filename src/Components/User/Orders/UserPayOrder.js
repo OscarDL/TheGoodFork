@@ -1,24 +1,164 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView } from 'react-native';
+import WebView from 'react-native-webview';
+import Toast from 'react-native-toast-message';
+import { Input, Button } from 'react-native-elements';
+import { Platform, SafeAreaView, View, ActivityIndicator, Alert } from 'react-native';
+import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
 
-import PaymentView from './PaymentView';
+import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { useDataLayerValue } from '../../Context/DataLayer';
+import { getIntent, payOrder } from '../../../Functions/stripe';
+import { editOrder, submitOrder } from '../../../Functions/orders';
 
 
-export default function UserPayOrder({route}) {
-  const {order} = route.params;
+const fullScreen = {
+  top: 0,
+  left: 0,
+  zIndex: 98,
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  backgroundColor: '#ddd6'
+};
 
-  const [response, setResponse] = useState(null);
-  const [makePayment, setMakePayment] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState('');
 
-  const onCheckStatus = async (paymentResponse) => {
-    // todo
-  }
+export default function UserPayOrder({route, navigation}) {
+  const {order, type} = route.params;
+  const [{token, user}] = useDataLayerValue();
+
+  const [webview, setWebview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [paymentIntent, setPaymentIntent] = useState(null);
+
+  const [card, setCard] = useState({
+    cvc: null,
+    number: null,
+    exp_year: null,
+    exp_month: null
+  });
+
+
+  const checkBiometrics = async () => {
+    const security = await getEnrolledLevelAsync();
+    const biometricsActive = await isEnrolledAsync(); 
+
+    if (security) {
+      const promptMessage = (security === 2 && biometricsActive) ? (
+        'Paiement sécurisé avec données biométriques.'
+      ) : (
+        'Veuillez entrer votre code de dévérouillage pour effectuer votre paiement sécurisé.'
+      );
+
+      authenticateAsync({promptMessage}).then(res => res.success && handlePayment());
+    } else {
+      const actions = [
+        {
+          text: 'Annuler'
+        }, {
+          text: 'Payer',
+          onPress: () => handlePayment()
+        }
+      ];
+      
+      Alert.alert(
+        'Vérification biométrique',
+        "Votre appareil n'a pas d'authentification mise en place pour sécuriser votre achat. Voulez-vous continuer ?",
+        [actions[Platform.OS === 'ios' ? 1 : 0], actions[Platform.OS === 'ios' ? 0 : 1]]
+      );
+    }
+  };
+
+  const handlePayment = async () => {
+    setLoading(true);
+
+    const payment = await payOrder(card, order, token);
+    if (!payment.success) {
+      Toast.show({
+        text1: 'Erreur de paiement',
+        text2: payment,
+        
+        visibilityTime: 1500,
+        position: 'bottom',
+        type: 'error'
+      });
+      return setLoading(false);
+    }
+
+    if (!payment.intent.next_action && !payment.intent.last_payment_error && payment.intent.status === 'succeeded')
+      return finalizePayment(payment);
+
+    setPaymentIntent(payment);
+    setWebview(payment.intent.next_action.use_stripe_sdk.stripe_js);
+  };
+  
+  const finalizePayment = async (payment) => {
+    setLoading(true);
+    const {intent} = await getIntent(payment.intent.id, token);
+
+    if (!intent?.next_action && !intent?.last_payment_error && intent?.status === 'succeeded') {
+      const res = await (type === 'edit' ? (
+        editOrder({...order, paid: true, status: 'paid', stripePi: payment.intent.id}, token)
+      ) : (
+        submitOrder({...order, user, stripePi: payment.intent.id}, token, user.email)
+      ));
+
+      if (res.success) {
+        Toast.show({
+          text1: payment.title,
+          text2: payment.desc,
+          
+          visibilityTime: 1500,
+          position: 'bottom',
+          type: 'success'
+        });
+        navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs');
+      }
+    } else {
+      setWebview(null);
+      setLoading(false);
+
+      const actions = [
+        {
+          text: 'Supprimer',
+          onPress: () => navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs')
+        }, {
+          text: 'Conserver',
+          onPress: () => navigation.goBack()
+        }
+      ];
+      Alert.alert(
+        'Paiement annulé',
+        'Vous avez annulé le paiement. Voulez-vous supprimer la commande en cours ?',
+        [actions[Platform.OS === 'ios' ? 1 : 0], actions[Platform.OS === 'ios' ? 0 : 1]]
+      );
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <PaymentView amount={order.price} product={'Lasagnes Test'} onCheckStatus={onCheckStatus}/>
+      <Input placeholder='Numéro de carte bleue' maxLength={16} onChangeText={number => setCard({...card, number})} />
+      <Input placeholder="Année d'expiration" maxLength={4} onChangeText={exp_year => setCard({...card, exp_year})} />
+      <Input placeholder="Mois d'expiration" maxLength={2} onChangeText={exp_month => setCard({...card, exp_month})} />
+      <Input placeholder='CVV' maxLength={3} onChangeText={cvc => setCard({...card, cvc})} />
+      
+      <Button
+        onPress={checkBiometrics}
+        title={`Payer : ${order.price} EUR`}
+        buttonStyle={[styles.button, {alignSelf: 'center'}]}
+      />
+
+      {webview && paymentIntent && <View style={fullScreen}>
+        <WebView source={{uri: webview}} onNavigationStateChange={({loading, url}) => {
+          setLoading(loading);
+          if (!loading && url.includes('https://hooks.stripe.com/3d_secure/complete')) finalizePayment(paymentIntent);
+        }}/>
+      </View>}
+
+      {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      </View>}
     </SafeAreaView>
-  )
-};
+  );
+}

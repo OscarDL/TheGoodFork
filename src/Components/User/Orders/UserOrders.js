@@ -54,7 +54,31 @@ export default function UserOrders({title}) {
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Vérification'}} name='UserSubmitOrder' component={UserSubmitOrder}/>
     </Stack.Navigator>
   );
-}
+};
+
+
+function UserOrdersComponent({navigation, paid, orders}) {
+  return (
+    <View style={styles.container}>
+      {orders?.filter(order => order.paid === paid).length > 0
+        ?
+      <ScrollView contentContainerStyle={{paddingVertical: 5}}>
+        <View>
+          {orders.map((order, i) => order.paid === paid &&
+            <BaseCard key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5)
+            + `, ${new Date(order.dateOrdered).toLocaleTimeString()}`} subtitle={order?.price + ' ' + order?.currency}
+            description={'Status: ' + order.status} screen='UserOrderDetails' params={{order}} navigation={navigation}
+          />)}
+        </View>
+      </ScrollView>
+        :
+      <View>
+        <Text style={styles.emptySection}>Vous n'avez aucune commande à payer.</Text>
+      </View>}
+    </View>
+  );
+};
+
 
 function UserOrderTabs({navigation}) {
   const isFocused = useIsFocused();
@@ -127,73 +151,63 @@ function UserOrderTabs({navigation}) {
   );
 
 
-  return orders ? <View style={styles.container}>
-    <Tabs.Navigator
-      tabBarOptions={style}
-      initialRouteName='A Payer'
-      backBehavior='initialRoute'
-    >
-      <Tabs.Screen name='A payer'>
-        {props => <UserOrdersComponent {...props} paid={false} orders={orders}/>}
-      </Tabs.Screen>
-      <Tabs.Screen name='Payées'>
-        {props => <UserOrdersComponent {...props} paid={true} orders={orders}/>}
-      </Tabs.Screen>
-    </Tabs.Navigator>
-
-    {show && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
-      <View style={styles.iosDateBg}>
-        <DateTimePicker
-          mode={mode}
-          value={date}
-          is24Hour={true}
-          display='spinner'
-          textColor='black'
-          minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
-          onChange={e => setDate(new Date(e.nativeEvent.timestamp))}
-        />
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <TouchableOpacity onPress={iosCancel}>
-            <Text style={{padding: 24, color: '#f22', fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={iosChange}>
-            <Text style={{padding: 24, color: '#28f', fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
-          </TouchableOpacity>
+  return orders ? (
+    <>
+      {orders.length > 0 ? (
+        <View style={styles.container}>
+          <Tabs.Navigator
+            tabBarOptions={style}
+            initialRouteName='A Payer'
+            backBehavior='initialRoute'
+          >
+            <Tabs.Screen name='A payer'>
+              {props => <UserOrdersComponent {...props} paid={false} orders={orders}/>}
+            </Tabs.Screen>
+            <Tabs.Screen name='Payées'>
+              {props => <UserOrdersComponent {...props} paid={true} orders={orders}/>}
+            </Tabs.Screen>
+          </Tabs.Navigator>
         </View>
-      </View>
-    </View> : <DateTimePicker
-      mode={mode}
-      value={date}
-      is24Hour={true}
-      display='default'
-      onChange={androidChange}
-      minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
-    />)}
+      ) : (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Vous n'avez pas de commandes.</Text>
+        </View>
+      )}
 
-    <FAB style={styles.fab} animated label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
-  </View> : <View style={styles.container}>
-    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
-  </View>
-}
+      {show && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
+        <View style={styles.iosDateBg}>
+          <DateTimePicker
+            mode={mode}
+            value={date}
+            is24Hour={true}
+            display='spinner'
+            textColor='black'
+            minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
+            onChange={e => setDate(new Date(e.nativeEvent.timestamp))}
+          />
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <TouchableOpacity onPress={iosCancel}>
+              <Text style={{padding: 24, color: '#f22', fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={iosChange}>
+              <Text style={{padding: 24, color: '#28f', fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View> : <DateTimePicker
+        mode={mode}
+        value={date}
+        is24Hour={true}
+        display='default'
+        onChange={androidChange}
+        minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
+      />)}
 
-function UserOrdersComponent({navigation, paid, orders}) {
-  return (
+      <FAB style={styles.fab} animated label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
+    </>
+  ) : (
     <View style={styles.container}>
-      {orders ? (orders?.length > 0 ? <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-
-        <View>
-          {orders?.filter(order => order.paid === paid).length > 0 ? orders.map((order, i) => order.paid === paid && <BaseCard
-            key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
-            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={order?.price + ' ' + order?.currency}
-            description={'Status: ' + order.status} screen='UserOrderDetails' params={{order}} navigation={navigation}
-          />) : <Text style={styles.emptySection}>Vous n'avez aucune commande à payer.</Text>}
-        </View>
-
-      </ScrollView> : <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Vous n'avez pas de commandes.</Text>
-      </View>) : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
-      </View>}
+      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
     </View>
-  );
-}
+  )
+};

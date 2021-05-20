@@ -61,8 +61,6 @@ export default function PeriodPicker({setStep, setShow, booking, bookings, setBo
             setStep(2);
             setShow(null);
 
-            console.log(bookings);
-
             const tables = Array.from(Array(totalTables), (_, i) => i + 1);
             bookings
               .filter(thisBooking => thisBooking.period === booking.period)

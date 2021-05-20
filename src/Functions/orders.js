@@ -106,29 +106,6 @@ export const validateOrder = async (order, token) => {
 };
 
 
-export const editOrder = async (order, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
-  try {
-    order.price = totalPrice(order); // For security
-    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
-    
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Modification',
-      desc: 'Commande modifiée avec succès.'
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
 export const submitOrder = async (order, token, email) => {
   const config = {
     headers: {
@@ -147,13 +124,40 @@ export const submitOrder = async (order, token, email) => {
     return {
       success: true,
       title: 'Nouvelle commande',
-      desc: 'Commande envoyée avec succès.'
+      desc: 'Commande envoyée avec succès.',
+
+      order: data.order
     }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 
-export const deleteOrder = async (order, token) => {
+export const editOrder = async (order, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  
+  try {
+    order.price = totalPrice(order); // For security
+    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Modification',
+      desc: 'Commande modifiée avec succès.',
+
+      order: data.order
+    }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const cancelOrder = async (order, token) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -162,7 +166,7 @@ export const deleteOrder = async (order, token) => {
   }
 
   try {
-    const {data} = await axios.delete(apiUrl + 'orders/delete/' + order._id, config);
+    const {data} = await axios.delete(apiUrl + 'orders/cancel/' + order._id, config);
 
     if (!data.success) return data?.error;
 

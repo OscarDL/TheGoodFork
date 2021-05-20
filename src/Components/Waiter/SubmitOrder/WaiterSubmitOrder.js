@@ -1,5 +1,5 @@
-import { Alert } from 'react-native';
 import React, { useState } from 'react';
+import { Alert, Platform } from 'react-native';
 import Toast from 'react-native-toast-message';
 import Collapsible from 'react-native-collapsible';
 import { Button, Input, Icon } from 'react-native-elements';
@@ -12,47 +12,12 @@ import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { submitOrder, editOrder } from '../../../Functions/orders';
 
 
-const handleEdit = (order, customer, token, navigation) => (
-  editOrder({...order, user: customer}, token).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de modification',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-
-    if (res.success) return navigation.navigate('WaiterOrderDetails', {order});
-
-    order.price === 0 && navigation.goBack();
-  })
-);
-
-const handleSubmit = (order, customer, token, navigation, user) => {
-  submitOrder({...order, user: customer}, token, user.email).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de commande',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-
-    if (res.success) return navigation.navigate('WaiterHome');
-
-    order.price === 0 && navigation.goBack();
-  });
-};
-
-
 export default function WaiterSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
   const [{token, user}] = useDataLayerValue();
 
   const [details, setDetails] = useState(order.details);
-  const [collapsed, setCollapsed] = useState({order: true, customer: false});
+  const [collapsed, setCollapsed] = useState({customer: false, order: true});
 
   const [customer, setCustomer] = useState({
     firstName: type !== 'edit' ? null : order.user.firstName,
@@ -60,6 +25,75 @@ export default function WaiterSubmitOrder({navigation, route}) {
     email: type !== 'edit' ? null : order.user.email,
     type: type !== 'edit' ? 'waiter' : order.user.type
   });
+
+
+  const handleEdit = () => {
+    if (!order.price) return navigation.goBack();
+
+    editOrder({...order, user: customer}, token).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de modification',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+
+      if (res.success) navigation.navigate('WaiterOrderDetails', {order});
+    });
+  };
+  
+  const handleSubmit = () => {
+    if (!order.price) return navigation.goBack();
+  
+    submitOrder({...order, user: customer}, token, user.email).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de commande',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+  
+      if (res.success) return navigation.navigate('WaiterHome');
+    });
+  };
+  
+  const handleChoice = () => {
+    if (!order.price) {
+      return Alert.alert(
+        'Erreur de commande',
+        'La commande ne peut pas être vide.',
+        [{
+          text: 'Compris',
+          onPress: () => navigation.goBack()
+        }]
+      );
+    }
+  
+    const actions = [
+      {
+        text: 'Annuler'
+      }, {
+        text: 'Plus tard',
+        onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
+      }, {
+        text: 'Payer',
+        onPress: () => navigation.navigate('WaiterPayOrder', {order, type})
+      }
+    ];
+    
+    Alert.alert(
+      'Procédure de paiement',
+      "Faire payer la commande au client maintenant ?",
+      [
+        actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]
+      ]
+    );
+  };
+
 
   return (
     <SafeAreaView style={{...styles.container, justifyContent: 'space-between'}}>
@@ -98,10 +132,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title='Commander' buttonStyle={[{...styles.button, margin: 10}]}
-          onPress={() => type === 'edit' ? handleEdit({...order, details}, customer, token, navigation)
-          : handleSubmit({...order, details}, customer, token, navigation, user)}
-        />
+        <Button title='Commander' buttonStyle={[{...styles.button, margin: 10}]} onPress={handleChoice}/>
       </View>
     </SafeAreaView>
   );

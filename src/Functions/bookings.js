@@ -60,28 +60,6 @@ export const getBooking = async (id, token) => {
 };
 
 
-export const editBooking = async (booking, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
-  try {
-    const {data} = await axios.put(apiUrl + 'bookings/update/' + booking._id, booking, config);
-    
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Modification',
-      desc: 'Réservation modifiée avec succès.'
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
 export const submitBooking = async (booking, token) => {
   const config = {
     headers: {
@@ -99,6 +77,28 @@ export const submitBooking = async (booking, token) => {
       success: true,
       title: 'Nouvelle réservation',
       desc: 'Réservation effectuée avec succès.'
+    }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const editBooking = async (booking, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  
+  try {
+    const {data} = await axios.put(apiUrl + 'bookings/update/' + booking._id, booking, config);
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Modification',
+      desc: 'Réservation modifiée avec succès.'
     }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
