@@ -2,9 +2,10 @@ import { FAB } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/core';
-import { View, Text, Alert, SafeAreaView } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
+import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import OrderDetails from '../../../Shared/Orders/OrderDetails';
@@ -16,12 +17,30 @@ export default function UserOrderDetails({navigation, route}) {
   const [{token}] = useDataLayerValue();
 
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   
   useEffect(() => {
     isFocused && getOrder(order._id, token).then(res => res.success && setUpdatedOrder(res.order));
     navigation.setOptions({title: `Commande ${(updatedOrder.takeaway ? 'à emporter' : 'sur place')}`});
   }, [isFocused]);
+
+  useEffect(() => {
+    !order.paid && (function() {
+      const actions = [{
+        text: 'Payer',
+        onPress: () => navigation.navigate('UserPayOrder', {order, type: 'edit'})
+      }, {
+        text: 'Plus tard'
+      }];
+
+      return Alert.alert(
+        'Commande impayée',
+        'Souhaitez-vous la payer maintenant ?',
+        [actions[Platform.OS === 'ios' ? 0 : 1], actions[Platform.OS === 'ios' ? 1 : 0]]
+      );
+    }());
+  }, [order]);
 
 
   const handleCancel = () => (
@@ -33,18 +52,24 @@ export default function UserOrderDetails({navigation, route}) {
       },
       {
         text: 'Continuer',
-        onPress: () => cancelOrder(order, token).then(res => {
-          Toast.show({
-            text1: res.title ?? "Erreur d'annulation",
-            text2: res.desc ?? res,
-            
-            position: 'bottom',
-            visibilityTime: 1500,
-            type: res.success ? 'success' : 'error'
-          });
+        onPress: () => {
+          setLoading(true);
 
-          if (res.success) navigation.goBack();
-        })
+          cancelOrder(order, token).then(res => {
+            setLoading(false);
+
+            Toast.show({
+              text1: res.title ?? "Erreur d'annulation",
+              text2: res.desc ?? res,
+              
+              position: 'bottom',
+              visibilityTime: 1500,
+              type: res.success ? 'success' : 'error'
+            });
+
+            if (res.success) navigation.goBack();
+          })
+        }
       }]
     )
   );
@@ -67,10 +92,15 @@ export default function UserOrderDetails({navigation, route}) {
         </View>
 
       </ScrollView>
+
       {!updatedOrder.validated && !updatedOrder.paid && (
         <FAB style={styles.fab} icon='pencil' label='Modifier' color='white'
         onPress={() => navigation.navigate('UserEditOrder', {order: updatedOrder})}/>
       )}
+
+      {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
+        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      </View>}
     </SafeAreaView>
   );
 }

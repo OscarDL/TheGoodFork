@@ -25,7 +25,7 @@ export default function UserPlanning({title}) {
   return (
     <Stack.Navigator>
       <Stack.Screen options={{title}} name='UserPlanningComponent' component={UserPlanningComponent}/>
-      <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Réservations'}} name='Bookings' component={Bookings}/>
+      <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Disponibilités'}} name='Bookings' component={Bookings}/>
       <Stack.Screen options={{cardStyleInterpolator: iosV, title: 'Mes réservations'}} name='MyBookings' component={MyBookings}/>
       <Stack.Screen options={{cardStyleInterpolator: iosH, title: 'Modifier réservation'}} name='EditBooking' component={EditBooking}/>
     </Stack.Navigator>

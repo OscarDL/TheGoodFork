@@ -31,9 +31,9 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
       },
       {
         text: 'Réserver',
-        onPress: () => submitBooking(booking, token).then(res => {
+        onPress: () => submitBooking(booking, user.email, token).then(res => {
           Toast.show({
-            text1: res.title ?? 'Erreur de validation',
+            text1: res.title ?? 'Erreur de réservation',
             text2: res.desc ?? res,
             
             position: 'bottom',
@@ -44,7 +44,8 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
         })
       }]
     ) 
-  }
+  };
+  
 
   return (
     <View style={styles.container}>

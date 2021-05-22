@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { resetPassword } from '../../Functions/auth';
-import { Button, Input } from 'react-native-elements';
+import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
@@ -38,7 +38,12 @@ export default function Reset({navigation}) {
         <Input placeholder='Nouveau mot de passe' secureTextEntry onChangeText={password => setPassword(password)} />
         <Input placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)} />
       </View>
-      <Button buttonStyle={[styles.button]} title='Réinitialiser' onPress={() => handleReset(token, password, passCheck, navigation)} />
+      <Button
+        title='Réinitialiser'
+        buttonStyle={[styles.button]}
+        onPress={() => handleReset(token, password, passCheck, navigation)}
+        icon={<Icon size={24} color='white' name='task-alt' style={{marginRight: 10}}/>}
+      />
     </KeyboardAvoidingView>
   );
 }

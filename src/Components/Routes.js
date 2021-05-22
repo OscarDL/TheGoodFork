@@ -30,9 +30,9 @@ import WaiterHome from './Waiter/WaiterHome';
 import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
 import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
+import WaiterPlanning from './Waiter/ManageBookings/WaiterPlanning';
 import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
 import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
-import WaiterManageTables from './Waiter/ManageTables/WaiterManageTables';
 import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
@@ -141,7 +141,7 @@ export default function Routes() {
       <Stack.Screen name='WaiterOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={WaiterOrderDetails}/>
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Valider une commande', cardStyleInterpolator: iosH}} component={WaiterValidateOrder}/>
       <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Vérification', cardStyleInterpolator: iosH}} component={WaiterSubmitOrder}/>
-      <Stack.Screen name='WaiterManageTables' options={{title: 'Gérer les réservations', cardStyleInterpolator: iosH}} component={WaiterManageTables}/>
+      <Stack.Screen name='WaiterPlanning' options={{headerShown: false, cardStyleInterpolator: iosH}} component={WaiterPlanning}/>
     </Stack.Navigator>
   );
 

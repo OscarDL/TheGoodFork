@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import WebView from 'react-native-webview';
 import Toast from 'react-native-toast-message';
-import { Input, Button } from 'react-native-elements';
-import { Platform, SafeAreaView, View, ActivityIndicator, Alert } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
+import { Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
 
+import CreditCard from './CreditCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { useDataLayerValue } from '../../Context/DataLayer';
@@ -137,13 +138,18 @@ export default function UserPayOrder({route, navigation}) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Input placeholder='Numéro de carte bleue' maxLength={16} onChangeText={number => setCard({...card, number})} />
-      <Input placeholder="Année d'expiration" maxLength={4} onChangeText={exp_year => setCard({...card, exp_year})} />
-      <Input placeholder="Mois d'expiration" maxLength={2} onChangeText={exp_month => setCard({...card, exp_month})} />
-      <Input placeholder='CVV' maxLength={3} onChangeText={cvc => setCard({...card, cvc})} />
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+    >
+      <CreditCard user={user} card={card} setCard={setCard}/>
       
       <Button
+        icon={<Icon
+          size={24}
+          color='white'
+          name='credit-card'
+          style={{marginRight: 10, padding: 2}}
+        />}
         onPress={checkBiometrics}
         title={`Payer : ${order.price} EUR`}
         buttonStyle={[styles.button, {alignSelf: 'center'}]}
@@ -159,6 +165,6 @@ export default function UserPayOrder({route, navigation}) {
       {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

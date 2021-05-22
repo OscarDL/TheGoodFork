@@ -1,5 +1,5 @@
 import Toast from 'react-native-toast-message';
-import { Alert , TextInput } from 'react-native';
+import { Alert, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Collapsible from 'react-native-collapsible';
 import { Button, Icon } from 'react-native-elements';
@@ -130,7 +130,17 @@ export default function UserSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title={type === 'edit' ? 'Modifier' : 'Commander'} buttonStyle={[{...styles.button, margin: 10}]} onPress={handleChoice}/>
+        <Button
+          icon={<Icon
+            size={24}
+            color='white'
+            style={{marginRight: 10, padding: 2}}
+            name={type === 'edit' ? 'pencil' : 'shopping-cart'}
+          />}
+          onPress={handleChoice}
+          buttonStyle={[{...styles.button, margin: 10}]}
+          title={type === 'edit' ? 'Modifier' : 'Commander'}
+        />
       </View>
     </SafeAreaView>
   );

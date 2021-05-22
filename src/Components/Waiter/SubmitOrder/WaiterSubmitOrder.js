@@ -132,7 +132,17 @@ export default function WaiterSubmitOrder({navigation, route}) {
           Total : {order.price} EUR
         </Text>
 
-        <Button title='Commander' buttonStyle={[{...styles.button, margin: 10}]} onPress={handleChoice}/>
+        <Button
+          icon={<Icon
+            size={24}
+            color='white'
+            style={{marginRight: 10, padding: 2}}
+            name={type === 'edit' ? 'pencil' : 'shopping-cart'}
+          />}
+          title='Commander'
+          onPress={handleChoice}
+          buttonStyle={[{...styles.button, margin: 10}]}
+        />
       </View>
     </SafeAreaView>
   );
