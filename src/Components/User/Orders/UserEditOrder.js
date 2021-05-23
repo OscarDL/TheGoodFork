@@ -6,6 +6,7 @@ import { View, Text, SafeAreaView, Platform } from 'react-native';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrder } from '../../../Functions/orders';
+import { truncPrice } from '../../../Functions/utils';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import SubmitOrderTabs from '../../../Shared/Orders/SubmitOrderTabs';
 
@@ -30,7 +31,7 @@ export default function UserEditOrder({navigation, route}) {
     <SubmitOrderTabs order={newOrder} setOrder={setNewOrder} setPrice={setPrice}/>
 
     <SafeAreaView style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price} EUR</Text>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {truncPrice(price)} EUR</Text>
       <Button title='Confirmer' buttonStyle={[styles.button]} 
       onPress={() => navigation.navigate('UserSubmitOrder', {order: newOrder, type: 'edit'})}/>
     </SafeAreaView>

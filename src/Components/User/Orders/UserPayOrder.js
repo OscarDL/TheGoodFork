@@ -5,9 +5,10 @@ import { Button, Icon } from 'react-native-elements';
 import { Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
 
-import CreditCard from './CreditCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { truncPrice } from '../../../Functions/utils';
+import CreditCard from '../../../Shared/Orders/CreditCard';
 import { useDataLayerValue } from '../../Context/DataLayer';
 import { getIntent, payOrder } from '../../../Functions/stripe';
 import { editOrder, submitOrder } from '../../../Functions/orders';
@@ -151,8 +152,8 @@ export default function UserPayOrder({route, navigation}) {
           style={{marginRight: 10, padding: 2}}
         />}
         onPress={checkBiometrics}
-        title={`Payer : ${order.price} EUR`}
         buttonStyle={[styles.button, {alignSelf: 'center'}]}
+        title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
       />
 
       {webview && paymentIntent && <View style={fullScreen}>

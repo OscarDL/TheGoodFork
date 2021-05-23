@@ -8,8 +8,8 @@ import { styles } from '../../../Shared/styles';
 import BaseCard from '../../../Shared/BaseCard';
 import SearchBar from '../../../Shared/SearchBar';
 import { getOrders } from '../../../Functions/orders';
-import { matchesOrder } from '../../../Functions/utils';
 import { useDataLayerValue } from '../../Context/DataLayer';
+import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
 const failureAlert = (error, navigation, setRetry) => Alert.alert(
@@ -25,7 +25,7 @@ const failureAlert = (error, navigation, setRetry) => Alert.alert(
 );
 
 export default function WaiterValidateOrder({navigation}) {
-  const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
+  const isFocused = useIsFocused();
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
@@ -41,17 +41,17 @@ export default function WaiterValidateOrder({navigation}) {
 
   return orders ? (
     <SafeAreaView style={styles.container}>
-      {orders?.length > 0 ? <>
+      {orders.length > 0 ? <>
         <SearchBar search={search} setSearch={setSearch} placeholder='Rechercher un client'/>
 
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <View>
             <Text style={styles.title}>Commandes</Text>
 
-            {orders?.map((order, i) => matchesOrder(order, search) && <BaseCard
-              key={i} size={26} icon='how-to-reg' title={`${order?.user?.firstName} ${order?.user?.lastName}`} subtitle={order?.price + ' ' + order?.currency}
-              description={`${new Date(order?.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order?.dateOrdered).toLocaleTimeString()}`}
-              screen='WaiterOrderDetails' params={{order, readOnly: false}} navigation={navigation}
+            {orders.filter(order => !order.validated)?.map((order, i) => matchesOrder(order, search) && <BaseCard
+              key={i} size={26} icon='how-to-reg' title={`${order.user.firstName} ${order.user.lastName}`} params={{order, readOnly: false}}
+              subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='WaiterOrderDetails' navigation={navigation}
+              description={`${new Date(order.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order.dateOrdered).toLocaleTimeString()}`}
             />)}
           </View>
         </ScrollView>

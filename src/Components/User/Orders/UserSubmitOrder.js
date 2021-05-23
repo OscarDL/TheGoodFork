@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import Picker from 'react-native-picker-select';
 import { Alert, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Collapsible from 'react-native-collapsible';
@@ -7,17 +8,36 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, ScrollView, Text, SafeAreaView, Platform } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
+import { truncPrice } from '../../../Functions/utils';
 import OrderDetails from '../../../Shared/Orders/OrderDetails';
 import { editOrder, submitOrder } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../../Components/Context/DataLayer';
+
+
+const pickerStyle = {
+  inputIOS: {
+    height: '100%',
+    marginLeft: 12,
+    marginRight: 28
+  },
+  inputAndroid: {
+    height: '100%',
+    marginRight: 20
+  },
+  iconContainer: {
+    padding: 6,
+    height: '100%'
+  }
+};
 
   
 export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
   const [{user, token}] = useDataLayerValue();
   
-  const [collapsed, setCollapsed] = useState(true);
+  const [tip, setTip] = useState(order.tip);
   const [details, setDetails] = useState(order.details);
+  const [collapsed, setCollapsed] = useState({tip: false, order: true});
 
   useEffect(() => {
     navigation.setOptions({title: 'Commande ' + (!order.takeaway ? 'sur place' : 'à emporter')})
@@ -25,7 +45,7 @@ export default function UserSubmitOrder({navigation, route}) {
 
 
   const handleEdit = () => {
-    editOrder(order, token).then(res => {
+    editOrder({...order, tip}, token).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -41,7 +61,7 @@ export default function UserSubmitOrder({navigation, route}) {
   };
   
   const handleSubmit = () => {
-    submitOrder({...order, user}, token, user.email).then(res => {
+    submitOrder({...order, tip, user}, token, user.email).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de commande',
         text2: res.desc ?? res,
@@ -93,7 +113,7 @@ export default function UserSubmitOrder({navigation, route}) {
         onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
       }, {
         text: 'Payer',
-        onPress: () => navigation.navigate('UserPayOrder', {order, type})
+        onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
       }
     ];
     
@@ -114,20 +134,41 @@ export default function UserSubmitOrder({navigation, route}) {
           value={details} style={{margin: 10, padding: 10, paddingTop: 10, borderRadius: 5, backgroundColor: 'white'}}/>
         </View>
         
-        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed(!collapsed)}>
+        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, tip: !collapsed.tip})}>
           <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
-          <Text style={styles.sectionText}>Commande</Text>
-          <Icon style={{paddingHorizontal: 10}} name={collapsed ? 'expand-more' : 'expand-less'}/>
+          <Text style={styles.sectionText}>Pourboire</Text>
+          <Icon style={{paddingHorizontal: 10}} name={collapsed.tip ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
 
-        <Collapsible collapsed={collapsed}>
+        <Collapsible collapsed={collapsed.tip}>
+          <View style={{...styles.pickerView, alignSelf: 'center', marginVertical: 20}}>
+            <Picker
+              placeholder={{}}
+              style={pickerStyle}
+              defaultValue={order.tip}
+              onValueChange={tip => setTip(order.price * tip/100)}
+              items={Array.from(Array(11), (_, i) => i * 5).map(tip => (
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + tip + ' %', value: truncPrice(order.price * tip/100), key: tip / 5 }
+              ))}
+              Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+            />
+          </View>
+        </Collapsible>
+
+        <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, order: !collapsed.order})}>
+          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+          <Text style={styles.sectionText}>Commande</Text>
+          <Icon style={{paddingHorizontal: 10}} name={collapsed.order ? 'expand-more' : 'expand-less'}/>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={collapsed.order}>
           <OrderDetails order={order} hideDetails={true} showPrice={false}/>
         </Collapsible>
       </ScrollView>
 
       <View style={{padding: 5}}>
         <Text style={{...styles.title, textAlign: 'center', marginVertical: 10}}>
-          Total : {order.price} EUR
+          Total : {truncPrice(order.price + tip)} EUR
         </Text>
 
         <Button
@@ -135,7 +176,7 @@ export default function UserSubmitOrder({navigation, route}) {
             size={24}
             color='white'
             style={{marginRight: 10, padding: 2}}
-            name={type === 'edit' ? 'pencil' : 'shopping-cart'}
+            name={type === 'edit' ? 'edit' : 'shopping-cart'}
           />}
           onPress={handleChoice}
           buttonStyle={[{...styles.button, margin: 10}]}

@@ -28,6 +28,7 @@ import BarmanHome from './Barman/BarmanHome';
 
 import WaiterHome from './Waiter/WaiterHome';
 import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
+import WaiterPayOrder from './Waiter/SubmitOrder/WaiterPayOrder';
 import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
 import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
 import WaiterPlanning from './Waiter/ManageBookings/WaiterPlanning';
@@ -54,8 +55,8 @@ import { StatusBar } from 'expo-status-bar';
 const Stack = createStackNavigator();
 const Nav = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
 
-const iosV = CardStyleInterpolators.forVerticalIOS;
 const iosH = CardStyleInterpolators.forHorizontalIOS;
+const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIOS;
 
 
 export default function Routes() {
@@ -83,6 +84,7 @@ export default function Routes() {
           onPress={() => navigation.navigate('AdminSettings')}
         />
       })}/>
+      <Stack.Screen name='AdminSettings' options={{title: 'Réglages', cardStyleInterpolator: iosV}} component={AdminSettings}/>
       <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
       <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
       <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={AdminStaffList} />
@@ -93,7 +95,6 @@ export default function Routes() {
       <Stack.Screen name='AdminStocksStats' options={{title: 'Statistiques : stock', cardStyleInterpolator: iosH}} component={AdminStocksStats} />
       <Stack.Screen name='AdminDailyRevenue' options={{title: 'Revenu quotidien', cardStyleInterpolator: iosH}} component={AdminDailyRevenue} />
       <Stack.Screen name='AdminRegisterStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosH}} component={AdminRegisterStaff} />
-      <Stack.Screen name='AdminSettings' options={{title: 'Réglages', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={AdminSettings}/>
     </Stack.Navigator>
   );
 
@@ -134,7 +135,8 @@ export default function Routes() {
           onPress={() => logout(dispatch)}
         />
       }}/>
-      <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: Platform.OS === 'ios' ? iosH : iosV}} component={WaiterNewOrder}/>
+      <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: iosH}} component={WaiterNewOrder}/>
+      <Stack.Screen name='WaiterPayOrder' options={{title: 'Payer commande', cardStyleInterpolator: iosV}} component={WaiterPayOrder}/>
       <Stack.Screen name='WaiterEditOrder' options={{title: 'Modifier commande', cardStyleInterpolator: iosH}} component={WaiterEditOrder}/>
       <Stack.Screen name='WaiterCreateBill' options={{title: 'Faire une addition', cardStyleInterpolator: iosH}} component={WaiterCreateBill}/>
       <Stack.Screen name='WaiterCheckOrders' options={{title: 'Commandes en cours', cardStyleInterpolator: iosH}} component={WaiterCheckOrders}/>

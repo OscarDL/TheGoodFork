@@ -25,3 +25,8 @@ export const getPeriod = (period) => {
   if (period === 3) return 'après-midi';
   if (period === 4) return 'soir';
 };
+
+
+export const truncPrice = (price) => (
+  ~~(price * 100) / 100
+);

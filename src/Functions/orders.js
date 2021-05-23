@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { truncPrice } from './utils';
 import { apiUrl } from '../../config';
 
 
@@ -188,5 +189,5 @@ export const totalPrice = (order) => {
   order.drink.map(it => total += it.price * it.quantity);
   order.alcohol.map(it => total += it.price * it.quantity);
   
-  return Number(total.toFixed(2));
+  return total;
 };

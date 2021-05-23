@@ -16,6 +16,7 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import { useDataLayerValue } from '../../Context/DataLayer';
+import { truncPrice } from '../../../Functions/utils';
 
 
 const Stack = createStackNavigator();
@@ -65,9 +66,10 @@ function UserOrdersComponent({navigation, paid, orders}) {
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         <View>
           {orders.map((order, i) => order.paid === paid &&
-            <BaseCard key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5)
-            + `, ${new Date(order.dateOrdered).toLocaleTimeString()}`} subtitle={order?.price + ' ' + order?.currency}
-            description={'Status: ' + order.status} screen='UserOrderDetails' params={{order}} navigation={navigation}
+            <BaseCard key={i} icon='restaurant' description={'Statut : ' + order.status}
+            params={{order}} title={new Date(order.dateOrdered).toDateString().slice(4, -5)
+            + `, ${new Date(order.dateOrdered).toLocaleTimeString()}`} navigation={navigation}
+            subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='UserOrderDetails'
           />)}
         </View>
       </ScrollView>

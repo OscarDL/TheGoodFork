@@ -35,12 +35,9 @@ export default function CookHome({navigation}) {
   }, [isFocused, token, retry, setRetry]);
 
 
-  return (
+  return orders ? (
     <SafeAreaView style={styles.container}>
-      {orders ?
-
-        (orders?.filter(order => order.validated).length > 0
-          ?
+      {orders?.filter(order => order.validated).length > 0 ? (
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <Text style={styles.title}>Commandes à préparer</Text>
 
@@ -50,14 +47,15 @@ export default function CookHome({navigation}) {
             description={'Status: ' + order.status} screen='CookOrderDetails' params={{order}} navigation={navigation}
           />)}
         </ScrollView>
-          :
+      ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Aucune commande à préparer pour l'instant.</Text>
-        </View>)
-
-      : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
-      </View>}
+        </View>
+      )}
     </SafeAreaView>
+  ) : (
+    <View style={styles.container}>
+      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+    </View>
   );
 }
