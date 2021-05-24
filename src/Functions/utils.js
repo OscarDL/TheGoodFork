@@ -1,3 +1,17 @@
+export const authConfig = (token) => ({
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  }
+});
+
+export const config = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}
+
+
 export const formatGrid = (data, numCol) => {
   const numFullRows = Math.floor(data.length / numCol);
 

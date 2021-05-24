@@ -1,19 +1,12 @@
 import axios from 'axios';
 
-import { truncPrice } from './utils';
+import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
 export const getOrders = async (user, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'orders', config);
+    const {data} = await axios.get(apiUrl + 'orders', authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -27,20 +20,81 @@ export const getOrders = async (user, token) => {
 
 
 export const getOrder = async (id, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'orders/' + id, config);
+    const {data} = await axios.get(apiUrl + 'orders/' + id, authConfig(token));
 
     if (!data.success) return data?.error;
 
     return {success: true, order: data.order};
     
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const validateOrder = async (order, token) => {
+  try {
+    order.validated = true;
+    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, authConfig(token));
+
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Validation',
+      desc: 'Commande validée avec succès.'
+    }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const submitOrder = async (order, token, email) => {
+  try {
+    order.orderedBy = email;
+    order.price = totalPrice(order); // For security
+    const {data} = await axios.post(apiUrl + 'orders', order, authConfig(token));
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Nouvelle commande',
+      desc: 'Commande envoyée avec succès.',
+
+      order: data.order
+    }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const editOrder = async (order, token) => {
+  try {
+    order.price = totalPrice(order); // For security
+    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, authConfig(token));
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Modification',
+      desc: 'Commande modifiée avec succès.',
+
+      order: data.order
+    }
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const cancelOrder = async (order, token) => {
+  try {
+    const {data} = await axios.delete(apiUrl + 'orders/' + order._id, authConfig(token));
+
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Annulation',
+      desc: 'Commande anulée avec succès.'
+    }
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
@@ -81,102 +135,6 @@ export const addToOrder = (order, type, item, num, setPrice) => {
   setPrice(order.price);
 
   return order;
-};
-
-
-export const validateOrder = async (order, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
-  try {
-    order.validated = true;
-    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
-
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Validation',
-      desc: 'Commande validée avec succès.'
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
-export const submitOrder = async (order, token, email) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
-  try {
-    order.orderedBy = email;
-    order.price = totalPrice(order); // For security
-    const {data} = await axios.post(apiUrl + 'orders/create', order, config);
-    
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Nouvelle commande',
-      desc: 'Commande envoyée avec succès.',
-
-      order: data.order
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
-export const editOrder = async (order, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
-  try {
-    order.price = totalPrice(order); // For security
-    const {data} = await axios.put(apiUrl + 'orders/update/' + order._id, order, config);
-    
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Modification',
-      desc: 'Commande modifiée avec succès.',
-
-      order: data.order
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
-export const cancelOrder = async (order, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
-  try {
-    const {data} = await axios.delete(apiUrl + 'orders/cancel/' + order._id, config);
-
-    if (!data.success) return data?.error;
-
-    return {
-      success: true,
-      title: 'Annulation',
-      desc: 'Commande anulée avec succès.'
-    }
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
 
 

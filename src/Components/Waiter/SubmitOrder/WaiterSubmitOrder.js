@@ -60,7 +60,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
         type: res.success ? 'success' : 'error'
       });
 
-      if (res.success) navigation.navigate('WaiterOrderDetails', {order});
+      res.success && navigation.navigate('WaiterOrderDetails', {order});
     });
   };
   
@@ -77,7 +77,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
         type: res.success ? 'success' : 'error'
       });
   
-      if (res.success) return navigation.navigate('WaiterHome');
+      res.success && navigation.navigate('WaiterHome');
     });
   };
   
@@ -95,22 +95,21 @@ export default function WaiterSubmitOrder({navigation, route}) {
   
     const actions = [
       {
-        text: 'Annuler'
+        text: 'Payer',
+        onPress: () => navigation.navigate('WaiterPayOrder', {order: {...order, tip, user: customer}, type})
       }, {
         text: 'Plus tard',
         onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
       }, {
-        text: 'Payer',
-        onPress: () => navigation.navigate('WaiterPayOrder', {order: {...order, tip, user: customer}, type})
+        text: 'Annuler',
+        style: 'cancel'
       }
     ];
     
     Alert.alert(
       'Procédure de paiement',
       "Faire payer la commande au client maintenant ?",
-      [
-        actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]
-      ]
+      Platform.OS === 'ios' ? actions : actions.reverse()
     );
   };
 
@@ -133,7 +132,13 @@ export default function WaiterSubmitOrder({navigation, route}) {
         <Collapsible collapsed={collapsed.customer}>
           <Input placeholder='First name' defaultValue={order?.user?.firstName} onChangeText={firstName => setCustomer({ ...customer, firstName })} />
           <Input placeholder='Last name' defaultValue={order?.user?.lastName} onChangeText={lastName => setCustomer({ ...customer, lastName })} />
-          <Input placeholder='Email address' keyboardType='email-address' defaultValue={order?.user?.email} autoCapitalize='none' onChangeText={email => setCustomer({ ...customer, email })} />
+          <Input
+            autoCapitalize='none'
+            placeholder='Email address'
+            keyboardType='email-address'
+            defaultValue={order?.user?.email}
+            onChangeText={email => setCustomer({ ...customer, email })}
+          />
         </Collapsible>
 
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, tip: !collapsed.tip})}>
@@ -175,9 +180,8 @@ export default function WaiterSubmitOrder({navigation, route}) {
 
         <Button
           icon={<Icon
-            size={24}
             color='white'
-            style={{marginRight: 10, padding: 2}}
+            style={{marginRight: 10}}
             name={type === 'edit' ? 'edit' : 'shopping-cart'}
           />}
           onPress={handleChoice}

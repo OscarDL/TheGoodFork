@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Alert, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
-import { registerStaff } from '../../../Functions/staff';
+import { createStaff } from '../../../Functions/staff';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
@@ -25,19 +25,6 @@ const pickerStyle = {
   }
 };
 
-const handleRegister = (staff, token) => {
-  registerStaff(staff, token).then(res => (
-    Toast.show({
-      text1: res.title ?? 'Erreur de création',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    })
-  ));
-};
-
 
 export default function AdminRegisterStaff({navigation}) {
   const [{token}] = useDataLayerValue();
@@ -49,6 +36,21 @@ export default function AdminRegisterStaff({navigation}) {
     passCheck: '',
     type: 'admin'
   });
+
+
+  const handleCreate = () => {
+    createStaff(staff, token).then(res => (
+      Toast.show({
+        text1: res.title ?? 'Erreur de création',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      })
+    ));
+  };
+
 
   return (
     <KeyboardAvoidingView style={styles.container}
@@ -84,14 +86,14 @@ export default function AdminRegisterStaff({navigation}) {
 
       <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title='Créer'
           icon={<Icon
             color='white'
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleRegister(staff, token)}
+          title='Créer'
+          onPress={handleCreate}
+          buttonStyle={[styles.button]}
         />
       </View>
       

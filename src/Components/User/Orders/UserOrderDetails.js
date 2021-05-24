@@ -14,9 +14,8 @@ import { getOrder, cancelOrder } from '../../../Functions/orders';
 
 export default function UserOrderDetails({navigation, route}) {
   const {order} = route.params;
-  const [{token}] = useDataLayerValue();
-
   const isFocused = useIsFocused();
+  const [{token}] = useDataLayerValue();
   const [loading, setLoading] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   
@@ -27,31 +26,30 @@ export default function UserOrderDetails({navigation, route}) {
 
   useEffect(() => {
     !order.paid && (function() {
-      const actions = [{
-        text: 'Payer',
-        onPress: () => navigation.navigate('UserPayOrder', {order, type: 'edit'})
-      }, {
-        text: 'Plus tard'
-      }];
+      const actions = [
+        {
+          text: 'Payer',
+          onPress: () => navigation.navigate('UserPayOrder', {order, type: 'edit'})
+        }, {
+          text: 'Plus tard',
+          style: 'cancel'
+        }
+      ];
 
       return Alert.alert(
         'Commande impayée',
         'Souhaitez-vous la payer maintenant ?',
-        [actions[Platform.OS === 'ios' ? 0 : 1], actions[Platform.OS === 'ios' ? 1 : 0]]
+        Platform.OS === 'ios' ? actions : actions.reverse()
       );
     }());
   }, [order]);
 
 
-  const handleCancel = () => (
-    Alert.alert(
-      'Êtes-vous sûr ?',
-      "Vous êtes sur le point d'annuler votre commande.",
-      [{
-        text: 'Revenir'
-      },
+  const handleCancel = () => {
+    const actions = [
       {
         text: 'Continuer',
+        style: 'destructive',
         onPress: () => {
           setLoading(true);
 
@@ -67,18 +65,26 @@ export default function UserOrderDetails({navigation, route}) {
               type: res.success ? 'success' : 'error'
             });
 
-            if (res.success) navigation.goBack();
+            res.success && navigation.goBack();
           })
         }
-      }]
-    )
-  );
+      }, {
+        text: 'Revenir',
+        style: 'cancel'
+      }
+    ];
+
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      "Vous êtes sur le point d'annuler votre commande.",
+      Platform.OS === 'ios' ? actions : actions.reverse()
+    );
+  };
 
   
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-
         <OrderDetails order={updatedOrder}/>
 
         <View style={{alignItems: 'center', margin: 20}}>
@@ -90,7 +96,6 @@ export default function UserOrderDetails({navigation, route}) {
             </TouchableOpacity>
           )}
         </View>
-
       </ScrollView>
 
       {!updatedOrder.validated && !updatedOrder.paid && (

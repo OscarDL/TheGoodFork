@@ -20,6 +20,7 @@ export default function Bookings({navigation, route}) {
     isFocused && getDayBookings(day, token).then(bookings => setBookings(bookings));
   }, [isFocused, setBookings]);
 
+  
   return (
     <SafeAreaView style={styles.container}>
       {bookings ? <PeriodTabs bookings={bookings} navigation={navigation} day={day}/> : <View style={styles.container}>

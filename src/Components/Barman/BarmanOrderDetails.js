@@ -7,7 +7,7 @@ import { styles } from '../../Shared/styles';
 import OrderDetails from '../../Shared/Orders/OrderDetails';
 
 
-export default function CookOrderDetails({navigation, route}) {
+export default function BarmanOrderDetails({navigation, route}) {
   const {order} = route.params;
   
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function CookOrderDetails({navigation, route}) {
       title: `${order.user.firstName} ${order.user.lastName}\u2000\u2013\u2000${(order.takeaway ? 'À emporter' : 'Sur place')}`
     });
   }, []);
-
+  
 
   const informWaiters = () => {
     const actions = [
@@ -34,7 +34,7 @@ export default function CookOrderDetails({navigation, route}) {
         style: 'cancel'
       }
     ];
-  
+
     return Alert.alert(
       'Valider la préparation',
       'Informer les serveurs que cette commande est prête à être servie ?',
@@ -42,7 +42,7 @@ export default function CookOrderDetails({navigation, route}) {
     );
   };
 
-  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>

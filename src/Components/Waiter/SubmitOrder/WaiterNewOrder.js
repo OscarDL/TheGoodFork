@@ -24,6 +24,7 @@ export default function WaiterNewOrder({navigation}) {
     type: {takeaway: false} // For now, waiters only have to place orders for customers on site
   });
 
+  
   return <>
     <SubmitOrderTabs order={order} setOrder={setOrder} setPrice={setPrice}/>
 

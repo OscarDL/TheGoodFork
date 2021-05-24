@@ -1,18 +1,12 @@
 import axios from 'axios';
 
+import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
 export const getStaff = async (token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'admin/accounts/staff', config);
+    const {data} = await axios.get(apiUrl + 'staff', authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -22,16 +16,9 @@ export const getStaff = async (token) => {
 };
 
 
-export const registerStaff = async (staff, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-  
+export const createStaff = async (staff, token) => {
   try {
-    const {data} = await axios.post(apiUrl + 'admin/accounts/register', staff, config);
+    const {data} = await axios.post(apiUrl + 'staff', staff, authConfig(token));
 
     if (!data.success) return data?.error;
     
@@ -46,16 +33,9 @@ export const registerStaff = async (staff, token) => {
 
 
 export const editStaff = async (id, staff, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.put(apiUrl + 'admin/accounts/update/' + id, staff, config);
+    const {data} = await axios.put(apiUrl + 'staff/' + id, staff, authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -70,16 +50,9 @@ export const editStaff = async (id, staff, token) => {
 
 
 export const deleteStaff = async (staff, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.delete(apiUrl + 'admin/accounts/delete/' + staff._id, config);
+    const {data} = await axios.delete(apiUrl + 'staff/' + staff._id, authConfig(token));
 
     if (!data.success) return data?.error;
 

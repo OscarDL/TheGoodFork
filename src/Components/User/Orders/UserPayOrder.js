@@ -56,17 +56,18 @@ export default function UserPayOrder({route, navigation}) {
     } else {
       const actions = [
         {
-          text: 'Annuler'
-        }, {
           text: 'Payer',
           onPress: () => handlePayment()
+        }, {
+          text: 'Annuler',
+          style: 'cancel'
         }
       ];
       
       Alert.alert(
         'Vérification biométrique',
         "Votre appareil n'a pas d'authentification mise en place pour sécuriser votre achat. Voulez-vous continuer ?",
-        [actions[Platform.OS === 'ios' ? 1 : 0], actions[Platform.OS === 'ios' ? 0 : 1]]
+        Platform.OS === 'ios' ? actions : actions.reverse()
       );
     }
   };
@@ -122,17 +123,19 @@ export default function UserPayOrder({route, navigation}) {
 
       const actions = [
         {
-          text: 'Supprimer',
-          onPress: () => navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs')
-        }, {
           text: 'Conserver',
           onPress: () => navigation.goBack()
+        }, {
+          text: 'Supprimer',
+          style: 'destructive',
+          onPress: () => navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs')
         }
       ];
+
       Alert.alert(
         'Paiement annulé',
         'Vous avez annulé le paiement. Voulez-vous supprimer la commande en cours ?',
-        [actions[Platform.OS === 'ios' ? 1 : 0], actions[Platform.OS === 'ios' ? 0 : 1]]
+        Platform.OS === 'ios' ? actions : actions.reverse()
       );
     }
   };
@@ -146,7 +149,6 @@ export default function UserPayOrder({route, navigation}) {
       
       <Button
         icon={<Icon
-          size={24}
           color='white'
           name='credit-card'
           style={{marginRight: 10, padding: 2}}

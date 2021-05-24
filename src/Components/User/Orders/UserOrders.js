@@ -24,23 +24,28 @@ const Tabs = createMaterialTopTabNavigator();
 const iosH = CardStyleInterpolators.forHorizontalIOS;
 const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIOS;
 
-
-const failureAlert = (error, setRetry) => Alert.alert(
-  "Erreur d'affichage des commandes", error,
-  [{
-    text: 'Annuler'
-  },
-  {
-    text: 'Réessayer',
-    onPress: () => setRetry(true)
-  }]
-);
-
 const style = {
   pressColor: 'darkgrey',
   activeTintColor: colors.accentPrimary,
   labelStyle: {fontSize: 14, fontWeight: 'bold'},
   indicatorStyle: {backgroundColor: colors.accentSecondary}
+};
+
+const failureAlert = (error, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel'
+    }
+  ];
+
+  Alert.alert(
+    "Erreur d'affichage des commandes", error,
+    Platform.OS === 'ios' ? actions : actions.reverse()
+  );
 };
 
 
@@ -91,16 +96,6 @@ function UserOrderTabs({navigation}) {
   const [mode, setMode] = useState('date');
   const [date, setDate] = useState(new Date(Date.now()));
 
-  const fabActions = [{
-    text: 'Annuler'
-  }, {
-    text: 'Sur place',
-    onPress: () => navigation.navigate('UserNewOrder', {type: {takeaway: false}})
-  }, {
-    text: 'À emporter',
-    onPress: () => setShow(true)
-  }];
-
   useEffect(() => {
     if ((isFocused || retry) && token) getOrders(user, token).then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
@@ -141,16 +136,26 @@ function UserOrderTabs({navigation}) {
     setDate(new Date(Date.now()));
   };
 
+  const handleNavigation = () => {
+    const actions = [
+      {
+        text: 'Sur place',
+        onPress: () => navigation.navigate('UserNewOrder', {type: {takeaway: false}})
+      }, {
+        text: 'À emporter',
+        onPress: () => setShow(true)
+      }, {
+        text: 'Annuler',
+        style: 'cancel'
+      }
+    ];
 
-  const handleNavigation = () => Alert.alert(
-    'Type de commande',
-    'Nous offrons des commandes sur place et à emporter. Faites votre choix !',
-    [
-      fabActions[Platform.OS === 'ios' ? 1 : 0],
-      fabActions[Platform.OS === 'ios' ? 2 : 1],
-      fabActions[Platform.OS === 'ios' ? 0 : 2]
-    ]
-  );
+    Alert.alert(
+      'Type de commande',
+      'Nous offrons des commandes sur place et à emporter. Faites votre choix !',
+      Platform.OS === 'ios' ? actions : actions.reverse()
+    );
+  };
 
 
   return orders ? (

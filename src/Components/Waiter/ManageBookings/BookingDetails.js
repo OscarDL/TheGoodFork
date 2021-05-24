@@ -5,7 +5,7 @@ import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { getPeriod } from '../../../Functions/utils';
-import { submitBooking } from '../../../Functions/bookings';
+import { newBooking } from '../../../Functions/bookings';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
@@ -21,10 +21,11 @@ export default function BookingDetails({navigation, route}) {
     firstName: null,
     lastName: null,
     email: null
-  })
+  });
+  
 
   const handleSubmit = () => (
-    submitBooking({...booking, user: customer}, token).then(res => {
+    newBooking({...booking, user: customer}, token).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de réservation',
         text2: res.desc ?? res,
@@ -48,24 +49,23 @@ export default function BookingDetails({navigation, route}) {
           + new Date(booking.dateBooked).getDate() + ' ' +
           months[new Date(booking.dateBooked).getMonth()]
         }</Text>
-        <Text style={{fontSize: 18}}>Période : {getPeriod(booking.period) + '\u2000\u1680\u2000'}table {booking.table}</Text>
+        <Text style={{fontSize: 18}}>Période : {getPeriod(booking.period) + '\u2000\u2013\u2000'}table {booking.table}</Text>
       </View>
 
       <View>
         <Text style={styles.sectionText}>Détails : client</Text>
         <View style={{marginTop: 12}}>
-          <Input placeholder='Prénom' onChangeText={firstName => setCustomer({...customer, firstName})} />
-          <Input placeholder='Nom' onChangeText={lastName => setCustomer({...customer, lastName})} />
-          <Input placeholder='Adresse email' onChangeText={email => setCustomer({...customer, email})} />
+          <Input placeholder='Prénom' onChangeText={firstName => setCustomer({...customer, firstName})}/>
+          <Input placeholder='Nom' onChangeText={lastName => setCustomer({...customer, lastName})}/>
+          <Input placeholder='Adresse email' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setCustomer({...customer, email})}/>
         </View>
       </View>
 
       <Button
         icon={<Icon
-          size={24}
           color='white'
           name='book-online'
-          style={{marginRight: 10, padding: 2}}
+          style={{marginRight: 10}}
         />}
         title='Réserver'
         onPress={handleSubmit}

@@ -56,17 +56,18 @@ export default function WaiterPayOrder({route, navigation}) {
     } else {
       const actions = [
         {
-          text: 'Annuler'
-        }, {
           text: 'Payer',
           onPress: () => handlePayment()
+        }, {
+          text: 'Annuler',
+          style: 'cancel'
         }
       ];
       
       Alert.alert(
         'Vérification biométrique',
         "Votre appareil n'a pas d'authentification mise en place pour sécuriser votre achat. Voulez-vous continuer ?",
-        [actions[Platform.OS === 'ios' ? 1 : 0], actions[Platform.OS === 'ios' ? 0 : 1]]
+        Platform.OS === 'ios' ? actions : actions.reverse()
       );
     }
   };
@@ -140,10 +141,9 @@ export default function WaiterPayOrder({route, navigation}) {
       
       <Button
         icon={<Icon
-          size={24}
           color='white'
           name='credit-card'
-          style={{marginRight: 10, padding: 2}}
+          style={{marginRight: 10}}
         />}
         onPress={checkBiometrics}
         buttonStyle={[styles.button, {alignSelf: 'center'}]}

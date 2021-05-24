@@ -21,6 +21,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
       return quantity + num;
     });
   };
+  
 
   return (
     <View style={styles.item}>

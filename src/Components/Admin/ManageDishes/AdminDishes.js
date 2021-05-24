@@ -7,8 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 
 import BaseCard from '../../../Shared/BaseCard';
-import { styles } from '../../../Shared/styles';
 import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getDishes } from '../../../Functions/dishes';
 
 
@@ -28,24 +28,30 @@ const pickerStyle = {
   }
 };
 
-const failureAlert = (error, navigation, setRetry) => Alert.alert(
-  "Erreur d'affichage des plats", error,
-  [{
-    text: 'Annuler',
-    onPress: () => navigation.goBack()
-  },
-  {
-    text: 'Réessayer',
-    onPress: () => setRetry(true)
-  }]
-);
+const failureAlert = (error, navigation, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel',
+      onPress: () => navigation.goBack()
+    }
+  ];
+
+  Alert.alert(
+    "Erreur d'affichage des plats", error,
+    Platform.OS === 'ios' ? actions : actions.reverse()
+  );
+};
 
 
 export default function AdminDishes({navigation}) {
+  const isFocused = useIsFocused();
   const [retry, setRetry] = useState(false);
   const [dishes, setDishes] = useState(null);
   const [dishType, setDishType] = useState('all');
-  const isFocused = useIsFocused(); // refresh data also when using navigation.goBack()
 
   useEffect(() => {
     if (isFocused || retry) getDishes().then(res => {
@@ -86,7 +92,7 @@ export default function AdminDishes({navigation}) {
               <Text style={styles.title}>Entrées</Text>
               {dishes?.map((dish, i) => dish.type === 'appetizer' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock ?? 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
               />)}
             </>}
 
@@ -94,7 +100,7 @@ export default function AdminDishes({navigation}) {
               <Text style={styles.title}>Plats</Text>
               {dishes?.map((dish, i) => dish.type === 'mainDish' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock ?? 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
               />)}
             </>}
 
@@ -102,7 +108,7 @@ export default function AdminDishes({navigation}) {
               <Text style={styles.title}>Desserts</Text>
               {dishes?.map((dish, i) => dish.type === 'dessert' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock ?? 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
               />)}
             </>}
 
@@ -110,7 +116,7 @@ export default function AdminDishes({navigation}) {
               <Text style={styles.title}>Boissons</Text>
               {dishes?.map((dish, i) => dish.type === 'drink' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock ?? 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
               />)}
             </>}
 
@@ -118,7 +124,7 @@ export default function AdminDishes({navigation}) {
               <Text style={styles.title}>Boissons alcoolisées</Text>
               {dishes?.map((dish, i) => dish.type === 'alcohol' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency} – Stock : ${dish.stock ?? 'non défini'}`}
+                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
               />)}
             </>}
           </View>

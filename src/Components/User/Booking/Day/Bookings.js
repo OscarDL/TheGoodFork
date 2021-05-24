@@ -1,4 +1,3 @@
-import { FAB } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator, Platform, SafeAreaView, View } from 'react-native';
@@ -25,6 +24,7 @@ export default function Bookings({route}) {
     });
   }, [refresh, isFocused, setBookings]);
 
+  
   return (
     <SafeAreaView style={styles.container}>
       {bookings ? <PeriodTabs bookings={bookings} setRefresh={setRefresh} day={day}/> : <View style={styles.container}>

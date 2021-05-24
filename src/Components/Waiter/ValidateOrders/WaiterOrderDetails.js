@@ -23,8 +23,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   useEffect(() => {
     isFocused && getOrder(order._id, token).then(res => setUpdatedOrder(res.order));
     navigation.setOptions({
-      title: `${(updatedOrder.takeaway ? 'À emporter' : 'Sur place')}` +
-      ` — ${updatedOrder.user.firstName} ${updatedOrder.user.lastName}`
+      title: `${order.user.firstName} ${order.user.lastName}\u2000\u2013\u2000${(order.takeaway ? 'À emporter' : 'Sur place')}`
     });
   }, [isFocused, setUpdatedOrder]);
 
@@ -43,19 +42,16 @@ export default function WaiterOrderDetails({navigation, route}) {
         visibilityTime: 1500,
         type: res.success ? 'success' : 'error'
       });
-      if (res.success) navigation.goBack();
+      
+      res.success && navigation.goBack();
     })
   };
   
-  const handleCancel = () => (
-    Alert.alert(
-      'Êtes-vous sûr ?',
-      "Vous êtes sur le point d'annuler cette commande.",
-      [{
-        text: 'Revenir'
-      },
+  const handleCancel = () => {
+    const actions = [
       {
         text: 'Continuer',
+        style: 'destructive',
         onPress: () => {
           setLoading(true);
 
@@ -70,12 +66,22 @@ export default function WaiterOrderDetails({navigation, route}) {
               visibilityTime: 1500,
               type: res.success ? 'success' : 'error'
             });
-            if (res.success) navigation.goBack();
+            
+            res.success && navigation.goBack();
           });
         }
-      }]
+      }, {
+        text: 'Revenir',
+        style: 'cancel'
+      }
+    ];
+
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      "Vous êtes sur le point d'annuler cette commande.",
+      Platform.OS === 'ios' ? actions : actions.reverse()
     )
-  );
+  };
   
   
   return (

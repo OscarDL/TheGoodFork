@@ -24,6 +24,7 @@ export default function WaiterPlanning() {
   );
 }
 
+
 function WaiterPlanningComponent({navigation}) {
   
   return (

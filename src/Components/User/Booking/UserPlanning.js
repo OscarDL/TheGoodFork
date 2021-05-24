@@ -35,29 +35,25 @@ export default function UserPlanning({title}) {
 function UserPlanningComponent({navigation}) {
   const isFocused = useIsFocused();
   const [{token}] = useDataLayerValue();
-  const [loaded, setLoaded] = useState(false);
   const [bookings, setBookings] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
 
-  useEffect(() => { setLoaded(true); }, []);
-
   useEffect(() => {
-    if (isFocused && loaded) {
-      getBookings(token).then(res => {
-        if (!res.success) return setBookings({});
+    isFocused && getBookings(token).then(res => {
+      if (!res.success) return setBookings({});
 
-        const dates = markedDates;
-        res.bookings.forEach((booking, i) => {
-          const day = getDay(booking.dateBooked).toISOString().slice(0,10);
-          dates[day] = {marked: true, dotColor: day < getDay(Date.now()).toISOString().slice(0,10) ? 'orange' : 'limegreen'};
+      const dates = markedDates;
+      res.bookings.forEach((booking, i) => {
+        const day = getDay(booking.dateBooked).toISOString().slice(0,10);
+        dates[day] = {marked: true, dotColor: day < getDay(Date.now()).toISOString().slice(0,10) ? 'orange' : 'limegreen'};
 
-          if (i+1 === res.bookings.length) return setMarkedDates(dates);
-        });
-
-        setBookings(res.bookings);
+        if (i+1 === res.bookings.length) return setMarkedDates(dates);
       });
-    }
-  }, [loaded, isFocused, setBookings, setMarkedDates]);
+
+      setBookings(res.bookings);
+    });
+  }, [isFocused, setBookings, setMarkedDates]);
+
 
   return (
     <View style={styles.container}>
@@ -78,9 +74,8 @@ function UserPlanningComponent({navigation}) {
                 <Text style={{
                   textAlign: 'center',
                   color: day < now ? '#aaa' : (day === now ? 'deepskyblue' : 'black')
-                }}>
-                  {date.day}
-                </Text>
+                }}>{date.day}</Text>
+
                 {date.dateString in markedDates
                   &&
                 <View style={{

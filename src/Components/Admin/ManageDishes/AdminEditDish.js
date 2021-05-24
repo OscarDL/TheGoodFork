@@ -26,45 +26,6 @@ const pickerStyle = {
   }
 };
 
-const handleEdit = (token, id, dish, navigation) => {
-  if (!dish.stock) dish.stock = null;
-
-  editDish(token, id, dish).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de modification',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-    res.success && navigation.goBack();
-  });
-};
-
-const handleDelete = (token, dish, navigation) => {
-  Alert.alert(
-    'Êtes-vous sûr ?',
-    `Vous êtes sur le point de supprimer "${dish.name}".`,
-    [
-      { text: 'Annuler' },
-      { text: 'Supprimer',
-        onPress: () => deleteDish(token, dish._id, dish).then(res => {
-          Toast.show({
-            text1: res.title ?? 'Erreur de supression',
-            text2: res.desc ?? res,
-            
-            position: 'bottom',
-            visibilityTime: 1500,
-            type: res.success ? 'success' : 'error'
-          });
-          res.success && navigation.goBack();
-        })
-      }
-    ]
-  );
-};
-
 
 export default function AdminEditDish({route, navigation}) {
   const {dish} = route.params;
@@ -77,6 +38,50 @@ export default function AdminEditDish({route, navigation}) {
     stock: dish.stock,
     detail: dish.detail
   });
+
+
+  const handleEdit = () => {
+    editDish(token, dish._id, {...newDish, stock: newDish.stock || null}).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de modification',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+      res.success && navigation.goBack();
+    });
+  };
+
+  const handleDelete = () => {
+    const actions = [
+      {
+        text: 'Supprimer',
+        style: 'destructive',
+        onPress: () => deleteDish(token, dish._id, dish).then(res => {
+          Toast.show({
+            text1: res.title ?? 'Erreur de supression',
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+          res.success && navigation.goBack();
+        })
+      }, {
+        text: 'Annuler',
+        style: 'cancel'
+      }
+    ];
+  
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      `Vous êtes sur le point de supprimer "${dish.name}".`,
+      Platform.OS === 'ios' ? actions : actions.reverse()
+    );
+  };
 
 
   return (
@@ -107,24 +112,34 @@ export default function AdminEditDish({route, navigation}) {
       <View>
         <Input value={newDish.name} placeholder='Nom' onChangeText={name => setNewDish({...newDish, name})}/>
         <Input value={newDish.detail} placeholder='Aucun détail' onChangeText={detail => setNewDish({...newDish, detail})}/>
-        <Input value={newDish.price.toString()} placeholder='Prix (EUR)' keyboardType='number-pad' onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})} />
-        <Input value={newDish.stock?.toString()} placeholder='Stock (le cas échéant)' onChangeText={stock => setNewDish({...newDish, stock})}/>
+        <Input
+          keyboardType='numeric'
+          placeholder='Prix (EUR)'
+          value={newDish.price.toString()}
+          onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})}
+        />
+        <Input
+          keyboardType='numeric'
+          value={newDish.stock?.toString()}
+          placeholder='Stock (le cas échéant)'
+          onChangeText={stock => setNewDish({...newDish, stock: stock.replace(/[^0-9]/g, '')})}
+        />
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title='Sauvegarder'
           icon={<Icon
             name='save'
             color='white'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleEdit(token, dish._id, newDish, navigation)}
+          title='Sauvegarder'
+          onPress={handleEdit}
+          buttonStyle={[styles.button]}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(token, dish, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={handleDelete}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

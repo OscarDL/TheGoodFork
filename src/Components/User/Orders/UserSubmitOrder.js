@@ -55,8 +55,8 @@ export default function UserSubmitOrder({navigation, route}) {
         type: res.success ? 'success' : 'error'
       });
 
-      if (!order.price) navigation.goBack();
-      if (res.success) navigation.navigate('UserOrderDetails');
+      !order.price && navigation.goBack();
+      res.success && navigation.navigate('UserOrderDetails');
     });
   };
   
@@ -71,8 +71,8 @@ export default function UserSubmitOrder({navigation, route}) {
         type: res.success ? 'success' : 'error'
       });
 
-      if (!order.price) navigation.goBack();
-      if (res.success) navigation.navigate('UserOrderTabs');
+      !order.price && navigation.goBack();
+      res.success && navigation.navigate('UserOrderTabs');
     });
   };
   
@@ -89,38 +89,40 @@ export default function UserSubmitOrder({navigation, route}) {
     }
   
     if (order.type?.takeaway) {
-      const actions = [{
-        text: 'Payer',
-        onPress: () => navigation.navigate('UserPayOrder', {order, type})
-      }, {
-        text: 'Annuler'
-      }];
+      const actions = [
+        {
+          text: 'Payer',
+          onPress: () => navigation.navigate('UserPayOrder', {order, type})
+        }, {
+          text: 'Annuler',
+          style: 'cancel'
+        }
+      ];
   
       return Alert.alert(
         'Procédure de paiement',
         "Vous devez payer les commandes à emporter en avance. Vous ne pourrez ni annuler ni modifier ultérieurement. Continuer ?",
-        [
-          actions[Platform.OS === 'ios' ? 0 : 1], actions[Platform.OS === 'ios' ? 1 : 0]
-        ]
+        Platform.OS === 'ios' ? actions : actions.reverse()
       );
     }
   
     const actions = [
       {
-        text: 'Annuler'
+        text: 'Payer',
+        onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
       }, {
         text: 'Plus tard',
         onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
       }, {
-        text: 'Payer',
-        onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
+        text: 'Annuler',
+        style: 'cancel'
       }
     ];
     
     Alert.alert(
       'Procédure de paiement',
       "Voulez-vous payer maintenant ? Vous ne pourrez plus modifier votre commande sans l'aide d'un serveur.",
-      [actions[Platform.OS === 'ios' ? 2 : 0], actions[1], actions[Platform.OS === 'ios' ? 0 : 2]]
+      Platform.OS === 'ios' ? actions : actions.reverse()
     );
   };
 
@@ -173,7 +175,6 @@ export default function UserSubmitOrder({navigation, route}) {
 
         <Button
           icon={<Icon
-            size={24}
             color='white'
             style={{marginRight: 10, padding: 2}}
             name={type === 'edit' ? 'edit' : 'shopping-cart'}

@@ -12,17 +12,24 @@ import { useDataLayerValue } from '../../Context/DataLayer';
 import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
-const failureAlert = (error, navigation, setRetry) => Alert.alert(
-  "Erreur d'affichage des commandes", error,
-  [{
-    text: 'Annuler',
-    onPress: () => navigation.goBack()
-  },
-  {
-    text: 'Réessayer',
-    onPress: () => setRetry(true)
-  }]
-);
+const failureAlert = (error, navigation, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel',
+      onPress: () => navigation.goBack()
+    }
+  ];
+
+  Alert.alert(
+    "Erreur d'affichage des commandes", error,
+    Platform.OS === 'ios' ? actions : actions.reverse()
+  );
+};
+
 
 export default function WaiterCreateBill({navigation}) {
   const isFocused = useIsFocused();

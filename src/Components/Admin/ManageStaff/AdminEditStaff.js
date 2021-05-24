@@ -26,43 +26,6 @@ const pickerStyle = {
   }
 };
 
-const handleEdit = (id, staff, token, navigation) => {
-  editStaff(id, staff, token).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de supression',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-    res.success && navigation.goBack();
-  });
-};
-
-const handleDelete = (staff, token, navigation) => {
-  Alert.alert(
-    'Êtes-vous sûr ?',
-    `Vous êtes sur le point de supprimer ${staff.firstName} ${staff.lastName}.`,
-    [
-      { text: 'Annuler' },
-      { text: 'Continuer',
-        onPress: () => deleteStaff(staff, token).then(res => {
-          Toast.show({
-            text1: res.title ?? 'Erreur de supression',
-            text2: res.desc ?? res,
-            
-            position: 'bottom',
-            visibilityTime: 1500,
-            type: res.success ? 'success' : 'error'
-          });
-          res.success && navigation.goBack();
-        })
-      }
-    ]
-  );
-};
-
 
 export default function AdminEditStaff({route, navigation}) {
   const {staff} = route.params;
@@ -76,6 +39,50 @@ export default function AdminEditStaff({route, navigation}) {
     password: null
   });
 
+
+  const handleEdit = () => {
+    editStaff(staff._id, newStaff, token).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de supression',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+      res.success && navigation.goBack();
+    });
+  };
+  
+  const handleDelete = () => {
+    const actions = [
+      {
+        text: 'Supprimer',
+        style: 'destructive',
+        onPress: () => deleteStaff(staff, token).then(res => {
+          Toast.show({
+            text1: res.title ?? 'Erreur de supression',
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+          res.success && navigation.goBack();
+        })
+      }, {
+        text: 'Annuler',
+        style: 'cancel'
+      }
+    ];
+  
+    Alert.alert(
+      'Êtes-vous sûr ?',
+      `Vous êtes sur le point de supprimer ${staff.firstName} ${staff.lastName}.`,
+      Platform.OS === 'ios' ? actions : actions.reverse()
+    );
+  };
+  
 
   return (
     <KeyboardAvoidingView style={styles.container}
@@ -110,18 +117,18 @@ export default function AdminEditStaff({route, navigation}) {
 
       <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title='Sauvegarder'
           icon={<Icon
             name='save'
             color='white'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleEdit(staff._id, newStaff, token, navigation)}
+          title='Sauvegarder'
+          onPress={handleEdit}
+          buttonStyle={[styles.button]}
         />
       </View>
       
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => handleDelete(staff, token, navigation)}>
+      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={handleDelete}>
         <Text style={styles.delete}>Supprimer</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>

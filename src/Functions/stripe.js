@@ -1,16 +1,12 @@
 import axios from 'axios';
 
+import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
 export const payOrder = async (card, order, token) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  };
-
   try {
-    const {data} = await axios.post(apiUrl + 'stripe/pay', {card, order}, {headers});
+    const {data} = await axios.post(apiUrl + 'stripe', {card, order}, authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -27,13 +23,8 @@ export const payOrder = async (card, order, token) => {
 
 
 export const getIntent = async (intent, token) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  };
-
   try {
-    const {data} = await axios.get(apiUrl + 'stripe/get/' + intent, {headers});
+    const {data} = await axios.get(apiUrl + 'stripe/' + intent, authConfig(token));
 
     return data.success ? data : data?.error;
     
@@ -42,13 +33,8 @@ export const getIntent = async (intent, token) => {
 
 
 export const cancelIntent = async (intent, token) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  };
-
   try {
-    const {data} = await axios.get(apiUrl + 'stripe/refund/' + intent, {headers});
+    const {data} = await axios.get(apiUrl + 'stripe/refund/' + intent, authConfig(token));
 
     return data.success ? data : data?.error;
     

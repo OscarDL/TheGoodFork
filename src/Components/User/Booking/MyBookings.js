@@ -29,6 +29,7 @@ export default function MyBookings({route}) {
     isFocused && getBookings(token).then(res => setBookings(res.bookings));
   }, [isFocused, setBookings]);
 
+  
   return bookings ? (
     <Tabs.Navigator backBehavior='none' tabBarOptions={style} initialRouteName='A Venir'>
       <Tabs.Screen name='A Venir'>

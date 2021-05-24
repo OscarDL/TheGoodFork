@@ -1,12 +1,12 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
 import Toast from 'react-native-toast-message';
-import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
 import { totalTables } from '../../../../../config';
 import { getPeriod } from '../../../../Functions/utils';
-import { submitBooking } from '../../../../Functions/bookings';
+import { newBooking } from '../../../../Functions/bookings';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 
 
@@ -23,15 +23,10 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
     const day = new Date(dateBooked).getDate();
     const month = months[new Date(dateBooked).getMonth()];
 
-    Alert.alert(
-      `${days[new Date(dateBooked).getDay()]} ${day} ${month}`,
-      `Voulez-vous réserver la table ${table} ${(period === 3 ? "dans l'" : 'au ')}${getPeriod(period)} ?`,
-      [{
-        text: 'Annuler'
-      },
+    const actions = [
       {
         text: 'Réserver',
-        onPress: () => submitBooking(booking, user.email, token).then(res => {
+        onPress: () => newBooking(booking, user.email, token).then(res => {
           Toast.show({
             text1: res.title ?? 'Erreur de réservation',
             text2: res.desc ?? res,
@@ -42,7 +37,16 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
           });
           res.success && setRefresh(true);
         })
-      }]
+      }, {
+        text: 'Annuler',
+        style: 'cancel'
+      }
+    ];
+
+    Alert.alert(
+      `${days[new Date(dateBooked).getDay()]} ${day} ${month}`,
+      `Voulez-vous réserver la table ${table} ${(period === 3 ? "dans l'" : 'au ')}${getPeriod(period)} ?`,
+      Platform.OS === 'ios' ? actions : actions.reverse()
     ) 
   };
   

@@ -3,15 +3,10 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { apiUrl } from '../../config';
+import { config, authConfig } from './utils';
 
 
 export const login = async (user) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
     user.email = user.email.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'auth/login', user, config);
@@ -24,13 +19,7 @@ export const login = async (user) => {
 };
 
 
-export const registerUser = async (user) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
+export const register = async (user) => {
   try {
     user.email = user.email.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'auth/register', user, config);
@@ -43,16 +32,9 @@ export const registerUser = async (user) => {
 };
 
 
-export const dispatchUserInfo = async (token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
+export const dispatchUserData = async (token) => {
   try {
-    const {data} = await axios.get(apiUrl + 'auth/userinfo', config);
+    const {data} = await axios.get(apiUrl + 'auth', authConfig(token));
     
     if (!data.success) return data?.error;
 
@@ -63,21 +45,15 @@ export const dispatchUserInfo = async (token) => {
 
 
 export const sendEmail = async (email) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
     email = email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'auth/forgotpassword', {email}, config);
+    const {data} = await axios.post(apiUrl + 'auth/forgot', {email}, config);
 
     if (!data.success) return data?.error;
     
     return {
       success: true,
-      title: 'Récupération',
+      title: 'Email de récupération',
       desc: data.data
     };
 
@@ -85,24 +61,17 @@ export const sendEmail = async (email) => {
 };
 
 
-export const resetPassword = async (resetToken, password, passCheck) => {
-  if (!resetToken)
-    return 'Veuillez entrer le code reçu par email.';
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
+export const resetPassword = async (token, password, passCheck) => {
+  if (!token) return 'Veuillez entrer le code reçu par email.';
 
   try {
-    const {data} = await axios.put(apiUrl + 'auth/resetpassword/' + resetToken, {password, passCheck}, config);
+    const {data} = await axios.put(apiUrl + 'auth/reset/' + token, {password, passCheck}, config);
 
     if (!data.success) return data?.error;
     
     return {
       success: true,
-      title: 'Récupération',
+      title: 'Réinitialisation réussie',
       desc: data.data
     };
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -112,23 +81,18 @@ export const resetPassword = async (resetToken, password, passCheck) => {
 export const checkLogin = async (dispatch) => {
   const token = await AsyncStorage.getItem('authToken');
 
-  if (!token) {
-    dispatch({type: 'SET_USER', user: null});
-    return dispatch({type: 'SET_TOKEN', token: ''});
-  }
+  if (!token) return dispatch({ type: 'LOGIN', user: null, token: '' });
 
-  dispatchUserInfo(token).then(async (res) => {
-    if (res.success) {
-      dispatch({type: 'SET_USER', user: res.user});
-      dispatch({type: 'SET_TOKEN', token});
-    } else Alert.alert(
+  dispatchUserData(token).then(async (res) => {
+    if (res.success) return dispatch({ type: 'LOGIN', user: res.user, token });
+    
+    Alert.alert(
       'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
       [{
         text: 'Compris',
         onPress: async () => {
           await AsyncStorage.removeItem('authToken');
-          dispatch({type: 'SET_USER', user: null});
-          dispatch({type: 'SET_TOKEN', token: ''});
+          dispatch({ type: 'LOGIN', user: null, token: '' });
         }
       }]
     );
@@ -136,7 +100,6 @@ export const checkLogin = async (dispatch) => {
 };
 
 
-export const logout = async (dispatch) => {
-  await AsyncStorage.removeItem('authToken');
-  checkLogin(dispatch);
+export const logout = (dispatch) => {
+  AsyncStorage.removeItem('authToken').then(() => checkLogin(dispatch));
 };

@@ -7,6 +7,7 @@ import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
 const Stack = createStackNavigator();
 
 
@@ -19,7 +20,8 @@ export default function UserAccount({title}) {
   );
 }
 
-function UserAccountComponent({navigation, route}) {
+
+function UserAccountComponent({route}) {
   return (
     <View style={{...styles.container, alignItems: 'center'}}>
       <View>

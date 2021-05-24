@@ -22,9 +22,7 @@ import AdminEditDish from './Admin/ManageDishes/AdminEditDish';
 import AdminStaffList from './Admin/ManageStaff/AdminStaffList';
 import AdminEditStaff from './Admin/ManageStaff/AdminEditStaff';
 import AdminCreateDish from './Admin/ManageDishes/AdminCreateDish';
-import AdminRegisterStaff from './Admin/ManageStaff/AdminRegisterStaff';
-
-import BarmanHome from './Barman/BarmanHome';
+import AdminCreateStaff from './Admin/ManageStaff/AdminCreateStaff';
 
 import WaiterHome from './Waiter/WaiterHome';
 import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
@@ -37,6 +35,9 @@ import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
 import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
 import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
 
+import BarmanHome from './Barman/BarmanHome';
+import BarmanOrderDetails from './Barman/BarmanOrderDetails';
+
 import CookHome from './Cook/CookHome';
 import CookOrderDetails from './Cook/CookOrderDetails';
 
@@ -47,9 +48,9 @@ import UserPlanning from './User/Booking/UserPlanning';
 
 import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
+import { StatusBar } from 'expo-status-bar';
 import { checkLogin, logout } from '../Functions/auth';
 import { useDataLayerValue } from './Context/DataLayer';
-import { StatusBar } from 'expo-status-bar';
 
 
 const Stack = createStackNavigator();
@@ -76,14 +77,13 @@ export default function Routes() {
 
   const adminStack = () => (
     <Stack.Navigator initialRouteName='AdminHome'>
-      <Stack.Screen name='AdminHome' component={AdminHome} options={({navigation}) => ({
+      <Stack.Screen name='AdminHome' component={AdminHome} options={{
         title: "Centre d'aministration",
-        headerRight: () => <Button type='clear'
-          buttonStyle={{marginRight: 10}}
-          icon={<Icon name='settings' size={26} />}
-          onPress={() => navigation.navigate('AdminSettings')}
+        headerRight: () => <Button
+          type='clear' icon={<Icon name='logout' size={26} />}
+          buttonStyle={{marginRight: 10}} onPress={() => logout(dispatch)}
         />
-      })}/>
+      }}/>
       <Stack.Screen name='AdminSettings' options={{title: 'Réglages', cardStyleInterpolator: iosV}} component={AdminSettings}/>
       <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
       <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
@@ -94,7 +94,7 @@ export default function Routes() {
       <Stack.Screen name='AdminSalesStats' options={{title: 'Statistiques : ventes', cardStyleInterpolator: iosH}} component={AdminSalesStats} />
       <Stack.Screen name='AdminStocksStats' options={{title: 'Statistiques : stock', cardStyleInterpolator: iosH}} component={AdminStocksStats} />
       <Stack.Screen name='AdminDailyRevenue' options={{title: 'Revenu quotidien', cardStyleInterpolator: iosH}} component={AdminDailyRevenue} />
-      <Stack.Screen name='AdminRegisterStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosH}} component={AdminRegisterStaff} />
+      <Stack.Screen name='AdminCreateStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosH}} component={AdminCreateStaff} />
     </Stack.Navigator>
   );
 
@@ -102,12 +102,12 @@ export default function Routes() {
     <Stack.Navigator initialRouteName='BarmanHome'>
       <Stack.Screen name='BarmanHome' component={BarmanHome} options={{
         title: 'Centre barmans',
-        headerRight: () => <Button type='clear'
-          buttonStyle={{marginRight: 10}}
-          icon={<Icon name='logout' size={26} />}
-          onPress={() => logout(dispatch)}
+        headerRight: () => <Button
+          type='clear' icon={<Icon name='logout' size={26} />}
+          buttonStyle={{marginRight: 10}} onPress={() => logout(dispatch)}
         />
       }}/>
+      <Stack.Screen name='BarmanOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={BarmanOrderDetails}/>
     </Stack.Navigator>
   );
 
@@ -115,10 +115,9 @@ export default function Routes() {
     <Stack.Navigator initialRouteName='CookHome'>
       <Stack.Screen name='CookHome'  component={CookHome} options={{
         title: 'Centre cuisiniers',
-        headerRight: () => <Button type='clear'
-          buttonStyle={{marginRight: 10}}
-          icon={<Icon name='logout' size={26} />}
-          onPress={() => logout(dispatch)}
+        headerRight: () => <Button
+          type='clear' icon={<Icon name='logout' size={26} />}
+          buttonStyle={{marginRight: 10}} onPress={() => logout(dispatch)}
         />
       }}/>
       <Stack.Screen name='CookOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={CookOrderDetails}/>
@@ -129,10 +128,9 @@ export default function Routes() {
     <Stack.Navigator initialRouteName='WaiterHome'>
       <Stack.Screen name='WaiterHome' component={WaiterHome} options={{
         title: 'Centre serveurs',
-        headerRight: () => <Button type='clear'
-          buttonStyle={{marginRight: 10}}
-          icon={<Icon name='logout' size={26} />}
-          onPress={() => logout(dispatch)}
+        headerRight: () => <Button
+          type='clear' icon={<Icon name='logout' size={26} />}
+          buttonStyle={{marginRight: 10}} onPress={() => logout(dispatch)}
         />
       }}/>
       <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: iosH}} component={WaiterNewOrder}/>

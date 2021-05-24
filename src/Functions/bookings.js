@@ -1,18 +1,12 @@
 import axios from 'axios';
 
+import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
 export const getBookings = async (token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'bookings', config);
+    const {data} = await axios.get(apiUrl + 'bookings', authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -23,15 +17,8 @@ export const getBookings = async (token) => {
 
 
 export const getDayBookings = async (day, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'bookings/day/' + day, config);
+    const {data} = await axios.get(apiUrl + 'bookings/day/' + day, authConfig(token));
 
     if (!data.success) return data?.error;
     
@@ -42,15 +29,8 @@ export const getDayBookings = async (day, token) => {
 
 
 export const getBooking = async (id, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.get(apiUrl + 'bookings/' + id, config);
+    const {data} = await axios.get(apiUrl + 'bookings/' + id, authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -60,16 +40,9 @@ export const getBooking = async (id, token) => {
 };
 
 
-export const submitBooking = async (booking, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
+export const newBooking = async (booking, token) => {
   try {
-    const {data} = await axios.post(apiUrl + 'bookings/create', booking, config);
+    const {data} = await axios.post(apiUrl + 'bookings', booking, authConfig(token));
     
     if (!data.success) return data?.error;
 
@@ -83,15 +56,8 @@ export const submitBooking = async (booking, token) => {
 
 
 export const editBooking = async (booking, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
-  
   try {
-    const {data} = await axios.put(apiUrl + 'bookings/update/' + booking._id, booking, config);
+    const {data} = await axios.put(apiUrl + 'bookings/' + booking._id, booking, authConfig(token));
     
     if (!data.success) return data?.error;
 
@@ -105,15 +71,8 @@ export const editBooking = async (booking, token) => {
 
 
 export const deleteBooking = async (booking, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-
   try {
-    const {data} = await axios.delete(apiUrl + 'bookings/delete/' + booking._id, config);
+    const {data} = await axios.delete(apiUrl + 'bookings/' + booking._id, authConfig(token));
 
     if (!data.success) return data?.error;
 

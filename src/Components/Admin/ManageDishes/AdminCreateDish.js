@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Alert, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { createDish } from '../../../Functions/dishes';
@@ -25,32 +25,31 @@ const pickerStyle = {
   }
 };
 
-const handleCreate = (dish, token, navigation) => {
-  if (!dish.stock) dish.stock = null;
-
-  createDish(dish, token).then(res => {
-    Toast.show({
-      text1: res.title ?? 'Erreur de création',
-      text2: res.desc ?? res,
-      
-      position: 'bottom',
-      visibilityTime: 1500,
-      type: res.success ? 'success' : 'error'
-    });
-    res.success && navigation.goBack();
-  });
-};
-
 
 export default function AdminCreateDish({navigation}) {
   const [{token}] = useDataLayerValue();
   const [dish, setDish] = useState({
     name: '',
-    price: 0,
     detail: '',
+    price: null,
     stock: null,
     type: 'appetizer'
   });
+
+
+  const handleCreate = () => {
+    createDish({...dish, stock: dish.stock || null}, token).then(res => {
+      Toast.show({
+        text1: res.title ?? 'Erreur de création',
+        text2: res.desc ?? res,
+        
+        position: 'bottom',
+        visibilityTime: 1500,
+        type: res.success ? 'success' : 'error'
+      });
+      res.success && navigation.goBack();
+    });
+  };
 
 
   return (
@@ -81,20 +80,30 @@ export default function AdminCreateDish({navigation}) {
       <View>
         <Input placeholder='Nom' onChangeText={name => setDish({...dish, name})}/>
         <Input placeholder='Détails' onChangeText={detail => setDish({...dish, detail})}/>
-        <Input placeholder='Prix (EUR)' keyboardType='number-pad' onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}/>
-        <Input placeholder='Stock (le cas échéant)' onChangeText={stock => setDish({...dish, stock})}/>
+        <Input
+          value={dish.price}
+          keyboardType='numeric'
+          placeholder='Prix (EUR)'
+          onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}
+        />
+        <Input
+          value={dish.stock}
+          keyboardType='numeric'
+          placeholder='Stock (le cas échéant)'
+          onChangeText={stock => setDish({...dish, stock: stock.replace(/[^0-9]/g, '')})}
+        />
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title='Ajouter'
           icon={<Icon
             name='create'
             color='white'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleCreate(dish, token, navigation)}
+          title='Ajouter'
+          onPress={handleCreate}
+          buttonStyle={[styles.button]}
         />
       </View>
     </KeyboardAvoidingView>

@@ -14,6 +14,7 @@ const style = {
   indicatorStyle: {backgroundColor: colors.accentSecondary}
 };
 
+
 export default function SubmitOrderTabs({order, setOrder, setPrice}) {
   return (
     <Tabs.Navigator

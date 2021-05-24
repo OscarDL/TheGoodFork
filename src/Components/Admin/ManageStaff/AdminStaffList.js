@@ -4,23 +4,29 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 
 import BaseCard from '../../../Shared/BaseCard';
-import { styles } from '../../../Shared/styles';
 import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getStaff } from '../../../Functions/staff';
 import { useDataLayerValue } from '../../Context/DataLayer';
 
 
-const failureAlert = (error, navigation, setRetry) => Alert.alert(
-  "Erreur d'affichage des membres", error,
-  [{
-    text: 'Annuler',
-    onPress: () => navigation.goBack()
-  },
-  {
-    text: 'Réessayer',
-    onPress: () => setRetry(true)
-  }]
-);
+const failureAlert = (error, navigation, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel',
+      onPress: () => navigation.goBack()
+    }
+  ];
+
+  Alert.alert(
+  "Erreur d'affichage du staff", error,
+  Platform.OS === 'ios' ? actions : actions.reverse()
+  );
+};
 
 
 export default function AdminStaffList({navigation}) {

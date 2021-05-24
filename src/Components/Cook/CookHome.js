@@ -9,16 +9,22 @@ import { getOrders } from '../../Functions/orders';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
-const failureAlert = (error, setRetry) => Alert.alert(
-  "Erreur d'affichage des commandes", error,
-  [{
-    text: 'Annuler'
-  },
-  {
-    text: 'Réessayer',
-    onPress: () => setRetry(true)
-  }]
-);
+const failureAlert = (error, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel'
+    }
+  ];
+
+  Alert.alert(
+    "Erreur d'affichage des commandes", error,
+    Platform.OS === 'ios' ? actions : actions.reverse()
+  );
+};
 
 
 export default function CookHome({navigation}) {
@@ -43,8 +49,8 @@ export default function CookHome({navigation}) {
 
           {orders.map((order, i) => order.validated && <BaseCard
             key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
-            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={order?.price + ' ' + order?.currency}
-            description={'Status: ' + order.status} screen='CookOrderDetails' params={{order}} navigation={navigation}
+            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={(order.price + order.tip) + ' ' + order.currency}
+            description={'Statut : ' + order.status} screen='CookOrderDetails' params={{order}} navigation={navigation}
           />)}
         </ScrollView>
       ) : (

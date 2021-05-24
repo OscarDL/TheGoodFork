@@ -5,28 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { login } from '../../Functions/auth';
+import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';
-
-
-const loginUser = (user, dispatch) => {
-  login(user).then(async (res) => {
-    if (!res.success) return (
-      Toast.show({
-        text1: 'Erreur de connexion',
-        text2: res,
-        
-        type: 'error',
-        position: 'bottom',
-        visibilityTime: 1500
-      })
-    );
-
-    dispatch({ type: 'SET_USER', user: res.user });
-    dispatch({ type: 'SET_TOKEN', token: res.token });
-    await AsyncStorage.setItem('authToken', res.token);
-  });
-}
 
 
 export default function Login({navigation}) {
@@ -35,6 +16,26 @@ export default function Login({navigation}) {
     email: '',
     password: ''
   });
+
+  
+  const loginUser = () => {
+    login(userLogin).then(async (res) => {
+      if (!res.success) return (
+        Toast.show({
+          text1: 'Erreur de connexion',
+          text2: res,
+          
+          type: 'error',
+          position: 'bottom',
+          visibilityTime: 1500
+        })
+      );
+  
+      await AsyncStorage.setItem('authToken', res.token);
+      dispatch({ type: 'LOGIN', user: res.user, token: res.token });
+    });
+  };
+
 
   return (
     <KeyboardAvoidingView
@@ -49,29 +50,27 @@ export default function Login({navigation}) {
       </View>
 
       <View>
-        <Input autoCapitalize='none' keyboardType='email-address' placeholder='Email address' onChangeText={email => setUserLogin({ ...userLogin, email })} />
-        <Input autoCapitalize='none' placeholder='Password' secureTextEntry onChangeText={password => setUserLogin({ ...userLogin, password })} />
+        <Input autoCapitalize='none' placeholder='Adresse email' keyboardType='email-address' onChangeText={email => setUserLogin({...userLogin, email})}/>
+        <Input autoCapitalize='none' placeholder='Mot de passe' secureTextEntry onChangeText={password => setUserLogin({...userLogin, password})}/>
 
         <TouchableOpacity style={{alignSelf: 'flex-end'}} onPress={() => navigation.navigate('Forgot')}>
-          <Text style={{padding: 10, paddingTop: 0, color: '#805A48'}}>Mot de passe oublié ?</Text>
+          <Text style={{padding: 10, paddingTop: 0, color: colors.accentPrimary}}>Mot de passe oublié ?</Text>
         </TouchableOpacity>
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
-          title='Connexion'
           icon={<Icon
-            size={28}
             color='white'
             name='lock-open'
             style={{marginRight: 10}}
-            />}
-          onPress={() => loginUser(userLogin, dispatch)}
+          />}
+          title='Connexion'
+          onPress={loginUser}
           buttonStyle={[styles.button]}
         />
       </View>
       
-      <View></View>
       <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Je n'ai pas encore de compte</Text>
       </TouchableOpacity>

@@ -39,6 +39,13 @@ export default function UserNewBooking({navigation, route}) {
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState(null);
   const [booking, setBooking] = useState(route.params.booking);
+  
+  useEffect(() => {
+    getDayBookings(booking.dateBooked, token).then(bookings => {
+      setLoading(false);
+      setBookings(bookings);
+    });
+  }, [setLoading, setBookings]);
 
 
   const androidChange = (e) => {
@@ -66,7 +73,6 @@ export default function UserNewBooking({navigation, route}) {
     });
   };
 
-
   const handleEdit = () => {
     editBooking(booking, token).then(res => {
       Toast.show({
@@ -84,37 +90,35 @@ export default function UserNewBooking({navigation, route}) {
   const handleCancel = () => {
     const day = new Date(booking.dateBooked);
 
+    const actions = [
+      {
+        text: 'Continuer',
+        style: 'destructive',
+        onPress: () => deleteBooking(booking, token).then(res => {
+          Toast.show({
+            text1: res.title ?? "Erreur d'annulation",
+            text2: res.desc ?? res,
+            
+            position: 'bottom',
+            visibilityTime: 1500,
+            type: res.success ? 'success' : 'error'
+          });
+          res.success && navigation.goBack();
+        })
+      }, {
+        text: 'Annuler',
+        style: 'cancel'
+      }
+    ];
+
     Alert.alert(
       'Êtes-vous sûr ?',
       "Vous êtes sur le point d'annuler votre réservation du "
       + `${days[day.getDay()]} ${day.getDate()} ${months[day.getMonth()]} `
       + `${booking.period === 3 ? "dans l'" : "au "}` + getPeriod(booking.period) + '.',
-      [
-        { text: 'Revenir' },
-        { text: 'Continuer',
-          onPress: () => deleteBooking(booking, token).then(res => {
-            Toast.show({
-              text1: res.title ?? "Erreur d'annulation",
-              text2: res.desc ?? res,
-              
-              position: 'bottom',
-              visibilityTime: 1500,
-              type: res.success ? 'success' : 'error'
-            });
-            res.success && navigation.goBack();
-          })
-        }
-      ]
+      Platform.OS === 'ios' ? actions : actions.reverse()
     );
   };
-
-  
-  useEffect(() => {
-    getDayBookings(booking.dateBooked, token).then(bookings => {
-      setLoading(false);
-      setBookings(bookings);
-    });
-  }, [setLoading, setBookings]);
 
 
   return (
@@ -212,11 +216,15 @@ export default function UserNewBooking({navigation, route}) {
 
       <View style={{alignItems: 'center'}}>
         <Button
-          title="Modifier"
+          icon={<Icon
+            name='save'
+            color='white'
+            style={{marginRight: 10}}
+          />}
+          title='Modifier'
           disabled={step < 3}
           onPress={handleEdit}
           buttonStyle={styles.button}
-          icon={<Icon name='save' color='white' style={{marginRight: 10}}/>}
         />
         <TouchableOpacity style={{alignItems: 'center', padding: 10, marginTop: 20}} onPress={handleCancel}>
           <Text style={styles.delete}>Annuler ma réservation</Text>

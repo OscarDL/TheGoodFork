@@ -5,33 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
-import { registerUser } from '../../Functions/auth';
+import { register } from '../../Functions/auth';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
-const handleRegister = (user, dispatch) => {
-  registerUser(user).then(async (res) => {
-    if (!res.success) return (
-      Toast.show({
-        text1: "Erreur d'inscription",
-        text2: res,
-        
-        type: 'error',
-        position: 'bottom',
-        visibilityTime: 1500
-      })
-    );
-
-    dispatch({ type: 'SET_USER', user: res.user });
-    dispatch({ type: 'SET_TOKEN', token: res.token });
-    await AsyncStorage.setItem('authToken', res.token);
-  });
-}
-
-
-export default function Register({navigation}) {
+export default function Register() {
   const [{}, dispatch] = useDataLayerValue();
-  const [userRegister, setUserRegister] = useState({
+  const [user, setUser] = useState({
     email: '',
     firstName: '',
     lastName: '',
@@ -39,6 +19,25 @@ export default function Register({navigation}) {
     passCheck: '',
     type: 'user'
   });
+
+
+  const handleRegister = () => {
+    register(user).then(async (res) => {
+      if (!res.success) return (
+        Toast.show({
+          text1: "Erreur d'inscription",
+          text2: res,
+          
+          type: 'error',
+          position: 'bottom',
+          visibilityTime: 1500
+        })
+      );
+  
+      await AsyncStorage.setItem('authToken', res.token);
+      dispatch({ type: 'LOGIN', user: res.user, token: res.token });
+    });
+  };
 
 
   return (
@@ -53,27 +52,25 @@ export default function Register({navigation}) {
       </Text>
       
       <View>
-        <Input placeholder='First name' onChangeText={firstName => setUserRegister({ ...userRegister, firstName })} />
-        <Input placeholder='Last name' onChangeText={lastName => setUserRegister({ ...userRegister, lastName })} />
-        <Input placeholder='Email address' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setUserRegister({ ...userRegister, email })} />
-        <Input placeholder='Password' autoCapitalize='none' secureTextEntry onChangeText={password => setUserRegister({ ...userRegister, password })} />
-        <Input placeholder='Confirm password' autoCapitalize='none' secureTextEntry onChangeText={passCheck => setUserRegister({ ...userRegister, passCheck })} />
+        <Input placeholder='Prénom' onChangeText={firstName => setUser({...user, firstName})}/>
+        <Input placeholder='Nom' onChangeText={lastName => setUser({...user, lastName})}/>
+        <Input placeholder='Adresse email' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setUser({...user, email})}/>
+        <Input placeholder='Mot de passe' autoCapitalize='none' secureTextEntry onChangeText={password => setUser({...user, password})}/>
+        <Input placeholder='Confirmation' autoCapitalize='none' secureTextEntry onChangeText={passCheck => setUser({...user, passCheck})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
-          buttonStyle={[styles.button]}
-          title="S'enregistrer"
           icon={<Icon
-            size={28}
             color='white'
             name='how-to-reg'
             style={{marginRight: 10}}
           />}
-          onPress={() => handleRegister(userRegister, dispatch)}
+          title="S'enregistrer"
+          onPress={handleRegister}
+          buttonStyle={[styles.button]}
         />
       </View>
-      <View></View>
     </KeyboardAvoidingView>
   );
 }

@@ -1,15 +1,10 @@
 import axios from 'axios';
 
 import { apiUrl } from '../../config';
+import { config, authConfig } from './utils';
 
 
 export const getDishes = async (type = null) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
     const {data} = await axios.get(apiUrl + 'dishes', config);
 
@@ -30,16 +25,8 @@ export const getDishes = async (type = null) => {
 
 
 export const createDish = async (dish, token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
-  
-
   try {
-    const {data} = await axios.post(apiUrl + 'dishes/create', dish, config);
+    const {data} = await axios.post(apiUrl + 'dishes', dish, authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -54,15 +41,8 @@ export const createDish = async (dish, token) => {
 
 
 export const editDish = async (token, id, dish) => {
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
-    const {data} = await axios.put(apiUrl + 'dishes/update/' + id, dish, config);
+    const {data} = await axios.put(apiUrl + 'dishes/' + id, dish, authConfig(token));
 
     if (!data.success) return data?.error;
 
@@ -76,15 +56,8 @@ export const editDish = async (token, id, dish) => {
 
 
 export const deleteDish = async (token, id, dish) => {
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
-    const {data} = await axios.delete(apiUrl + 'dishes/delete/' + id, config);
+    const {data} = await axios.delete(apiUrl + 'dishes/' + id, authConfig(token));
 
     if (!data.success) return data?.error;
 
