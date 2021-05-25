@@ -41,6 +41,4 @@ export const getPeriod = (period) => {
 };
 
 
-export const truncPrice = (price) => (
-  ~~(price * 100) / 100
-);
+export const truncPrice = (price) => Number(price).toFixed(2);

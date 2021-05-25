@@ -4,7 +4,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
-import { login } from '../../Functions/auth';
+import { login } from '../../Functions/user';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { useDataLayerValue } from '../Context/DataLayer';

@@ -137,7 +137,7 @@ export default function UserSubmitOrder({navigation, route}) {
         </View>
         
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, tip: !collapsed.tip})}>
-          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name='expand-less'/>
           <Text style={styles.sectionText}>Pourboire</Text>
           <Icon style={{paddingHorizontal: 10}} name={collapsed.tip ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>
@@ -148,9 +148,9 @@ export default function UserSubmitOrder({navigation, route}) {
               placeholder={{}}
               style={pickerStyle}
               defaultValue={order.tip}
-              onValueChange={tip => setTip(order.price * tip/100)}
+              onValueChange={tip => setTip(tip)}
               items={Array.from(Array(11), (_, i) => i * 5).map(tip => (
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + tip + ' %', value: truncPrice(order.price * tip/100), key: tip / 5 }
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + tip + ' %', value: (order.price * tip/100), key: tip / 5 }
               ))}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
@@ -158,7 +158,7 @@ export default function UserSubmitOrder({navigation, route}) {
         </Collapsible>
 
         <TouchableOpacity style={styles.sectionTitle} onPress={() => setCollapsed({...collapsed, order: !collapsed.order})}>
-          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name={'expand-less'}/>
+          <Icon style={{opacity: 0, paddingHorizontal: 10} /* Center title */} name='expand-less'/>
           <Text style={styles.sectionText}>Commande</Text>
           <Icon style={{paddingHorizontal: 10}} name={collapsed.order ? 'expand-more' : 'expand-less'}/>
         </TouchableOpacity>

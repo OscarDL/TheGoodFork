@@ -49,28 +49,28 @@ const failureAlert = (error, navigation, setRetry) => {
 
 export default function AdminDishes({navigation}) {
   const isFocused = useIsFocused();
+  const [type, setType] = useState('all');
   const [retry, setRetry] = useState(false);
   const [dishes, setDishes] = useState(null);
-  const [dishType, setDishType] = useState('all');
 
   useEffect(() => {
     if (isFocused || retry) getDishes().then(res => {
       res.success ? setDishes(res.dishes) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });
-  }, [isFocused, retry, setRetry]);
+  }, [isFocused, retry, setRetry, setDishes]);
 
 
   return dishes ? (
     <SafeAreaView style={styles.container}>
       {dishes?.length > 0 ? (
-        <ScrollView>
-          <View style={{alignItems: 'center', marginTop: 30, marginBottom: 15}}>
+        <ScrollView contentContainerStyle={{paddingVertical: 5}}>
+          <View style={{alignItems: 'center', marginVertical: 30}}>
             <Text style={{marginBottom: 10}}>Catégorie à afficher</Text>
             
             <View style={styles.pickerView}>
               <Picker
-                onValueChange={type => setDishType(type)}
+                onValueChange={type => setType(type)}
                 items={[
                   { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Tous les plats', value: 'all', key: 0 },
                   { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrées', value: 'appetizer', key: 1 },
@@ -79,16 +79,16 @@ export default function AdminDishes({navigation}) {
                   { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons', value: 'drink', key: 4 },
                   { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons alcoolisées', value: 'alcohol', key: 5 }
                 ]}
+                value={type}
                 placeholder={{}}
-                value={dishType}
                 style={pickerStyle}
                 Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
               />
             </View>
           </View>
 
-          <View style={{marginVertical: 5}}>
-            {(dishType === 'appetizer' || dishType === 'all') && <>
+          <View>
+            {(type === 'appetizer' || type === 'all') && <>
               <Text style={styles.title}>Entrées</Text>
               {dishes?.map((dish, i) => dish.type === 'appetizer' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
@@ -96,7 +96,7 @@ export default function AdminDishes({navigation}) {
               />)}
             </>}
 
-            {(dishType === 'mainDish' || dishType === 'all') && <>
+            {(type === 'mainDish' || type === 'all') && <>
               <Text style={styles.title}>Plats</Text>
               {dishes?.map((dish, i) => dish.type === 'mainDish' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
@@ -104,7 +104,7 @@ export default function AdminDishes({navigation}) {
               />)}
             </>}
 
-            {(dishType === 'dessert' || dishType === 'all') && <>
+            {(type === 'dessert' || type === 'all') && <>
               <Text style={styles.title}>Desserts</Text>
               {dishes?.map((dish, i) => dish.type === 'dessert' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
@@ -112,7 +112,7 @@ export default function AdminDishes({navigation}) {
               />)}
             </>}
 
-            {(dishType === 'drink' || dishType === 'all') && <>
+            {(type === 'drink' || type === 'all') && <>
               <Text style={styles.title}>Boissons</Text>
               {dishes?.map((dish, i) => dish.type === 'drink' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
@@ -120,7 +120,7 @@ export default function AdminDishes({navigation}) {
               />)}
             </>}
 
-            {(dishType === 'alcohol' || dishType === 'all') && <>
+            {(type === 'alcohol' || type === 'all') && <>
               <Text style={styles.title}>Boissons alcoolisées</Text>
               {dishes?.map((dish, i) => dish.type === 'alcohol' && <BaseCard
                 key={i} icon='how-to-reg' navigation={navigation} screen='AdminEditDish' description={dish?.detail || 'Aucun détail'}
@@ -134,7 +134,7 @@ export default function AdminDishes({navigation}) {
             <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Aucun plat n'a été ajouté.</Text>
           </View>
         )}
-      <FAB style={styles.fab} icon='plus' color='white' onPress={() => navigation.navigate('AdminCreateDish')}/>
+      <FAB style={styles.fab} icon='plus' color='white' onPress={() => navigation.navigate('AdminCreateDish', {type: type === 'all' ? null : type})}/>
     </SafeAreaView>
   ) : (
     <View style={styles.container}>

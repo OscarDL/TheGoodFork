@@ -18,6 +18,7 @@ export const getStaff = async (token) => {
 
 export const createStaff = async (staff, token) => {
   try {
+    staff.email = staff.email.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'staff', staff, authConfig(token));
 
     if (!data.success) return data?.error;

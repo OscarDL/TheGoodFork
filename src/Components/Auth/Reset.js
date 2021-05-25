@@ -4,7 +4,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
-import { resetPassword } from '../../Functions/auth';
+import { resetPassword } from '../../Functions/user';
 
 
 export default function Reset({navigation}) {

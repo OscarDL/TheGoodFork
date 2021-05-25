@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
-import { register } from '../../Functions/auth';
+import { register } from '../../Functions/user';
 import { useDataLayerValue } from '../Context/DataLayer';
 
 
@@ -46,8 +46,8 @@ export default function Register() {
       behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
       <Text style={{textAlign: 'center'}}>Sécurité du mot de passe :
-        <Text style={{color: userRegister.password.length < 8 ? '#f22' : (userRegister.password.length < 12 ? 'orange' : 'limegreen')}}>
-          {userRegister.password.length < 8 ? ' FAIBLE' : (userRegister.password.length < 12 ? ' MOYENNE' : ' HAUTE')}
+        <Text style={{color: user.password.length < 8 ? '#f22' : (user.password.length < 12 ? 'orange' : 'limegreen')}}>
+          {user.password.length < 8 ? ' FAIBLE' : (user.password.length < 12 ? ' MOYENNE' : ' HAUTE')}
         </Text>
       </Text>
       

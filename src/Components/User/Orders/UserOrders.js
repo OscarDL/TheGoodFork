@@ -9,14 +9,14 @@ import { View, ScrollView, Text, Alert, Platform, TouchableOpacity, ActivityIndi
 import UserNewOrder from './UserNewOrder';
 import UserPayOrder from './UserPayOrder';
 import UserEditOrder from './UserEditOrder';
-import UserSubmitOrder from './UserSubmitOrder';
-import UserOrderDetails from './UserOrderDetails';
 import BaseCard from '../../../Shared/BaseCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import UserSubmitOrder from './UserSubmitOrder';
+import UserOrderDetails from './UserOrderDetails';
 import { getOrders } from '../../../Functions/orders';
-import { useDataLayerValue } from '../../Context/DataLayer';
 import { truncPrice } from '../../../Functions/utils';
+import { useDataLayerValue } from '../../Context/DataLayer';
 
 
 const Stack = createStackNavigator();

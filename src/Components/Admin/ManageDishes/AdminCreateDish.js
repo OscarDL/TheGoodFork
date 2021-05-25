@@ -26,14 +26,14 @@ const pickerStyle = {
 };
 
 
-export default function AdminCreateDish({navigation}) {
+export default function AdminCreateDish({navigation, route}) {
   const [{token}] = useDataLayerValue();
   const [dish, setDish] = useState({
     name: '',
     detail: '',
     price: null,
     stock: null,
-    type: 'appetizer'
+    type: route.params.type ?? 'appetizer'
   });
 
 

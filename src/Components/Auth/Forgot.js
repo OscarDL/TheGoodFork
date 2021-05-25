@@ -4,7 +4,7 @@ import { Button, Icon, Input } from 'react-native-elements';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
-import { sendEmail } from '../../Functions/auth';
+import { sendEmail } from '../../Functions/user';
 
 
 export default function Forgot({navigation}) {

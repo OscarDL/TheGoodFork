@@ -30,13 +30,3 @@ export const getIntent = async (intent, token) => {
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
-
-
-export const cancelIntent = async (intent, token) => {
-  try {
-    const {data} = await axios.get(apiUrl + 'stripe/refund/' + intent, authConfig(token));
-
-    return data.success ? data : data?.error;
-    
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};

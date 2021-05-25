@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { createStaff } from '../../../Functions/staff';
@@ -26,7 +26,7 @@ const pickerStyle = {
 };
 
 
-export default function AdminRegisterStaff({navigation}) {
+export default function AdminRegisterStaff({navigation, route}) {
   const [{token}] = useDataLayerValue();
   const [staff, setStaff] = useState({
     email: '',
@@ -34,7 +34,7 @@ export default function AdminRegisterStaff({navigation}) {
     lastName: '',
     password: '',
     passCheck: '',
-    type: 'admin'
+    type: route.params.type ?? 'admin'
   });
 
 
@@ -96,10 +96,6 @@ export default function AdminRegisterStaff({navigation}) {
           buttonStyle={[styles.button]}
         />
       </View>
-      
-      <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('AdminStaffList')}>
-        <Text style={styles.link}>Modifier un membre existant</Text>
-      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }

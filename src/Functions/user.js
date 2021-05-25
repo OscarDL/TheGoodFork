@@ -9,7 +9,7 @@ import { config, authConfig } from './utils';
 export const login = async (user) => {
   try {
     user.email = user.email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'auth/login', user, config);
+    const {data} = await axios.post(apiUrl + 'user/login', user, config);
 
     if (!data.success) return data?.error;
     
@@ -22,7 +22,7 @@ export const login = async (user) => {
 export const register = async (user) => {
   try {
     user.email = user.email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'auth/register', user, config);
+    const {data} = await axios.post(apiUrl + 'user/register', user, config);
 
     if (!data.success) return data?.error;
 
@@ -32,9 +32,9 @@ export const register = async (user) => {
 };
 
 
-export const dispatchUserData = async (token) => {
+export const getUserData = async (token) => {
   try {
-    const {data} = await axios.get(apiUrl + 'auth', authConfig(token));
+    const {data} = await axios.get(apiUrl + 'user', authConfig(token));
     
     if (!data.success) return data?.error;
 
@@ -47,7 +47,7 @@ export const dispatchUserData = async (token) => {
 export const sendEmail = async (email) => {
   try {
     email = email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'auth/forgot', {email}, config);
+    const {data} = await axios.put(apiUrl + 'user/forgot', {email}, config);
 
     if (!data.success) return data?.error;
     
@@ -65,7 +65,7 @@ export const resetPassword = async (token, password, passCheck) => {
   if (!token) return 'Veuillez entrer le code reçu par email.';
 
   try {
-    const {data} = await axios.put(apiUrl + 'auth/reset/' + token, {password, passCheck}, config);
+    const {data} = await axios.put(apiUrl + 'user/reset/' + token, {password, passCheck}, config);
 
     if (!data.success) return data?.error;
     
@@ -78,12 +78,42 @@ export const resetPassword = async (token, password, passCheck) => {
 };
 
 
+export const updateUser = async (user, token) => {
+  try {
+    user.email = user.email.replace(' ', '');
+    const {data} = await axios.put(apiUrl + 'user', user, authConfig(token));
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Modification réussie',
+      desc: 'Votre compte a bien été mis à jour.',
+      user: data.user
+    };
+    
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const deleteUser = async (token) => {
+  try {
+    const {data} = await axios.delete(apiUrl + 'user', authConfig(token));
+    
+    if (!data.success) return data?.error;
+
+    return data;
+    
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
 export const checkLogin = async (dispatch) => {
   const token = await AsyncStorage.getItem('authToken');
 
   if (!token) return dispatch({ type: 'LOGIN', user: null, token: '' });
 
-  dispatchUserData(token).then(async (res) => {
+  getUserData(token).then(async (res) => {
     if (res.success) return dispatch({ type: 'LOGIN', user: res.user, token });
     
     Alert.alert(
