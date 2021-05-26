@@ -18,22 +18,22 @@ export default function Login({navigation}) {
   });
 
   
-  const loginUser = () => {
-    login(userLogin).then(async (res) => {
-      if (!res.success) return (
-        Toast.show({
-          text1: 'Erreur de connexion',
-          text2: res,
-          
-          type: 'error',
-          position: 'bottom',
-          visibilityTime: 1500
-        })
-      );
+  const loginUser = async () => {
+    const res = await login(userLogin);
+
+    if (!res.success) return (
+      Toast.show({
+        text1: 'Erreur de connexion',
+        text2: res,
+        
+        type: 'error',
+        position: 'bottom',
+        visibilityTime: 1500
+      })
+    );
   
-      await AsyncStorage.setItem('authToken', res.token);
-      dispatch({ type: 'LOGIN', user: res.user, token: res.token });
-    });
+    await AsyncStorage.setItem('authToken', res.token);
+    dispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 
 

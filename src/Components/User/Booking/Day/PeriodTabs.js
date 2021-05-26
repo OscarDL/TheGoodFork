@@ -15,7 +15,7 @@ const style = {
 };
 
 
-export default function SubmitOrderTabs({bookings, setRefresh, day}) {
+export default function SubmitOrderTabs({tables, bookings, setRefresh, day}) {
   return (
     <Tabs.Navigator
       backBehavior='none'
@@ -23,16 +23,16 @@ export default function SubmitOrderTabs({bookings, setRefresh, day}) {
       initialRouteName='Matin'
     >
       <Tabs.Screen name='Matin'>
-        {props => <BookingPeriod {...props} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={1}/>}
+        {props => <BookingPeriod {...props} tables={tables} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={1}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Midi'>
-        {props => <BookingPeriod {...props} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={2}/>}
+        {props => <BookingPeriod {...props} tables={tables} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={2}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Apres Midi'>
-        {props => <BookingPeriod {...props} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={3}/>}
+        {props => <BookingPeriod {...props} tables={tables} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={3}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Soir'>
-        {props => <BookingPeriod {...props} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={4}/>}
+        {props => <BookingPeriod {...props} tables={tables} bookings={bookings} setRefresh={setRefresh} dateBooked={day} period={4}/>}
       </Tabs.Screen>
     </Tabs.Navigator>
   );

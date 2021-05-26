@@ -16,9 +16,9 @@ export const getTables = async (token) => {
 };
 
 
-export const addTables = async (tables, token) => {
+export const updateTables = async (amount, token) => {
   try {
-    const {data} = await axios.put(apiUrl + 'tables', tables, authConfig(token));
+    const {data} = await axios.put(apiUrl + 'tables', {amount}, authConfig(token));
 
     if (!data.success) return data?.error;
 

@@ -4,7 +4,6 @@ import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
-import { totalTables } from '../../../../../config';
 
 
 const pickerStyle = {
@@ -34,7 +33,7 @@ const pickerBg = {
 };
 
 
-export default function PeriodPicker({setStep, setShow, booking, bookings, setBooking}) {
+export default function PeriodPicker({tables, setStep, setShow, booking, bookings, setBooking}) {
   return (
     <View style={{...styles.iosDateBackdrop, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.25)'}}>
       <View style={pickerBg}>
@@ -61,13 +60,13 @@ export default function PeriodPicker({setStep, setShow, booking, bookings, setBo
             setStep(2);
             setShow(null);
 
-            const tables = Array.from(Array(totalTables), (_, i) => i + 1);
+            const total = Array.from(Array(tables), (_, i) => i + 1);
             bookings
               .filter(thisBooking => thisBooking.period === booking.period)
-              .forEach(thisBooking => tables.splice(tables.indexOf(thisBooking.table), 1));
+              .forEach(thisBooking => total.splice(total.indexOf(thisBooking.table), 1));
               
             // Select lowest available table by default to avoid submit error
-            setBooking({ ...booking, table: Math.min(...tables) });
+            setBooking({ ...booking, table: Math.min(...total) });
           }}>
             <Text style={{color: '#28f', fontSize: 18, padding: 20}}>Terminé</Text>
           </TouchableOpacity>

@@ -5,6 +5,7 @@ import { ActivityIndicator, Platform, SafeAreaView, View } from 'react-native';
 import PeriodTabs from './PeriodTabs';
 import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
+import { getTables } from '../../../../Functions/tables';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings } from '../../../../Functions/bookings';
 
@@ -14,16 +15,22 @@ export default function Bookings({navigation, route}) {
   
   const isFocused = useIsFocused();
   const [{token}] = useDataLayerValue();
+  const [tables, setTables] = useState(null);
   const [bookings, setBookings] = useState(null);
 
   useEffect(() => {
-    isFocused && getDayBookings(day, token).then(bookings => setBookings(bookings));
-  }, [isFocused, setBookings]);
+    isFocused && getDayBookings(day, token).then(bookings => (
+      getTables(token).then(res => {
+        setBookings(bookings);
+        setTables(res.tables.amount);
+      })
+    ));
+  }, [isFocused, setTables, setBookings]);
 
   
   return (
     <SafeAreaView style={styles.container}>
-      {bookings ? <PeriodTabs bookings={bookings} navigation={navigation} day={day}/> : <View style={styles.container}>
+      {bookings ? <PeriodTabs tables={tables} bookings={bookings} navigation={navigation} day={day}/> : <View style={styles.container}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>}
     </SafeAreaView>

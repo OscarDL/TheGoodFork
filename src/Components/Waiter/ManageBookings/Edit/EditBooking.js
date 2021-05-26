@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
+import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -8,7 +8,7 @@ import TablePicker from './TablePicker';
 import PeriodPicker from './PeriodPicker';
 import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
-import { getPeriod } from '../../../../Functions/utils';
+import { getTables } from '../../../../Functions/tables';
 import { useDataLayerValue } from '../../../Context/DataLayer';
 import { getDayBookings, editBooking, deleteBooking } from '../../../../Functions/bookings';
 
@@ -36,16 +36,20 @@ export default function UserNewBooking({navigation, route}) {
   const [step, setStep] = useState(3);
   const [show, setShow] = useState(null);
   
+  const [tables, setTables] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState(null);
   const [booking, setBooking] = useState(route.params.booking);
   
   useEffect(() => {
-    getDayBookings(booking.dateBooked, token).then(bookings => {
-      setLoading(false);
-      setBookings(bookings);
-    });
-  }, [setLoading, setBookings]);
+    getDayBookings(booking.dateBooked, token).then(bookings => (
+      getTables(token).then(res => {
+        setLoading(false);
+        setBookings(bookings);
+        setTables(res.tables.amount);
+      })
+    ));
+  }, [setTables, setLoading, setBookings]);
 
 
   const androidChange = (e) => {
@@ -203,6 +207,7 @@ export default function UserNewBooking({navigation, route}) {
       />}
 
       {show === 2 && <TablePicker
+        tables={tables}
         setStep={setStep}
         setShow={setShow}
         booking={booking}

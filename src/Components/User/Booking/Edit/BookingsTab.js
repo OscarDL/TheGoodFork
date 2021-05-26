@@ -18,7 +18,7 @@ export default function BookingsTab({navigation, bookings, future}) {
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         {bookings
           .filter(booking => future ? booking.dateBooked > Date.now() : booking.dateBooked < Date.now())
-          .sort((a, b) => a.dateBooked > b.dateBooked)
+          .sort((a, b) => (a.dateBooked + a.table) > (b.dateBooked + b.table)) // append table to sort by table too
           .map((booking, i) => {
             const date = new Date(booking.dateBooked);
             return <BaseCard

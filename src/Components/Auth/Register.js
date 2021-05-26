@@ -21,22 +21,22 @@ export default function Register() {
   });
 
 
-  const handleRegister = () => {
-    register(user).then(async (res) => {
-      if (!res.success) return (
-        Toast.show({
-          text1: "Erreur d'inscription",
-          text2: res,
-          
-          type: 'error',
-          position: 'bottom',
-          visibilityTime: 1500
-        })
-      );
+  const handleRegister = async () => {
+    const res = await register(user);
+
+    if (!res.success) return (
+      Toast.show({
+        text1: "Erreur d'inscription",
+        text2: res,
+        
+        type: 'error',
+        position: 'bottom',
+        visibilityTime: 1500
+      })
+    );
   
-      await AsyncStorage.setItem('authToken', res.token);
-      dispatch({ type: 'LOGIN', user: res.user, token: res.token });
-    });
+    await AsyncStorage.setItem('authToken', res.token);
+    dispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 
 

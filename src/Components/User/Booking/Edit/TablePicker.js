@@ -4,7 +4,6 @@ import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
-import { totalTables } from '../../../../../config';
 
 
 const pickerStyle = {
@@ -33,12 +32,12 @@ const pickerBg = {
   borderRadius: Platform.OS === 'ios' ? 10 : 5
 };
 
-const tables = Array.from(Array(totalTables), (_, i) => ( // Tables picker list initialization
-  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table ' + (i + 1), value: i + 1, key: i }
-));
 
+export default function TablePicker({tables, setStep, setShow, booking, bookings, setBooking}) {
+  const total = Array.from(Array(tables), (_, i) => ( // Tables picker list initialization
+    { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Table ' + (i + 1), value: i + 1, key: i }
+  ));
 
-export default function TablePicker({setStep, setShow, booking, bookings, setBooking}) {
   return (
     <View style={{...styles.iosDateBackdrop, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.25)'}}>
       <View style={pickerBg}>
@@ -49,7 +48,7 @@ export default function TablePicker({setStep, setShow, booking, bookings, setBoo
             value={booking.table}
             onValueChange={table => setBooking({ ...booking, table })}
             items={
-              tables.filter(table => {
+              total.filter(table => {
                 const taken = [];
                 bookings
                   .filter(thisBooking => thisBooking.period === booking.period)

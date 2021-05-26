@@ -4,7 +4,6 @@ import Toast from 'react-native-toast-message';
 import { ScrollView, Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
-import { totalTables } from '../../../../../config';
 import { getPeriod } from '../../../../Functions/utils';
 import { newBooking } from '../../../../Functions/bookings';
 import { useDataLayerValue } from '../../../Context/DataLayer';
@@ -14,7 +13,7 @@ const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Sa
 const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 
-export default function BookingPeriod({bookings, setRefresh, dateBooked, period}) {
+export default function BookingPeriod({tables, bookings, setRefresh, dateBooked, period}) {
   const [{user, token}] = useDataLayerValue();
   
   const handleSubmit = (table) => {
@@ -26,7 +25,7 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
     const actions = [
       {
         text: 'Réserver',
-        onPress: () => newBooking(booking, user.email, token).then(res => {
+        onPress: () => newBooking(booking, token).then(res => {
           Toast.show({
             text1: res.title ?? 'Erreur de réservation',
             text2: res.desc ?? res,
@@ -54,7 +53,7 @@ export default function BookingPeriod({bookings, setRefresh, dateBooked, period}
   return (
     <View style={styles.container}>
       <ScrollView>
-        {Array.from(Array(totalTables), (_, i) => i + 1).map(table => (
+        {Array.from(Array(tables), (_, i) => i + 1).map(table => (
           <View key={table} style={styles.bookingRow}>
             <Text style={{fontSize: 16}}>Table {table}</Text>
 

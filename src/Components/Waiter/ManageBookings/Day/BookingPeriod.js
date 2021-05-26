@@ -3,14 +3,13 @@ import { Icon } from 'react-native-elements';
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../../Shared/styles';
-import { totalTables } from '../../../../../config';
 
 
-export default function BookingPeriod({bookings, dateBooked, period, navigation}) {
+export default function BookingPeriod({tables, bookings, dateBooked, period, navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {Array.from(Array(totalTables), (_, i) => i + 1).map(table => {
+        {Array.from(Array(tables), (_, i) => i + 1).map(table => {
           const booking = bookings.filter(booking => booking.table === table && booking.period === period);
           return (
             <TouchableOpacity
