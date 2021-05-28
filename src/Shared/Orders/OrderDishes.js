@@ -30,8 +30,8 @@ const failureAlert = (error, navigation, setRetry) => {
 
 
 export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
-  const [dishes, setDishes] = useState(null);
   const [retry, setRetry] = useState(true);
+  const [dishes, setDishes] = useState(null);
 
   useEffect(() => {
     if (retry) {
@@ -43,7 +43,7 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
   }, [retry, setRetry]);
 
   const renderItem = ({item}) => (
-    item.empty
+    item.empty && cols > 1
       ?
     <View style={[styles.item, styles.itemInvisible] /* Show an invisible item for impair dishes number */}/>
       :
@@ -64,6 +64,7 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
         numColumns={cols}
         renderItem={renderItem}
         data={formatGrid(dishes, cols)}
+        keyExtractor={item => item._id}
         contentContainerStyle={{padding: 5}}
       />}
     </View>

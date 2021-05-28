@@ -77,11 +77,17 @@ export default function AdminRegisterStaff({navigation, route}) {
       </View>
 
       <View>
-        <Input placeholder='Prénom' onChangeText={firstName => setStaff({ ...staff, firstName })} />
-        <Input placeholder='Nom' onChangeText={lastName => setStaff({ ...staff, lastName })} />
+        <View style={{flexDirection: 'row'}}>
+          <Input containerStyle={{width: '50%'}} placeholder='Prénom' onChangeText={firstName => setStaff({ ...staff, firstName })} />
+          <Input containerStyle={{width: '50%'}} placeholder='Nom' onChangeText={lastName => setStaff({ ...staff, lastName })} />
+        </View>
+        
         <Input placeholder='Adresse email' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setStaff({ ...staff, email })} />
-        <Input placeholder='Mot de passe' secureTextEntry onChangeText={password => setStaff({ ...staff, password })} />
-        <Input placeholder='Confirmer mot de passe' secureTextEntry onChangeText={passCheck => setStaff({ ...staff, passCheck })} />
+        
+        <View style={{flexDirection: 'row'}}>
+          <Input containerStyle={{width: '50%'}} placeholder='Mot de passe' secureTextEntry onChangeText={password => setStaff({ ...staff, password })} />
+          <Input containerStyle={{width: '50%'}} placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setStaff({ ...staff, passCheck })} />
+        </View>
       </View>
 
       <View style={{alignItems: 'center'}}>

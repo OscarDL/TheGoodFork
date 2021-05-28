@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from 'react-native-elements';
-import TextTicker from 'react-native-text-ticker';
-import { View, Text, Easing } from 'react-native';
+import { View, Text, Image, Easing } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { colors } from '../colors';
@@ -25,33 +24,29 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
 
   return (
     <View style={styles.item}>
-      <View style={small ? {flexDirection: 'column'} : {flexDirection: 'row', alignItems: 'center'}}>
-        <Icon name='how-to-reg' type='material' style={{paddingTop: 8}}/>
+      <View style={{flexDirection: small ? 'column' : 'row'}}>
+        <Image
+          source={{uri: item.image}}
+          style={{
+            marginVertical: 16, marginLeft: small ? 0 : 8, alignSelf: 'center',
+            width: 100, height: (item.type === 'drink' || item.type === 'alcohol') ? 75 : 50
+          }}
+        />
 
-        <View style={{padding: 8, flexGrow: small ? 0 : 1}}>
-          <TextTicker loop
-            scrollSpeed={200}
-            bounceSpeed={100}
-            bounceDelay={1000}
-            marqueeDelay={1000}
-            easing={Easing.linear}
-            bouncePadding={{left: 0, right: 0}}
-            style={{fontSize: 15, fontWeight: '600', paddingVertical: 10}}
+        <View style={{padding: 8, flexShrink: small ? 0 : 1, alignSelf: 'center'}}>
+          <Text
+            numberOfLines={2}
+            style={{
+              fontSize: 16,
+              minWidth: '100%',
+              fontWeight: '700',
+              textAlign: small ? 'center' : 'left'
+            }}
           >
             {item?.name}
-          </TextTicker>
+          </Text>
+          <Text style={{paddingTop: 10}}>{item?.detail || 'Aucun détail'}</Text>
           <Text>{item?.price + ' ' + item?.currency}</Text>
-          <TextTicker loop
-            scrollSpeed={200}
-            bounceSpeed={100}
-            bounceDelay={1000}
-            marqueeDelay={1000}
-            easing={Easing.linear}
-            bouncePadding={{left: 0, right: 0}}
-            style={{paddingTop: 10}}
-          >
-            {item?.detail || 'Aucun détail'}
-          </TextTicker>
         </View>
       </View>
 

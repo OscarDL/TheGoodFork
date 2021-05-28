@@ -67,8 +67,8 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'space-between'
   },
   itemInvisible: {
     color: 'transparent',

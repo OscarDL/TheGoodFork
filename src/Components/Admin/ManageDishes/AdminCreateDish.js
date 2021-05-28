@@ -31,6 +31,7 @@ export default function AdminCreateDish({navigation, route}) {
   const [dish, setDish] = useState({
     name: '',
     detail: '',
+    image: null,
     price: null,
     stock: null,
     type: route.params.type ?? 'appetizer'
@@ -80,25 +81,30 @@ export default function AdminCreateDish({navigation, route}) {
       <View>
         <Input placeholder='Nom' onChangeText={name => setDish({...dish, name})}/>
         <Input placeholder='Détails' onChangeText={detail => setDish({...dish, detail})}/>
-        <Input
-          value={dish.price}
-          keyboardType='numeric'
-          placeholder='Prix (EUR)'
-          onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}
-        />
-        <Input
-          value={dish.stock}
-          keyboardType='numeric'
-          placeholder='Stock (le cas échéant)'
-          onChangeText={stock => setDish({...dish, stock: stock.replace(/[^0-9]/g, '')})}
-        />
+        <View style={{flexDirection: 'row'}}>
+          <Input
+            value={dish.price}
+            keyboardType='numeric'
+            placeholder='Prix (EUR)'
+            containerStyle={{width:'30%'}}
+            onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}
+          />
+          <Input
+            value={dish.stock}
+            keyboardType='numeric'
+            containerStyle={{width:'70%'}}
+            placeholder='Stock (le cas échéant)'
+            onChangeText={stock => setDish({...dish, stock: stock.replace(/[^0-9]/g, '')})}
+          />
+        </View>
+        <Input value={dish.image} placeholder='Image (URL cloudinary)' onChangeText={image => setDish({...dish, image})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
           icon={<Icon
-            name='create'
             color='white'
+            name='restaurant'
             style={{marginRight: 10}}
           />}
           title='Ajouter'

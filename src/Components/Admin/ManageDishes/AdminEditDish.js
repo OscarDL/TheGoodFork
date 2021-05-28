@@ -31,13 +31,7 @@ export default function AdminEditDish({route, navigation}) {
   const {dish} = route.params;
   const [{token}] = useDataLayerValue();
 
-  const [newDish, setNewDish] = useState({
-    name: dish.name,
-    type: dish.type,
-    price: dish.price,
-    stock: dish.stock,
-    detail: dish.detail
-  });
+  const [newDish, setNewDish] = useState(dish);
 
 
   const handleEdit = () => {
@@ -112,28 +106,33 @@ export default function AdminEditDish({route, navigation}) {
       <View>
         <Input value={newDish.name} placeholder='Nom' onChangeText={name => setNewDish({...newDish, name})}/>
         <Input value={newDish.detail} placeholder='Aucun détail' onChangeText={detail => setNewDish({...newDish, detail})}/>
-        <Input
-          keyboardType='numeric'
-          placeholder='Prix (EUR)'
-          value={newDish.price.toString()}
-          onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})}
-        />
-        <Input
-          keyboardType='numeric'
-          value={newDish.stock?.toString()}
-          placeholder='Stock (le cas échéant)'
-          onChangeText={stock => setNewDish({...newDish, stock: stock.replace(/[^0-9]/g, '')})}
-        />
+        <View style={{flexDirection: 'row'}}>
+          <Input
+            keyboardType='numeric'
+            placeholder='Prix (EUR)'
+            containerStyle={{width:'30%'}}
+            value={newDish.price.toString()}
+            onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})}
+          />
+          <Input
+            keyboardType='numeric'
+            containerStyle={{width:'70%'}}
+            value={newDish.stock?.toString()}
+            placeholder='Stock (le cas échéant)'
+            onChangeText={stock => setNewDish({...newDish, stock: stock.replace(/[^0-9]/g, '')})}
+          />
+        </View>
+        <Input value={newDish.image} placeholder='Image (URL cloudinary)' onChangeText={image => setNewDish({...newDish, image})}/>
       </View>
 
       <View style={{alignItems: 'center'}}>
         <Button
           icon={<Icon
-            name='save'
+            name='edit'
             color='white'
             style={{marginRight: 10}}
           />}
-          title='Sauvegarder'
+          title='Modifier'
           onPress={handleEdit}
           buttonStyle={[styles.button]}
         />

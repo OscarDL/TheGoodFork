@@ -109,8 +109,10 @@ export default function AdminEditStaff({route, navigation}) {
       </View>
 
       <View>
-        <Input value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
-        <Input value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
+        <View style={{flexDirection: 'row'}}>
+          <Input containerStyle={{width: '50%'}} value={newStaff.firstName} onChangeText={firstName => setNewStaff({ ...newStaff, firstName })} />
+          <Input containerStyle={{width: '50%'}} value={newStaff.lastName} onChangeText={lastName => setNewStaff({ ...newStaff, lastName })} />
+        </View>
         <Input value={newStaff.email} keyboardType='email-address' autoCapitalize='none' onChangeText={email => setNewStaff({ ...newStaff, email })} />
         <Input placeholder='Changer le mot de passe' secureTextEntry type='password' onChangeText={password => setNewStaff({ ...newStaff, password })} />
       </View>
