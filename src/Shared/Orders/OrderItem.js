@@ -12,13 +12,8 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
   const [quantity, setQuantity] = useState(order[type]?.find(dish => dish && dish._id === item._id)?.quantity || 0);
 
   const addItem = (item, num) => {
+    setQuantity(quantity => quantity + num);
     setOrder(addToOrder(order, type, item, num, setPrice));
-    setQuantity(quantity => {
-      if (quantity + num < 0) return 0;
-      if (item.stock === null) return quantity + num;
-      if (item.stock === 0 || quantity + num > item.stock) return quantity;
-      return quantity + num;
-    });
   };
   
 
@@ -52,7 +47,11 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
 
       {item.stock !== 0 ? (
         <View style={styles.orderItemRow}>
-          <TouchableOpacity style={{minWidth: '30%', borderBottomLeftRadius: 6}} onPress={() => addItem(item, -1)}>
+          <TouchableOpacity
+            disabled={!quantity}
+            onPress={() => addItem(item, -1)}
+            style={{minWidth: '30%', borderBottomLeftRadius: 6}}
+          >
             <Icon name='remove' color={colors.accentPrimary} style={styles.orderItemButton}/>
           </TouchableOpacity>
 
@@ -60,7 +59,11 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
             {item.stock === 0 ? 'Rupture' : (!item.stock ? quantity : quantity + ' / ' + item.stock)}
           </Text>
 
-          <TouchableOpacity style={{minWidth: '30%', borderBottomRightRadius: 6}} onPress={() => addItem(item, 1)}>
+          <TouchableOpacity
+            onPress={() => addItem(item, 1)}
+            style={{minWidth: '30%', borderBottomRightRadius: 6}}
+            disabled={item.stock !== null && quantity >= item.stock}
+          >
             <Icon name='add' color={colors.accentPrimary} style={styles.orderItemButton}/>
           </TouchableOpacity>
         </View>

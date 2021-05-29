@@ -114,11 +114,7 @@ export const addToOrder = (order, type, item, num, setPrice) => {
   
   if (exists || num === -1) {
 
-    if (num === -1 && order[type].find(found => found._id === item._id) === undefined) // don't remove from order below 0
-      return order;
-    else if (num === 1 && item.stock && order[type][index].quantity + num > item.stock) // don't add to order above stock limit
-      return order;
-    else if (num === -1 && order[type][index].quantity === 1) // remote dish from array in dish-type object
+    if (num === -1 && order[type][index].quantity === 1) // remote dish from array in dish-type object
       order[type].splice(index, 1);
     else
       order[type][index].quantity += num;
