@@ -29,7 +29,7 @@ const failureAlert = (error, navigation, setRetry) => {
 };
 
 
-export default function OrderDishes({navigation, type, order, setOrder, setPrice}) {
+export default function OrderDishes({navigation, type, oldOrder, order, setOrder, setPrice}) {
   const [retry, setRetry] = useState(true);
   const [dishes, setDishes] = useState(null);
 
@@ -51,6 +51,7 @@ export default function OrderDishes({navigation, type, order, setOrder, setPrice
       item={item}
       type={type}
       order={order}
+      oldOrder={oldOrder}
       setOrder={setOrder}
       setPrice={setPrice}
       small={cols > 1 ? true : false}

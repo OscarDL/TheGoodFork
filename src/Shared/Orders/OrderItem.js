@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from 'react-native-elements';
-import { View, Text, Image, Easing } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { colors } from '../colors';
@@ -8,8 +8,10 @@ import { styles } from '../styles';
 import { addToOrder } from '../../Functions/orders';
 
 
-export default function OrderItem({item, type, order, setOrder, setPrice, small}) {
-  const [quantity, setQuantity] = useState(order[type]?.find(dish => dish && dish._id === item._id)?.quantity || 0);
+export default function OrderItem({item, type, oldOrder, order, setOrder, setPrice, small}) {
+  // initialQuantity is necessary to get static existing quantities when editing order
+  const initialQuantity = oldOrder?.[type]?.find(dish => dish && dish._id === item._id)?.quantity ?? 0;
+  const [quantity, setQuantity] = useState(order[type]?.find(dish => dish && dish._id === item._id)?.quantity ?? 0);
 
   const addItem = (item, num) => {
     setQuantity(quantity => quantity + num);
@@ -56,7 +58,7 @@ export default function OrderItem({item, type, order, setOrder, setPrice, small}
           </TouchableOpacity>
 
           <Text style={{minWidth: '40%', textAlign: 'center', fontSize: 20}}>
-            {item.stock === 0 ? 'Rupture' : (!item.stock ? quantity : quantity + ' / ' + item.stock)}
+            {item.stock === 0 ? 'Rupture' : (!item.stock ? quantity : quantity + ' / ' + (item.stock + initialQuantity))}
           </Text>
 
           <TouchableOpacity

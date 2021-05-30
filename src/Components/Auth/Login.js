@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { setItemAsync } from 'expo-secure-store';
 import { Button, Input, Icon } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { login } from '../../Functions/user';
@@ -32,7 +32,7 @@ export default function Login({navigation}) {
       })
     );
   
-    await AsyncStorage.setItem('authToken', res.token);
+    await setItemAsync('authToken', res.token);
     dispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 

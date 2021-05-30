@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getItemAsync, deleteItemAsync } from 'expo-secure-store';
 
 import { apiUrl } from '../../config';
 import { config, authConfig } from './utils';
@@ -78,10 +78,10 @@ export const resetPassword = async (token, password, passCheck) => {
 };
 
 
-export const updateUser = async (user, token) => {
+export const updateData = async (user, token) => {
   try {
     user.email = user.email.replace(' ', '');
-    const {data} = await axios.put(apiUrl + 'user', user, authConfig(token));
+    const {data} = await axios.put(apiUrl + 'user/data', user, authConfig(token));
     
     if (!data.success) return data?.error;
 
@@ -89,6 +89,23 @@ export const updateUser = async (user, token) => {
       success: true,
       title: 'Modification réussie',
       desc: 'Votre compte a bien été mis à jour.',
+      user: data.user
+    };
+    
+  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
+};
+
+
+export const updatePassword = async (current, password, passCheck, token) => {
+  try {
+    const {data} = await axios.put(apiUrl + 'user/password', {current, password, passCheck}, authConfig(token));
+    
+    if (!data.success) return data?.error;
+
+    return {
+      success: true,
+      title: 'Modification réussie',
+      desc: 'Votre mot de passe a bien été mis à jour.',
       user: data.user
     };
     
@@ -109,7 +126,7 @@ export const deleteUser = async (token) => {
 
 
 export const checkLogin = async (dispatch) => {
-  const token = await AsyncStorage.getItem('authToken');
+  const token = await getItemAsync('authToken');
 
   if (!token) return dispatch({ type: 'LOGIN', user: null, token: '' });
 
@@ -121,7 +138,7 @@ export const checkLogin = async (dispatch) => {
       [{
         text: 'Compris',
         onPress: async () => {
-          await AsyncStorage.removeItem('authToken');
+          await deleteItemAsync('authToken');
           dispatch({ type: 'LOGIN', user: null, token: '' });
         }
       }]
@@ -131,5 +148,5 @@ export const checkLogin = async (dispatch) => {
 
 
 export const logout = (dispatch) => {
-  AsyncStorage.removeItem('authToken').then(() => checkLogin(dispatch));
+  deleteItemAsync('authToken').then(() => checkLogin(dispatch));
 };

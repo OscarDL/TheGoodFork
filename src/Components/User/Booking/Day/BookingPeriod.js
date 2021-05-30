@@ -3,6 +3,7 @@ import { Icon } from 'react-native-elements';
 import Toast from 'react-native-toast-message';
 import { ScrollView, Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
 
+import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';
 import { newBooking } from '../../../../Functions/bookings';
@@ -64,7 +65,7 @@ export default function BookingPeriod({tables, bookings, setRefresh, dateBooked,
               alignItems: 'center',
               marginRight: -12
             }}>
-              <Text style={{fontSize: 16, color: '#f22'}}>RÉSERVÉE</Text>
+              <Text style={{fontSize: 16, color: colors.red}}>RÉSERVÉE</Text>
               <TouchableOpacity style={{padding: 12}} disabled>
                 <Icon name='add-circle-outline' color='#28d' style={{opacity: 0.5}}/>
               </TouchableOpacity>
@@ -75,7 +76,7 @@ export default function BookingPeriod({tables, bookings, setRefresh, dateBooked,
               alignItems: 'center',
               marginRight: -12
             }}>
-              <Text style={{fontSize: 16, color: '#2b4'}}>DISPONIBLE</Text>
+              <Text style={{fontSize: 16, color: colors.green}}>DISPONIBLE</Text>
               <TouchableOpacity onPress={() => handleSubmit(table)} style={{padding: 12}}>
                 <Icon name='add-circle-outline' color='#28d'/>
               </TouchableOpacity>

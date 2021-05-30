@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { setItemAsync } from 'expo-secure-store';
 import { Button, Input, Icon } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
+import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { register } from '../../Functions/user';
 import { useDataLayerValue } from '../Context/DataLayer';
@@ -35,7 +36,7 @@ export default function Register() {
       })
     );
   
-    await AsyncStorage.setItem('authToken', res.token);
+    await setItemAsync('authToken', res.token);
     dispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 
@@ -45,8 +46,8 @@ export default function Register() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
     >
-      <Text style={{textAlign: 'center'}}>Sécurité du mot de passe :
-        <Text style={{color: user.password.length < 8 ? '#f22' : (user.password.length < 12 ? 'orange' : 'limegreen')}}>
+      <Text style={{textAlign: 'center', paddingHorizontal: 20}}>Sécurité du mot de passe :
+        <Text style={{color: user.password.length < 8 ? colors.red : (user.password.length < 12 ? 'orange' : 'limegreen')}}>
           {user.password.length < 8 ? ' FAIBLE' : (user.password.length < 12 ? ' MOYENNE' : ' HAUTE')}
         </Text>
       </Text>

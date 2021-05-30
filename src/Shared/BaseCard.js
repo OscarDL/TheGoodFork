@@ -29,7 +29,7 @@ export default function BaseCard({
         <View style={{flexShrink: 1, marginLeft: 8}}>
           <Text numberOfLines={1} style={{fontSize: 18, fontWeight: '700', minWidth: '100%'}}>{title}</Text>
           {subtitle && <Text>{subtitle}</Text>}
-          <Text numberOfLines={1} style={{marginTop: 10}}>{description}</Text>
+          <Text style={{marginTop: 10, fontSize: 13}}>{description}</Text>
         </View>
       </TouchComponent>
     </View>

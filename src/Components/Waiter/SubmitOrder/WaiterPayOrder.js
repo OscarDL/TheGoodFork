@@ -34,43 +34,12 @@ export default function WaiterPayOrder({route, navigation}) {
   const [paymentIntent, setPaymentIntent] = useState(null);
 
   const [card, setCard] = useState({
-    cvc: null,
-    number: null,
-    exp_year: null,
-    exp_month: null
+    cvc: '',
+    number: '',
+    exp_year: '',
+    exp_month: ''
   });
 
-
-  const checkBiometrics = async () => {
-    const security = await getEnrolledLevelAsync();
-    const biometricsActive = await isEnrolledAsync(); 
-
-    if (security) {
-      const promptMessage = (security === 2 && biometricsActive) ? (
-        'Paiement sécurisé avec données biométriques.'
-      ) : (
-        'Veuillez entrer votre code de dévérouillage pour effectuer votre paiement sécurisé.'
-      );
-
-      authenticateAsync({promptMessage}).then(res => res.success && handlePayment());
-    } else {
-      const actions = [
-        {
-          text: 'Payer',
-          onPress: () => handlePayment()
-        }, {
-          text: 'Annuler',
-          style: 'cancel'
-        }
-      ];
-      
-      Alert.alert(
-        'Vérification biométrique',
-        "Votre appareil n'a pas d'authentification mise en place pour sécuriser votre achat. Voulez-vous continuer ?",
-        Platform.OS === 'ios' ? actions : actions.reverse()
-      );
-    }
-  };
 
   const handlePayment = async () => {
     setLoading(true);
@@ -145,17 +114,18 @@ export default function WaiterPayOrder({route, navigation}) {
           name='credit-card'
           style={{marginRight: 10}}
         />}
-        onPress={checkBiometrics}
+        onPress={handlePayment}
         buttonStyle={[styles.button, {alignSelf: 'center'}]}
         title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
+        disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
       />
 
-      {webview && paymentIntent && <View style={fullScreen}>
+      {(webview && paymentIntent) ? <View style={fullScreen}>
         <WebView source={{uri: webview}} onNavigationStateChange={({loading, url}) => {
           setLoading(loading);
           if (!loading && url.includes('https://hooks.stripe.com/3d_secure/complete')) finalizePayment(paymentIntent);
         }}/>
-      </View>}
+      </View> : null}
 
       {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>

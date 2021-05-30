@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 12,
-    backgroundColor: '#805A48',
+    backgroundColor: colors.accentPrimary,
     borderRadius: Platform.OS === 'ios' ? 8 : 4
   },
   title: {
@@ -22,13 +22,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   link: {
-    color: '#28e',
-    fontSize: 16
+    fontSize: 16,
+    color: colors.blue
   },
   delete: {
     fontSize: 16,
-    color: '#f22',
-    fontWeight: '600'
+    fontWeight: '600',
+    color: colors.red
   },
   card: {
     padding: 10,
@@ -147,8 +147,8 @@ export const styles = StyleSheet.create({
   searchBarCancel: {
     padding: 10,
     fontSize: 16,
-    color: '#27e',
-    paddingLeft: 0
+    paddingLeft: 0,
+    color: colors.blue
   },
   iosDateBackdrop: {
     top: 0,

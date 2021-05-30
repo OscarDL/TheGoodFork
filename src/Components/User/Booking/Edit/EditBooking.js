@@ -140,7 +140,7 @@ export default function UserNewBooking({navigation, route}) {
           activeOpacity={0.66}
           onPress={() => setShow(0)}
         >
-          <View style={{...circle, backgroundColor: step > 0 ? '#2b4d' : '#ea0'}}>
+          <View style={{...circle, backgroundColor: step > 0 ? colors.green : colors.yellow}}>
             <Icon name={step > 0 ? 'event-available' : 'event-busy'} color='white' size={48}/>
           </View>
           <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Date</Text>
@@ -151,7 +151,7 @@ export default function UserNewBooking({navigation, route}) {
           activeOpacity={0.66}
           onPress={() => setShow(1)}
         >
-          <View style={{...circle, backgroundColor: step > 1 ? '#2b4d' : '#ea0'}}>
+          <View style={{...circle, backgroundColor: step > 1 ? colors.green : colors.yellow}}>
             <Icon name={step > 1 ? 'schedule' : 'more-time'} color='white' size={48}/>
           </View>
           <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Période</Text>
@@ -163,7 +163,7 @@ export default function UserNewBooking({navigation, route}) {
           activeOpacity={0.66}
           onPress={() => setShow(2)}
         >
-          <View style={{...circle, opacity: step > 1 ? 1 : 0.5, backgroundColor: step > 2 ? '#2b4d' : '#ea0'}}>
+          <View style={{...circle, opacity: step > 1 ? 1 : 0.5, backgroundColor: step > 2 ? colors.green : colors.yellow}}>
             <Icon name={step > 2 ? 'restaurant' : 'no-meals'} color='white' size={48}/>
           </View>
           <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Table</Text>
@@ -183,10 +183,10 @@ export default function UserNewBooking({navigation, route}) {
           />
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <TouchableOpacity onPress={() => setShow(null)}>
-              <Text style={{padding: 24, color: '#f22', fontSize: 18}}>Cancel</Text>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: '#28f', fontWeight: '500', fontSize: 18}}>Done</Text>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>

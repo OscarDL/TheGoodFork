@@ -85,7 +85,7 @@ export default OrderDetails = ({order, hideDetails = false, showPrice = true}) =
         Total : {truncPrice(order.price + order.tip)} EUR
       </Text>
       {order.tip ? <Text style={{fontSize: 16, alignSelf: 'center', marginBottom: 10}}>
-        Pourboire inclus : {order.tip} EUR
+        Pourboire inclus : {order.tip.toFixed(2)} EUR
       </Text> : null}
     </>}
   </View>

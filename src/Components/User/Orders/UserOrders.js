@@ -194,10 +194,10 @@ function UserOrderTabs({navigation}) {
           />
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <TouchableOpacity onPress={iosCancel}>
-              <Text style={{padding: 24, color: '#f22', fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: '#28f', fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
             </TouchableOpacity>
           </View>
         </View>

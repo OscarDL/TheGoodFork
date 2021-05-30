@@ -12,7 +12,6 @@ import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
 
 import AdminHome from './Admin/AdminHome';
-import AdminSettings from './Admin/AdminSettings';
 import AdminTablesList from './Admin/AdminTablesList';
 import AdminSalesStats from './Admin/AdminSalesStats';
 import AdminStocksStats from './Admin/AdminStocksStats';
@@ -45,15 +44,15 @@ import CookHome from './Cook/CookHome';
 import CookOrderDetails from './Cook/CookOrderDetails';
 
 import UserDishes from './User/UserDishes';
-import UserAccount from './User/UserAccount';
 import UserOrders from './User/Orders/UserOrders';
+import UserAccount from './User/Account/UserAccount';
 import UserPlanning from './User/Booking/UserPlanning';
 
 import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
 import { StatusBar } from 'expo-status-bar';
+import { checkLogin } from '../Functions/user';
 import LogoutButton from '../Shared/LogoutButton';
-import { checkLogin, logout } from '../Functions/user';
 import { useDataLayerValue } from './Context/DataLayer';
 
 
@@ -86,7 +85,6 @@ export default function Routes() {
         headerRight: () => <LogoutButton/>,
         headerRightContainerStyle: {marginRight: 5}
       }}/>
-      <Stack.Screen name='AdminSettings' options={{title: 'Réglages', cardStyleInterpolator: iosV}} component={AdminSettings}/>
       <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
       <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
       <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: iosH}} component={AdminStaffList} />

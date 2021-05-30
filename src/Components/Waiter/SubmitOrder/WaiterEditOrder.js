@@ -27,7 +27,7 @@ export default function WaiterEditOrder({navigation, route}) {
 
 
   return newOrder ? <>
-    <SubmitOrderTabs order={newOrder} setOrder={setNewOrder} setPrice={setPrice}/>
+    <SubmitOrderTabs oldOrder={route.params.order} order={newOrder} setOrder={setNewOrder} setPrice={setPrice}/>
 
     <SafeAreaView style={styles.orderStrip}>
       <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price} EUR</Text>

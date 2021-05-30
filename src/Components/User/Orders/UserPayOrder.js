@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
 import WebView from 'react-native-webview';
 import Toast from 'react-native-toast-message';
+import { getItemAsync } from 'expo-secure-store';
+import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
 import { Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
@@ -34,14 +35,14 @@ export default function UserPayOrder({route, navigation}) {
   const [paymentIntent, setPaymentIntent] = useState(null);
 
   const [card, setCard] = useState({
-    cvc: null,
-    number: null,
-    exp_year: null,
-    exp_month: null
+    cvc: '',
+    number: '',
+    exp_year: '',
+    exp_month: ''
   });
 
 
-  const checkBiometrics = async () => {
+  const checkBiometrics = async (card) => {
     const security = await getEnrolledLevelAsync();
     const biometricsActive = await isEnrolledAsync(); 
 
@@ -52,23 +53,9 @@ export default function UserPayOrder({route, navigation}) {
         'Veuillez entrer votre code de dévérouillage pour effectuer votre paiement sécurisé.'
       );
 
-      authenticateAsync({promptMessage}).then(res => res.success && handlePayment());
+      authenticateAsync({promptMessage}).then(res => res.success && setCard(card));
     } else {
-      const actions = [
-        {
-          text: 'Payer',
-          onPress: () => handlePayment()
-        }, {
-          text: 'Annuler',
-          style: 'cancel'
-        }
-      ];
-      
-      Alert.alert(
-        'Vérification biométrique',
-        "Votre appareil n'a pas d'authentification mise en place pour sécuriser votre achat. Voulez-vous continuer ?",
-        Platform.OS === 'ios' ? actions : actions.reverse()
-      );
+      setCard(card);
     }
   };
 
@@ -141,6 +128,31 @@ export default function UserPayOrder({route, navigation}) {
   };
 
 
+  useEffect(() => {
+    const getCard = async () => {
+      const card = await getItemAsync('card');
+      if (!card) return;
+
+      const actions = [
+        {
+          text: 'Utiliser',
+          onPress: () => checkBiometrics(JSON.parse(card))
+        }, {
+          text: 'Ne pas utiliser',
+          style: 'cancel'
+        }
+      ];
+      Alert.alert(
+        'Données de paiement',
+        'Voulez-vous utiliser vos données de paiement sauvegardées ?',
+        Platform.OS === 'ios' ? actions : actions.reverse()
+      );
+    };
+
+    getCard();
+  }, []);
+
+
   return (
     <KeyboardAvoidingView style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -153,17 +165,18 @@ export default function UserPayOrder({route, navigation}) {
           name='credit-card'
           style={{marginRight: 10, padding: 2}}
         />}
-        onPress={checkBiometrics}
+        onPress={handlePayment}
         buttonStyle={[styles.button, {alignSelf: 'center'}]}
         title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
+        disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
       />
 
-      {webview && paymentIntent && <View style={fullScreen}>
+      {(webview && paymentIntent) ? <View style={fullScreen}>
         <WebView source={{uri: webview}} onNavigationStateChange={({loading, url}) => {
           setLoading(loading);
           if (!loading && url.includes('https://hooks.stripe.com/3d_secure/complete')) finalizePayment(paymentIntent);
         }}/>
-      </View>}
+      </View> : null}
 
       {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>

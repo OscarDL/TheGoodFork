@@ -15,7 +15,7 @@ const style = {
 };
 
 
-export default function SubmitOrderTabs({order, setOrder, setPrice}) {
+export default function SubmitOrderTabs({oldOrder, order, setOrder, setPrice}) {
   return (
     <Tabs.Navigator
       tabBarOptions={style}
@@ -23,19 +23,19 @@ export default function SubmitOrderTabs({order, setOrder, setPrice}) {
       backBehavior='initialRoute'
     >
       <Tabs.Screen name='Entrées'>
-        {props => <OrderDishes {...props} type='appetizer' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+        {props => <OrderDishes {...props} type='appetizer' oldOrder={oldOrder} order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Plats'>
-        {props => <OrderDishes {...props} type='mainDish' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+        {props => <OrderDishes {...props} type='mainDish' oldOrder={oldOrder} order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Desserts'>
-        {props => <OrderDishes {...props} type='dessert' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+        {props => <OrderDishes {...props} type='dessert' oldOrder={oldOrder} order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Boissons'>
-        {props => <OrderDishes {...props} type='drink' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+        {props => <OrderDishes {...props} type='drink' oldOrder={oldOrder} order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
       <Tabs.Screen name='Alcools'>
-        {props => <OrderDishes {...props} type='alcohol' order={order} setOrder={setOrder} setPrice={setPrice}/>}
+        {props => <OrderDishes {...props} type='alcohol' oldOrder={oldOrder} order={order} setOrder={setOrder} setPrice={setPrice}/>}
       </Tabs.Screen>
     </Tabs.Navigator>
   );

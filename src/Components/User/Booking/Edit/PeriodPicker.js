@@ -3,6 +3,7 @@ import { Icon } from 'react-native-elements';
 import Picker from 'react-native-picker-select';
 import { View, Text, Platform, TouchableOpacity } from 'react-native';
 
+import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 
 
@@ -54,7 +55,7 @@ export default function PeriodPicker({tables, setStep, setShow, booking, booking
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
           <TouchableOpacity onPress={() => setShow(null)}>
-            <Text style={{color: '#f22', fontSize: 18, padding: 20}}>Annuler</Text>
+            <Text style={{color: colors.red, fontSize: 18, padding: 20}}>Annuler</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             setStep(2);
@@ -68,7 +69,7 @@ export default function PeriodPicker({tables, setStep, setShow, booking, booking
             // Select lowest available table by default to avoid submit error
             setBooking({ ...booking, table: Math.min(...total) });
           }}>
-            <Text style={{color: '#28f', fontSize: 18, padding: 20}}>Terminé</Text>
+            <Text style={{color: colors.blue, fontSize: 18, padding: 20}}>Terminé</Text>
           </TouchableOpacity>
         </View>
       </View>

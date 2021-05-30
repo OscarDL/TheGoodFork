@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'react-native-elements';
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 
+import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 
 
@@ -24,7 +25,7 @@ export default function BookingPeriod({tables, bookings, dateBooked, period, nav
               <Text style={{fontSize: 16}}>Table {table}</Text>
 
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontSize: 16, color: booking.length ? '#f22' : '#2b4'}}>
+                <Text style={{fontSize: 16, color: booking.length ? colors.red : colors.green}}>
                   {booking.length ? 'RÉSERVÉE' : 'DISPONIBLE'}
                 </Text>
                 <Icon name='chevron-right' style={{marginLeft: 8}} color='grey' />
