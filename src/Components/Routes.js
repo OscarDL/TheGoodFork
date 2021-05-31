@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,53 +11,53 @@ import Reset from './Auth/Reset';
 import Forgot from './Auth/Forgot';
 import Register from './Auth/Register';
 
-import AdminHome from './Admin/AdminHome';
-import AdminTablesList from './Admin/AdminTablesList';
-import AdminSalesStats from './Admin/AdminSalesStats';
-import AdminStocksStats from './Admin/AdminStocksStats';
-import AdminDailyRevenue from './Admin/AdminDailyRevenue';
-import AdminDishes from './Admin/ManageDishes/AdminDishes';
-import AdminEditDish from './Admin/ManageDishes/AdminEditDish';
-import AdminStaffList from './Admin/ManageStaff/AdminStaffList';
-import AdminEditStaff from './Admin/ManageStaff/AdminEditStaff';
-import AdminCreateDish from './Admin/ManageDishes/AdminCreateDish';
-import AdminCreateStaff from './Admin/ManageStaff/AdminCreateStaff';
+import AdminHome from './Admin/Home';
+import AdminDishList from './Admin/Dishes/List';
+import AdminEditDish from './Admin/Dishes/Edit';
+import AdminCreateDish from './Admin/Dishes/Create';
+import AdminStaffList from './Admin/Staff/List';
+import AdminEditStaff from './Admin/Staff/Edit';
+import AdminCreateStaff from './Admin/Staff/Create';
+import AdminTables from './Admin/Tables/Tables';
+import AdminSalesStats from './Admin/Stats/Sales';
+import AdminStocksStats from './Admin/Stats/Stocks';
+import AdminDailyRevenue from './Admin/Revenue/Daily';
 
-import WaiterHome from './Waiter/WaiterHome';
-import Bookings from './Waiter/ManageBookings/Day/Bookings';
-import WaiterNewOrder from './Waiter/SubmitOrder/WaiterNewOrder';
-import WaiterPayOrder from './Waiter/SubmitOrder/WaiterPayOrder';
-import WaiterEditOrder from './Waiter/SubmitOrder/WaiterEditOrder';
-import WaiterCreateBill from './Waiter/TableBill/WaiterCreateBill';
-import EditBooking from './Waiter/ManageBookings/Edit/EditBooking';
-import BookingDetails from './Waiter/ManageBookings/BookingDetails';
-import WaiterPlanning from './Waiter/ManageBookings/WaiterPlanning';
-import WaiterCheckOrders from './Waiter/CheckOrders/WaiterCheckOrders';
-import WaiterSubmitOrder from './Waiter/SubmitOrder/WaiterSubmitOrder';
-import WaiterOrderDetails from './Waiter/ValidateOrders/WaiterOrderDetails';
-import WaiterValidateOrder from './Waiter/ValidateOrders/WaiterValidateOrder';
+import WaiterHome from './Waiter/Home';
+import WaiterNewOrder from './Waiter/Orders/New';
+import WaiterPayOrder from './Waiter/Orders/Pay';
+import WaiterEditOrder from './Waiter/Orders/Edit';
+import WaiterCheckOrders from './Waiter/Orders/Check';
+import WaiterSubmitOrder from './Waiter/Orders/Submit';
+import WaiterOrderDetails from './Waiter/Orders/Details';
+import WaiterValidateOrder from './Waiter/Orders/Validate';
+import WaiterNewBooking from './Waiter/Bookings/New';
+import WaiterEditBooking from './Waiter/Bookings/Edit';
+import WaiterBookings from './Waiter/Bookings/Day/Bookings';
+import WaiterPlanning from './Waiter/Bookings/Planning';
+import WaiterCreateBill from './Waiter/Billing/Create';
 
-import BarmanHome from './Barman/BarmanHome';
-import BarmanOrderDetails from './Barman/BarmanOrderDetails';
+import BarmanHome from './Barman/Home';
+import BarmanOrderDetails from './Barman/OrderDetails';
 
-import CookHome from './Cook/CookHome';
-import CookOrderDetails from './Cook/CookOrderDetails';
+import CookHome from './Cook/Home';
+import CookOrderDetails from './Cook/OrderDetails';
 
-import UserDishes from './User/UserDishes';
-import UserOrders from './User/Orders/UserOrders';
-import UserAccount from './User/Account/UserAccount';
-import UserPlanning from './User/Booking/UserPlanning';
+import UserDishes from './User/Dishes/Dishes';
+import UserOrders from './User/Orders/Orders';
+import UserAccount from './User/Account/Account';
+import UserPlanning from './User/Booking/Planning';
 
 import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
 import { StatusBar } from 'expo-status-bar';
 import { checkLogin } from '../Functions/user';
-import LogoutButton from '../Shared/LogoutButton';
-import { useDataLayerValue } from './Context/DataLayer';
+import { useDataLayerValue } from '../Context/DataLayer';
+import LogoutButton from '../Shared/Components/LogoutButton';
 
 
 const Stack = createStackNavigator();
-const Nav = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
+const Tabs = Platform.OS === 'ios' ? createBottomTabNavigator() : createMaterialBottomTabNavigator();
 
 const iosH = CardStyleInterpolators.forHorizontalIOS;
 const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIOS;
@@ -85,16 +85,16 @@ export default function Routes() {
         headerRight: () => <LogoutButton/>,
         headerRightContainerStyle: {marginRight: 5}
       }}/>
-      <Stack.Screen name='AdminDishes' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishes} />
       <Stack.Screen name='AdminEditDish' options={{title: 'Modifier plat', cardStyleInterpolator: iosH}} component={AdminEditDish} />
-      <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: iosH}} component={AdminStaffList} />
+      <Stack.Screen name='AdminDishList' options={{title: 'Tous les plats', cardStyleInterpolator: iosH}} component={AdminDishList} />
       <Stack.Screen name='AdminCreateDish' options={{title: 'Nouveau plat', cardStyleInterpolator: iosV}} component={AdminCreateDish} />
-      <Stack.Screen name='AdminTablesList' options={{title: 'Liste des tables', cardStyleInterpolator: iosH}} component={AdminTablesList} />
+      <Stack.Screen name='AdminStaffList' options={{title: 'Personnel / Staff', cardStyleInterpolator: iosH}} component={AdminStaffList} />
       <Stack.Screen name='AdminEditStaff' options={{title: 'Modifier un membre', cardStyleInterpolator: iosH}} component={AdminEditStaff} />
+      <Stack.Screen name='AdminCreateStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosV}} component={AdminCreateStaff} />
+      <Stack.Screen name='AdminTables' options={{title: 'Nombre de tables', cardStyleInterpolator: iosH}} component={AdminTables} />
       <Stack.Screen name='AdminSalesStats' options={{title: 'Statistiques : ventes', cardStyleInterpolator: iosH}} component={AdminSalesStats} />
       <Stack.Screen name='AdminStocksStats' options={{title: 'Statistiques : stock', cardStyleInterpolator: iosH}} component={AdminStocksStats} />
       <Stack.Screen name='AdminDailyRevenue' options={{title: 'Revenu quotidien', cardStyleInterpolator: iosH}} component={AdminDailyRevenue} />
-      <Stack.Screen name='AdminCreateStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosV}} component={AdminCreateStaff} />
     </Stack.Navigator>
   );
 
@@ -127,10 +127,10 @@ export default function Routes() {
         headerRight: () => <LogoutButton/>,
         headerRightContainerStyle: {marginRight: 5}
       }}/>
-      <Stack.Screen name='Bookings' options={{title: 'Disponibilités', cardStyleInterpolator: iosH}} component={Bookings}/>
+      <Stack.Screen name='WaiterBookings' options={{title: 'Disponibilités', cardStyleInterpolator: iosH}} component={WaiterBookings}/>
       <Stack.Screen name='WaiterPlanning' options={{title: 'Réservations', cardStyleInterpolator: iosH}} component={WaiterPlanning}/>
-      <Stack.Screen name='EditBooking' options={{title: 'Modifier réservation', cardStyleInterpolator: iosH}} component={EditBooking}/>
-      <Stack.Screen name='BookingDetails' options={{title: 'Détails réservation', cardStyleInterpolator: iosH}} component={BookingDetails}/>
+      <Stack.Screen name='WaiterEditBooking' options={{title: 'Modifier réservation', cardStyleInterpolator: iosH}} component={WaiterEditBooking}/>
+      <Stack.Screen name='WaiterNewBooking' options={{title: 'Nouvelle réservation', cardStyleInterpolator: iosH}} component={WaiterNewBooking}/>
       <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: iosH}} component={WaiterNewOrder}/>
       <Stack.Screen name='WaiterPayOrder' options={{title: 'Payer commande', cardStyleInterpolator: iosV}} component={WaiterPayOrder}/>
       <Stack.Screen name='WaiterEditOrder' options={{title: 'Modifier commande', cardStyleInterpolator: iosH}} component={WaiterEditOrder}/>
@@ -143,23 +143,23 @@ export default function Routes() {
   );
 
   const userStack = () => (
-    <Nav.Navigator barStyle={{backgroundColor: 'white'}} activeColor={colors.accentPrimary} tabBarOptions={{activeTintColor: colors.accentSecondary}}>
-      <Nav.Screen name='UserPlanning' options={{tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' />}}>
+    <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor={colors.accentPrimary} tabBarOptions={{activeTintColor: colors.accentPrimary}}>
+      <Tabs.Screen name='UserPlanning' options={{tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' />}}>
         {props => <UserPlanning {...props} title='Réservations'/>}
-      </Nav.Screen>
+      </Tabs.Screen>
       
-      <Nav.Screen name='UserDishes' options={{tabBarLabel: 'Menu', tabBarIcon: ({color}) => <Icon color={color} name='restaurant' />}}>
+      <Tabs.Screen name='UserDishes' options={{tabBarLabel: 'Menu', tabBarIcon: ({color}) => <Icon color={color} name='restaurant' />}}>
         {props => <UserDishes {...props} title='Tous les plats'/>}
-      </Nav.Screen>
+      </Tabs.Screen>
       
-      <Nav.Screen name='UserOrders' options={{tabBarLabel: 'Commandes', tabBarIcon: ({color}) => <Icon color={color} name='shopping-cart' />}}>
+      <Tabs.Screen name='UserOrders' options={{tabBarLabel: 'Commandes', tabBarIcon: ({color}) => <Icon color={color} name='shopping-cart' />}}>
         {props => <UserOrders {...props} title='Vos commandes'/>}
-      </Nav.Screen>
+      </Tabs.Screen>
 
-      <Nav.Screen name='UserAccount' options={{tabBarLabel: 'Compte', tabBarIcon: ({color}) => <Icon color={color} name='account-circle' />}}>
+      <Tabs.Screen name='UserAccount' options={{tabBarLabel: 'Compte', tabBarIcon: ({color}) => <Icon color={color} name='account-circle' />}}>
         {props => <UserAccount {...props} title='Votre compte'/>}
-      </Nav.Screen>
-    </Nav.Navigator>
+      </Tabs.Screen>
+    </Tabs.Navigator>
   );
 
   const components = {

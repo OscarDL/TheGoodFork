@@ -7,7 +7,7 @@ import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { register } from '../../Functions/user';
-import { useDataLayerValue } from '../Context/DataLayer';
+import { useDataLayerValue } from '../../Context/DataLayer';
 
 
 export default function Register() {
@@ -53,11 +53,42 @@ export default function Register() {
       </Text>
       
       <View>
-        <Input placeholder='Prénom' onChangeText={firstName => setUser({...user, firstName})}/>
-        <Input placeholder='Nom' onChangeText={lastName => setUser({...user, lastName})}/>
-        <Input placeholder='Adresse email' keyboardType='email-address' autoCapitalize='none' onChangeText={email => setUser({...user, email})}/>
-        <Input placeholder='Mot de passe' autoCapitalize='none' secureTextEntry onChangeText={password => setUser({...user, password})}/>
-        <Input placeholder='Confirmation' autoCapitalize='none' secureTextEntry onChangeText={passCheck => setUser({...user, passCheck})}/>
+        <View style={{flexDirection: 'row'}}>
+          <Input
+            placeholder='Prénom'
+            containerStyle={{width: '50%'}}
+            onChangeText={firstName => setUser({...user, firstName})}
+          />
+          <Input
+            placeholder='Nom'
+            containerStyle={{width: '50%'}}
+            onChangeText={lastName => setUser({...user, lastName})}
+          />
+        </View>
+
+        <Input
+          autoCapitalize='none'
+          placeholder='Adresse email'
+          keyboardType='email-address'
+          onChangeText={email => setUser({...user, email})}
+        />
+        
+        <View style={{flexDirection: 'row'}}>
+          <Input
+            secureTextEntry
+            autoCapitalize='none'
+            placeholder='Mot de passe'
+            containerStyle={{width: '50%'}}
+            onChangeText={password => setUser({...user, password})}
+          />
+          <Input
+            secureTextEntry
+            autoCapitalize='none'
+            placeholder='Confirmation'
+            containerStyle={{width: '50%'}}
+            onChangeText={passCheck => setUser({...user, passCheck})}
+          />
+        </View>
       </View>
 
       <View style={{alignItems: 'center'}}>

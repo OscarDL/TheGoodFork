@@ -4,8 +4,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Routes from './src/Components/Routes.js';
 
-import { DataLayer } from './src/Components/Context/DataLayer';
-import { initialState, reducer } from './src/Components/Context/reducer';
+import { DataLayer } from './src/Context/DataLayer';
+import { initialState, reducer } from './src/Context/reducer';
 
 
 export default function App() {

@@ -42,6 +42,7 @@ export const getBooking = async (id, token) => {
 
 export const newBooking = async (booking, token) => {
   try {
+    booking.user.email = booking.user.email.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'bookings', booking, authConfig(token));
     
     if (!data.success) return data?.error;

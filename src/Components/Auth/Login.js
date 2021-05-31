@@ -7,7 +7,7 @@ import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } f
 import { login } from '../../Functions/user';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
-import { useDataLayerValue } from '../Context/DataLayer';
+import { useDataLayerValue } from '../../Context/DataLayer';
 
 
 export default function Login({navigation}) {
