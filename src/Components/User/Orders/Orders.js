@@ -16,7 +16,7 @@ import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import { truncPrice } from '../../../Functions/utils';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const Stack = createStackNavigator();
@@ -92,7 +92,7 @@ function UserOrderTabs({navigation}) {
   const isFocused = useIsFocused();
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{token, user}] = useDataLayerValue();
+  const [{token, user}] = useAuthContext();
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState('date');
   const [date, setDate] = useState(new Date(Date.now()));

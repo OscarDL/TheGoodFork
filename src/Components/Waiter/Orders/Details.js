@@ -7,7 +7,7 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 import { cancelOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
@@ -16,7 +16,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   const {order, pay = false, readOnly} = route.params;
 
   const isFocused = useIsFocused();
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
 

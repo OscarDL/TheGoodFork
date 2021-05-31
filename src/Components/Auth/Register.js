@@ -7,11 +7,11 @@ import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { register } from '../../Functions/user';
-import { useDataLayerValue } from '../../Context/DataLayer';
+import { useAuthContext } from '../../Context/Auth/Provider';
 
 
 export default function Register() {
-  const [{}, dispatch] = useDataLayerValue();
+  const [{}, authDispatch] = useAuthContext();
   const [user, setUser] = useState({
     email: '',
     firstName: '',
@@ -37,7 +37,7 @@ export default function Register() {
     );
   
     await setItemAsync('authToken', res.token);
-    dispatch({ type: 'LOGIN', user: res.user, token: res.token });
+    authDispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 
 

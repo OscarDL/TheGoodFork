@@ -8,7 +8,7 @@ import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import SearchBar from '../../../Shared/Components/SearchBar';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
@@ -36,7 +36,7 @@ export default function WaiterValidateOrder({navigation}) {
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}] = useDataLayerValue();
+  const [{user, token}] = useAuthContext();
 
   useEffect(() => {
     if (isFocused || retry) getOrders(user, token).then(res => {

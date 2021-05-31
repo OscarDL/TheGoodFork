@@ -9,7 +9,7 @@ import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getIntent, payOrder } from '../../../Functions/stripe';
 import { editOrder, submitOrder } from '../../../Functions/orders';
 import CreditCard from '../../../Shared/Components/Orders/CreditCard';
@@ -28,7 +28,7 @@ const fullScreen = {
 
 export default function UserPayOrder({route, navigation}) {
   const {order, type} = route.params;
-  const [{token, user}] = useDataLayerValue();
+  const [{token, user}] = useAuthContext();
 
   const [webview, setWebview] = useState(null);
   const [loading, setLoading] = useState(false);

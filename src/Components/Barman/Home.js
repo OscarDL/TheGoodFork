@@ -6,7 +6,7 @@ import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { getOrders } from '../../Functions/orders';
 import TouchCard from '../../Shared/Components/TouchCard';
-import { useDataLayerValue } from '../../Context/DataLayer';
+import { useAuthContext } from '../../Context/Auth/Provider';
 
 
 const failureAlert = (error, setRetry) => {
@@ -31,7 +31,7 @@ export default function BarmanHome({navigation}) {
   const isFocused = useIsFocused();
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}] = useDataLayerValue();
+  const [{user, token}] = useAuthContext();
 
   useEffect(() => {
     if ((isFocused || retry) && token) getOrders(user, token).then(res => {

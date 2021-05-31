@@ -7,7 +7,7 @@ import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { createDish } from '../../../Functions/dishes';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const pickerStyle = {
@@ -28,7 +28,7 @@ const pickerStyle = {
 
 
 export default function AdminCreateDish({navigation, route}) {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [dish, setDish] = useState({
     name: '',
     image: '',

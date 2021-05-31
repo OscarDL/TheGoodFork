@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-native-elements';
 import { View, ScrollView } from 'react-native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
@@ -18,8 +19,7 @@ export default function UserAccount({title}) {
   return (
     <Stack.Navigator>
       <Stack.Screen options={{title, headerRight: () => <LogoutButton/>, headerRightContainerStyle: {marginRight: 5}}}
-        name='UserAccountComponent'
-        component={UserAccountComponent}
+        name='UserAccountComponent' component={UserAccountComponent}
       />
       <Stack.Screen options={{title: 'Vos informations', cardStyleInterpolator: iosH}} name='UserEditData' component={UserEditData}/>
       <Stack.Screen options={{title: 'Votre mot de passe', cardStyleInterpolator: iosH}} name='UserEditPassword' component={UserEditPassword}/>

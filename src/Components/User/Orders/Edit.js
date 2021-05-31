@@ -7,12 +7,12 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrder } from '../../../Functions/orders';
 import { truncPrice } from '../../../Functions/utils';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import SubmitOrderTabs from '../../../Shared/Components/Orders/SubmitOrderTabs';
 
 
 export default function UserEditOrder({navigation, route}) {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
 
   const [newOrder, setNewOrder] = useState(null);
   const [price, setPrice] = useState(route.params.order.price);

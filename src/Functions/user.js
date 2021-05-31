@@ -125,13 +125,13 @@ export const deleteUser = async (token) => {
 };
 
 
-export const checkLogin = async (dispatch) => {
+export const checkLogin = async (authDispatch) => {
   const token = await getItemAsync('authToken');
 
-  if (!token) return dispatch({ type: 'LOGIN', user: null, token: '' });
+  if (!token) return authDispatch({ type: 'LOGIN', user: null, token: '' });
 
   getUserData(token).then(async (res) => {
-    if (res.success) return dispatch({ type: 'LOGIN', user: res.user, token });
+    if (res.success) return authDispatch({ type: 'LOGIN', user: res.user, token });
     
     Alert.alert(
       'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
@@ -139,7 +139,7 @@ export const checkLogin = async (dispatch) => {
         text: 'Compris',
         onPress: async () => {
           await deleteItemAsync('authToken');
-          dispatch({ type: 'LOGIN', user: null, token: '' });
+          authDispatch({ type: 'LOGIN', user: null, token: '' });
         }
       }]
     );
@@ -147,6 +147,6 @@ export const checkLogin = async (dispatch) => {
 };
 
 
-export const logout = (dispatch) => {
-  deleteItemAsync('authToken').then(() => checkLogin(dispatch));
+export const logout = (authDispatch) => {
+  deleteItemAsync('authToken').then(() => checkLogin(authDispatch));
 };

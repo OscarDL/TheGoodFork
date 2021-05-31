@@ -7,7 +7,7 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getOrder, cancelOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
@@ -15,7 +15,7 @@ import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 export default function UserOrderDetails({navigation, route}) {
   const {order} = route.params;
   const isFocused = useIsFocused();
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   

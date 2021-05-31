@@ -9,7 +9,7 @@ import { View, ScrollView, Text, SafeAreaView, Platform } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { editOrder, submitOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
@@ -33,7 +33,7 @@ const pickerStyle = {
   
 export default function UserSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
-  const [{user, token}] = useDataLayerValue();
+  const [{user, token}] = useAuthContext();
   
   const [tip, setTip] = useState(order.tip);
   const [details, setDetails] = useState(order.details);

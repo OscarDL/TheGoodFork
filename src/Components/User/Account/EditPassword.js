@@ -6,11 +6,11 @@ import { Icon, Input, Button } from 'react-native-elements';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { updatePassword } from '../../../Functions/user';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 export default function UpdateInfo({navigation}) {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
 
   const [current, setCurrent] = useState('');
   const [password, setPassword] = useState('');

@@ -10,7 +10,7 @@ import { View, ScrollView, Text, TextInput, SafeAreaView } from 'react-native';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { submitOrder, editOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
@@ -34,7 +34,7 @@ const pickerStyle = {
   
 export default function WaiterSubmitOrder({navigation, route}) {
   const {order, type} = route.params;
-  const [{token, user}] = useDataLayerValue();
+  const [{token, user}] = useAuthContext();
 
   const [tip, setTip] = useState(0);
   const [details, setDetails] = useState(order.details);

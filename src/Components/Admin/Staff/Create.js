@@ -6,7 +6,7 @@ import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { createStaff } from '../../../Functions/staff';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { colors } from '../../../Shared/colors';
 
 
@@ -28,7 +28,7 @@ const pickerStyle = {
 
 
 export default function AdminRegisterStaff({navigation, route}) {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [staff, setStaff] = useState({
     email: '',
     firstName: '',

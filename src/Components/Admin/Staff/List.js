@@ -10,7 +10,7 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getStaff } from '../../../Functions/staff';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const pickerStyle = {
@@ -50,7 +50,7 @@ const failureAlert = (error, navigation, setRetry) => {
 
 export default function AdminStaffList({navigation}) {
   const isFocused = useIsFocused();
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [type, setType] = useState('all');
   const [staff, setStaff] = useState(null);
   const [retry, setRetry] = useState(false);

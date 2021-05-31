@@ -5,12 +5,12 @@ import { View, Text, ActivityIndicator, Platform, KeyboardAvoidingView } from 'r
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getTables, updateTables } from '../../../Functions/tables';
 
 
 export default function AdminTablesList() {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [tables, setTables] = useState(null);
 
   useEffect(() => {

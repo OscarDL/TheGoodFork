@@ -7,7 +7,7 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getPeriod } from '../../../Functions/utils';
 import { newBooking } from '../../../Functions/bookings';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -16,7 +16,7 @@ const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao
 
 export default function BookingDetails({navigation, route}) {
   const {booking} = route.params;
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   
   const [customer, setCustomer] = useState({
     firstName: '',

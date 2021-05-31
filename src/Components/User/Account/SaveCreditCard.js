@@ -6,12 +6,12 @@ import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
 
 import { styles } from '../../../Shared/styles';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import CreditCard from '../../../Shared/Components/Orders/CreditCard';
 
 
 export default function UserSaveCreditCard({navigation}) {
-  const [{user}] = useDataLayerValue();
+  const [{user}] = useAuthContext();
   const [exists, setExists] = useState(false);
   const [card, setCard] = useState({
     cvc: '',

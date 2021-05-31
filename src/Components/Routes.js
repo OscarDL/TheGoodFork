@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Icon } from 'react-native-elements';
-import { NavigationContainer } from '@react-navigation/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Login from './Auth/Login';
@@ -52,7 +52,8 @@ import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
 import { StatusBar } from 'expo-status-bar';
 import { checkLogin } from '../Functions/user';
-import { useDataLayerValue } from '../Context/DataLayer';
+import { useAppContext } from '../Context/App/Provider';
+import { useAuthContext } from '../Context/Auth/Provider';
 import LogoutButton from '../Shared/Components/LogoutButton';
 
 
@@ -64,9 +65,10 @@ const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIO
 
 
 export default function Routes() {
-  const [{user, token}, dispatch] = useDataLayerValue();
+  const [{darkTheme}] = useAppContext();
+  const [{user, token}, authauthDispatch] = useAuthContext();
 
-  useEffect(() => { checkLogin(dispatch); }, [dispatch]);
+  useEffect(() => { checkLogin(authauthDispatch); }, [authauthDispatch]);
 
 
   const authStack = () => (
@@ -178,10 +180,10 @@ export default function Routes() {
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>
     ) : (<>
-      <StatusBar style='dark'/>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={token === '' ? 'auth' : user?.type}>
-          <Stack.Screen name={user?.type ?? 'auth'} options={{headerShown: false}} component={components[user?.type ?? 'auth']} />
+      <StatusBar style={darkTheme ? 'light' : 'dark'}/>
+      <NavigationContainer theme={darkTheme ? DarkTheme : DefaultTheme}>
+        <Stack.Navigator initialRouteName={token === '' ? 'auth' : user.type}>
+          <Stack.Screen name={user.type ?? 'auth'} options={{headerShown: false}} component={components[user.type ?? 'auth']} />
         </Stack.Navigator>
       </NavigationContainer>
     </>)

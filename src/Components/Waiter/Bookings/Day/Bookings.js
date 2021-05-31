@@ -7,14 +7,14 @@ import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getTables } from '../../../../Functions/tables';
 import { getDayBookings } from '../../../../Functions/bookings';
-import { useDataLayerValue } from '../../../../Context/DataLayer';
+import { useAuthContext } from '../../../../Context/Auth/Provider';
 
 
 export default function Bookings({navigation, route}) {
   const day = route.params.date.timestamp;
   
   const isFocused = useIsFocused();
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
   const [tables, setTables] = useState(null);
   const [bookings, setBookings] = useState(null);
 

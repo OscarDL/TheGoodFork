@@ -7,7 +7,7 @@ import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity,
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getTables } from '../../../Functions/tables';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 import TablePicker from '../../../Shared/Components/Bookings/TablePicker';
 import PeriodPicker from '../../../Shared/Components/Bookings/PeriodPicker';
 import { getDayBookings, editBooking, deleteBooking } from '../../../Functions/bookings';
@@ -31,7 +31,7 @@ const circleZone = {
 
 
 export default function UserNewBooking({navigation, route}) {
-  const [{token}] = useDataLayerValue();
+  const [{token}] = useAuthContext();
 
   const [step, setStep] = useState(3);
   const [show, setShow] = useState(null);

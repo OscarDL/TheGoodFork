@@ -7,11 +7,11 @@ import { View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } f
 import { login } from '../../Functions/user';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
-import { useDataLayerValue } from '../../Context/DataLayer';
+import { useAuthContext } from '../../Context/Auth/Provider';
 
 
 export default function Login({navigation}) {
-  const [{}, dispatch] = useDataLayerValue();
+  const [{}, authDispatch] = useAuthContext();
   const [userLogin, setUserLogin] = useState({
     email: '',
     password: ''
@@ -33,7 +33,7 @@ export default function Login({navigation}) {
     );
   
     await setItemAsync('authToken', res.token);
-    dispatch({ type: 'LOGIN', user: res.user, token: res.token });
+    authDispatch({ type: 'LOGIN', user: res.user, token: res.token });
   };
 
 

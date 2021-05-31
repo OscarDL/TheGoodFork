@@ -6,11 +6,11 @@ import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { updateData } from '../../../Functions/user';
-import { useDataLayerValue } from '../../../Context/DataLayer';
+import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 export default function UpdateInfo() {
-  const [{user, token}, dispatch] = useDataLayerValue();
+  const [{user, token}, authDispatch] = useAuthContext();
 
   const [newUser, setNewUser] = useState(user);
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function UpdateInfo() {
         visibilityTime: 1500,
         type: res.success ? 'success' : 'error'
       });
-      res.success && dispatch({type: 'LOGIN', token, user: res.user});
+      res.success && authDispatch({type: 'LOGIN', token, user: res.user});
     });
   };
 
