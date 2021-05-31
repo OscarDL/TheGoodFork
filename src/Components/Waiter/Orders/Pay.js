@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import WebView from 'react-native-webview';
 import Toast from 'react-native-toast-message';
 import { Button, Icon } from 'react-native-elements';
-import { Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
@@ -25,8 +25,8 @@ const fullScreen = {
 
 
 export default function WaiterPayOrder({route, navigation}) {
+  const [{user}] = useAuthContext();
   const {order, type} = route.params;
-  const [{token, user}] = useAuthContext();
 
   const [webview, setWebview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ export default function WaiterPayOrder({route, navigation}) {
   const handlePayment = async () => {
     setLoading(true);
 
-    const payment = await payOrder(card, order, token);
+    const payment = await payOrder(card, order);
     if (!payment.success) {
       Toast.show({
         text1: 'Erreur de paiement',
@@ -65,13 +65,13 @@ export default function WaiterPayOrder({route, navigation}) {
   
   const finalizePayment = async (payment) => {
     setLoading(true);
-    const {intent} = await getIntent(payment.intent.id, token);
+    const {intent} = await getIntent(payment.intent.id);
 
     if (!intent?.next_action && !intent?.last_payment_error && intent?.status === 'succeeded') {
       const res = await (type === 'edit' ? (
-        editOrder({...order, paid: true, status: 'paid', stripePi: payment.intent.id}, token)
+        editOrder({...order, paid: true, status: 'paid', stripePi: payment.intent.id})
       ) : (
-        submitOrder({...order, stripePi: payment.intent.id}, token, user.email)
+        submitOrder({...order, stripePi: payment.intent.id}, user.email)
       ));
 
       if (res.success) {
@@ -102,33 +102,35 @@ export default function WaiterPayOrder({route, navigation}) {
 
 
   return (
-    <KeyboardAvoidingView style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-    >
-      <CreditCard user={order.user} card={card} setCard={setCard}/>
-      
-      <Button
-        icon={<Icon
-          color='white'
-          name='credit-card'
-          style={{marginRight: 10}}
-        />}
-        onPress={handlePayment}
-        buttonStyle={[styles.button, {alignSelf: 'center'}]}
-        title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
-        disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
-      />
+    <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
+      <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+      >
+        <CreditCard user={order.user} card={card} setCard={setCard}/>
+        
+        <Button
+          icon={<Icon
+            color='white'
+            name='credit-card'
+            style={{marginRight: 10}}
+          />}
+          onPress={handlePayment}
+          buttonStyle={[styles.button, {alignSelf: 'center'}]}
+          title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
+          disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
+        />
 
-      {(webview && paymentIntent) ? <View style={fullScreen}>
-        <WebView source={{uri: webview}} onNavigationStateChange={({loading, url}) => {
-          setLoading(loading);
-          if (!loading && url.includes('https://hooks.stripe.com/3d_secure/complete')) finalizePayment(paymentIntent);
-        }}/>
-      </View> : null}
+        {(webview && paymentIntent) ? <View style={fullScreen}>
+          <WebView source={{uri: webview}} onNavigationStateChange={({loading, url}) => {
+            setLoading(loading);
+            if (!loading && url.includes('https://hooks.stripe.com/3d_secure/complete')) finalizePayment(paymentIntent);
+          }}/>
+        </View> : null}
 
-      {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
-      </View>}
-    </KeyboardAvoidingView>
+        {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
+          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        </View>}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }

@@ -7,7 +7,6 @@ import BookingsTab from './Tab';
 import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getBookings } from '../../../../Functions/bookings';
-import { useAuthContext } from '../../../../Context/Auth/Provider';
 
 
 const Tabs = createMaterialTopTabNavigator();
@@ -22,11 +21,10 @@ const style = {
 
 export default function MyBookings({route}) {
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [bookings, setBookings] = useState(route.params.bookings ?? null);
 
   useEffect(() => {
-    isFocused && getBookings(token).then(res => setBookings(res.bookings));
+    isFocused && getBookings().then(res => setBookings(res.bookings));
   }, [isFocused, setBookings]);
 
   

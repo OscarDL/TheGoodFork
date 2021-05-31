@@ -33,8 +33,8 @@ const pickerStyle = {
 
   
 export default function WaiterSubmitOrder({navigation, route}) {
+  const [{user}] = useAuthContext();
   const {order, type} = route.params;
-  const [{token, user}] = useAuthContext();
 
   const [tip, setTip] = useState(0);
   const [details, setDetails] = useState(order.details);
@@ -51,7 +51,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
   const handleEdit = () => {
     if (!order.price) return navigation.goBack();
 
-    editOrder({...order, tip, user: customer}, token).then(res => {
+    editOrder({...order, tip, user: customer}).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -68,7 +68,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
   const handleSubmit = () => {
     if (!order.price) return navigation.goBack();
   
-    submitOrder({...order, tip, user: customer}, token, user.email).then(res => {
+    submitOrder({...order, tip, user: customer}, user.email).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de commande',
         text2: res.desc ?? res,

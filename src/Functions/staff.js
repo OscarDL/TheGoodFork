@@ -4,9 +4,10 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const getStaff = async (token) => {
+export const getStaff = async () => {
   try {
-    const {data} = await axios.get(apiUrl + 'staff', authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'staff', config);
 
     if (!data.success) return data?.error;
 
@@ -16,10 +17,12 @@ export const getStaff = async (token) => {
 };
 
 
-export const createStaff = async (staff, token) => {
+export const createStaff = async (staff) => {
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'staff', staff, authConfig(token));
+
+    const config = await authConfig();
+    const {data} = await axios.post(apiUrl + 'staff', staff, config);
 
     if (!data.success) return data?.error;
     
@@ -33,10 +36,12 @@ export const createStaff = async (staff, token) => {
 };
 
 
-export const editStaff = async (id, staff, token) => {
+export const editStaff = async (id, staff) => {
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.put(apiUrl + 'staff/' + id, staff, authConfig(token));
+
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'staff/' + id, staff, config);
 
     if (!data.success) return data?.error;
 
@@ -50,10 +55,12 @@ export const editStaff = async (id, staff, token) => {
 };
 
 
-export const deleteStaff = async (staff, token) => {
+export const deleteStaff = async (staff) => {
   try {
     staff.email = staff.email.replace(' ', '');
-    const {data} = await axios.delete(apiUrl + 'staff/' + staff._id, authConfig(token));
+    
+    const config = await authConfig();
+    const {data} = await axios.delete(apiUrl + 'staff/' + staff._id, config);
 
     if (!data.success) return data?.error;
 

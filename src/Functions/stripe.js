@@ -4,9 +4,10 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const payOrder = async (card, order, token) => {
+export const payOrder = async (card, order) => {
   try {
-    const {data} = await axios.post(apiUrl + 'stripe', {card, order}, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.post(apiUrl + 'stripe', {card, order}, config);
 
     if (!data.success) return data?.error;
 
@@ -22,9 +23,10 @@ export const payOrder = async (card, order, token) => {
 };
 
 
-export const getIntent = async (intent, token) => {
+export const getIntent = async (intent) => {
   try {
-    const {data} = await axios.get(apiUrl + 'stripe/' + intent, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'stripe/' + intent, config);
 
     return data.success ? data : data?.error;
     

@@ -7,7 +7,7 @@ import { styles } from '../../../Shared/styles';
 export default function AdminDailyRevenue() {
   return (
     <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Disponible bientôt !</Text>
+      <Text style={{...styles.title, padding: 0, margin: 0, textAlign: 'center'}}>Bientôt disponible !</Text>
     </SafeAreaView>
   );
 }

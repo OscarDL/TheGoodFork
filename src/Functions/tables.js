@@ -4,9 +4,10 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const getTables = async (token) => {
+export const getTables = async () => {
   try {
-    const {data} = await axios.get(apiUrl + 'tables', authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'tables', config);
 
     if (!data.success) return data?.error;
 
@@ -16,9 +17,10 @@ export const getTables = async (token) => {
 };
 
 
-export const updateTables = async (amount, token) => {
+export const updateTables = async (amount) => {
   try {
-    const {data} = await axios.put(apiUrl + 'tables', {amount}, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'tables', {amount}, config);
 
     if (!data.success) return data?.error;
 

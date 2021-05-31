@@ -29,16 +29,17 @@ const failureAlert = (error, setRetry) => {
 
 export default function BarmanHome({navigation}) {
   const isFocused = useIsFocused();
+  const [{user}] = useAuthContext();
+  
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}] = useAuthContext();
 
   useEffect(() => {
-    if ((isFocused || retry) && token) getOrders(user, token).then(res => {
+    if (isFocused || retry) getOrders(user).then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
       setRetry(false);
     });
-  }, [isFocused, token, retry, setRetry]);
+  }, [isFocused, retry, setRetry]);
 
 
   return orders ? (

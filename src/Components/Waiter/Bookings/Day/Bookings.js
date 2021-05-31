@@ -7,20 +7,18 @@ import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getTables } from '../../../../Functions/tables';
 import { getDayBookings } from '../../../../Functions/bookings';
-import { useAuthContext } from '../../../../Context/Auth/Provider';
 
 
 export default function Bookings({navigation, route}) {
   const day = route.params.date.timestamp;
   
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [tables, setTables] = useState(null);
   const [bookings, setBookings] = useState(null);
 
   useEffect(() => {
-    isFocused && getDayBookings(day, token).then(bookings => (
-      getTables(token).then(res => {
+    isFocused && getDayBookings(day).then(bookings => (
+      getTables().then(res => {
         setBookings(bookings);
         setTables(res.tables.amount);
       })

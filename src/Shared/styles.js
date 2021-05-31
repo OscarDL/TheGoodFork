@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 12,
     backgroundColor: colors.accentPrimary,
-    borderRadius: Platform.OS === 'ios' ? 8 : 4
+    borderRadius: Platform.OS === 'ios' ? 10 : 5
   },
   title: {
     fontSize: 24,

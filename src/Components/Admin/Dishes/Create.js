@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { createDish } from '../../../Functions/dishes';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const pickerStyle = {
@@ -28,7 +27,6 @@ const pickerStyle = {
 
 
 export default function AdminCreateDish({navigation, route}) {
-  const [{token}] = useAuthContext();
   const [dish, setDish] = useState({
     name: '',
     image: '',
@@ -40,7 +38,7 @@ export default function AdminCreateDish({navigation, route}) {
 
 
   const handleCreate = () => {
-    createDish({...dish, stock: dish.stock || null}, token).then(res => {
+    createDish({...dish, stock: dish.stock || null}).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de création',
         text2: res.desc ?? res,
@@ -55,73 +53,75 @@ export default function AdminCreateDish({navigation, route}) {
 
 
   return (
-    <KeyboardAvoidingView style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-    >
-      <View style={{alignItems: 'center'}}>
-        <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
-        
-        <View style={styles.pickerView}>
-          <Picker
-            onValueChange={type => setDish({...dish, type})}
-            items={[
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrée', value: 'appetizer', key: 0 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plat', value: 'mainDish', key: 1 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Dessert', value: 'dessert', key: 2 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson', value: 'drink', key: 3 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
-            ]}
-            placeholder={{}}
-            value={dish.type}
-            style={pickerStyle}
-            Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+    <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
+      <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+      >
+        <View style={{alignItems: 'center'}}>
+          <Text style={{marginBottom: 10}}>Sélectionnez le type</Text>
+          
+          <View style={styles.pickerView}>
+            <Picker
+              onValueChange={type => setDish({...dish, type})}
+              items={[
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrée', value: 'appetizer', key: 0 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plat', value: 'mainDish', key: 1 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Dessert', value: 'dessert', key: 2 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson', value: 'drink', key: 3 },
+                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+              ]}
+              placeholder={{}}
+              value={dish.type}
+              style={pickerStyle}
+              Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
+            />
+          </View>
+        </View>
+
+        <View>
+          <Input placeholder='Nom' placeholderTextColor={colors.accentSecondary} onChangeText={name => setDish({...dish, name})}/>
+          <Input placeholder='Détails' placeholderTextColor={colors.accentSecondary} onChangeText={detail => setDish({...dish, detail})}/>
+
+          <View style={{flexDirection: 'row'}}>
+            <Input
+              value={dish.price}
+              keyboardType='numeric'
+              placeholder='Prix (EUR)'
+              containerStyle={{width:'30%'}}
+              placeholderTextColor={colors.accentSecondary}
+              onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}
+            />
+            <Input
+              value={dish.stock}
+              keyboardType='numeric'
+              containerStyle={{width:'70%'}}
+              placeholder='Stock (le cas échéant)'
+              placeholderTextColor={colors.accentSecondary}
+              onChangeText={stock => setDish({...dish, stock: stock.replace(/[^0-9]/g, '')})}
+            />
+          </View>
+          
+          <Input
+            value={dish.image}
+            placeholder='Image (URL Cloudinary)'
+            placeholderTextColor={colors.accentSecondary}
+            onChangeText={image => setDish({...dish, image})}
           />
         </View>
-      </View>
 
-      <View>
-        <Input placeholder='Nom' placeholderTextColor={colors.accentSecondary} onChangeText={name => setDish({...dish, name})}/>
-        <Input placeholder='Détails' placeholderTextColor={colors.accentSecondary} onChangeText={detail => setDish({...dish, detail})}/>
-
-        <View style={{flexDirection: 'row'}}>
-          <Input
-            value={dish.price}
-            keyboardType='numeric'
-            placeholder='Prix (EUR)'
-            containerStyle={{width:'30%'}}
-            placeholderTextColor={colors.accentSecondary}
-            onChangeText={price => setDish({...dish, price: price.replace(',', '.')})}
-          />
-          <Input
-            value={dish.stock}
-            keyboardType='numeric'
-            containerStyle={{width:'70%'}}
-            placeholder='Stock (le cas échéant)'
-            placeholderTextColor={colors.accentSecondary}
-            onChangeText={stock => setDish({...dish, stock: stock.replace(/[^0-9]/g, '')})}
+        <View style={{alignItems: 'center'}}>
+          <Button
+            icon={<Icon
+              color='white'
+              name='restaurant'
+              style={{marginRight: 10}}
+            />}
+            title='Ajouter'
+            onPress={handleCreate}
+            buttonStyle={[styles.button]}
           />
         </View>
-        
-        <Input
-          value={dish.image}
-          placeholder='Image (URL Cloudinary)'
-          placeholderTextColor={colors.accentSecondary}
-          onChangeText={image => setDish({...dish, image})}
-        />
-      </View>
-
-      <View style={{alignItems: 'center'}}>
-        <Button
-          icon={<Icon
-            color='white'
-            name='restaurant'
-            style={{marginRight: 10}}
-          />}
-          title='Ajouter'
-          onPress={handleCreate}
-          buttonStyle={[styles.button]}
-        />
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }

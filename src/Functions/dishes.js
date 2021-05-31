@@ -24,9 +24,10 @@ export const getDishes = async (type = null) => {
 };
 
 
-export const createDish = async (dish, token) => {
+export const createDish = async (dish) => {
   try {
-    const {data} = await axios.post(apiUrl + 'dishes', dish, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.post(apiUrl + 'dishes', dish, config);
 
     if (!data.success) return data?.error;
 
@@ -40,9 +41,10 @@ export const createDish = async (dish, token) => {
 };
 
 
-export const editDish = async (token, id, dish) => {
+export const editDish = async (id, dish) => {
   try {
-    const {data} = await axios.put(apiUrl + 'dishes/' + id, dish, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'dishes/' + id, dish, config);
 
     if (!data.success) return data?.error;
 
@@ -55,9 +57,10 @@ export const editDish = async (token, id, dish) => {
 };
 
 
-export const deleteDish = async (token, id, dish) => {
+export const deleteDish = async (id, dish) => {
   try {
-    const {data} = await axios.delete(apiUrl + 'dishes/' + id, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.delete(apiUrl + 'dishes/' + id, config);
 
     if (!data.success) return data?.error;
 

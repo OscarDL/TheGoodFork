@@ -90,19 +90,21 @@ function UserOrdersComponent({navigation, orders}) {
 
 function UserOrderTabs({navigation}) {
   const isFocused = useIsFocused();
+  const [{user}] = useAuthContext();
+
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{token, user}] = useAuthContext();
+  
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState('date');
   const [date, setDate] = useState(new Date(Date.now()));
 
   useEffect(() => {
-    if ((isFocused || retry) && token) getOrders(user, token).then(res => {
+    if (isFocused || retry) getOrders(user).then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
       setRetry(false);
     });
-  }, [isFocused, token, retry, setRetry]);
+  }, [isFocused, retry, setRetry]);
 
 
   const androidChange = (e) => {

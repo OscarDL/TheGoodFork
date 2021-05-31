@@ -64,7 +64,7 @@ export default function OrderItem({item, type, oldOrder, order, setOrder, setPri
           <TouchableOpacity
             onPress={() => addItem(item, 1)}
             style={{minWidth: '30%', borderBottomRightRadius: 6}}
-            disabled={item.stock !== null && quantity >= item.stock}
+            disabled={item.stock !== null && quantity >= (item.stock + initialQuantity)}
           >
             <Icon name='add' color={colors.accentPrimary} style={styles.orderItemButton}/>
           </TouchableOpacity>

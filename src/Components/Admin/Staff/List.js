@@ -10,7 +10,6 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getStaff } from '../../../Functions/staff';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const pickerStyle = {
@@ -50,13 +49,12 @@ const failureAlert = (error, navigation, setRetry) => {
 
 export default function AdminStaffList({navigation}) {
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [type, setType] = useState('all');
   const [staff, setStaff] = useState(null);
   const [retry, setRetry] = useState(false);
 
   useEffect(() => {
-    if (isFocused || retry) getStaff(token).then(res => {
+    if (isFocused || retry) getStaff().then(res => {
       res.success ? setStaff(res.users) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });

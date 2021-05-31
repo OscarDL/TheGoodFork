@@ -1,20 +1,14 @@
-export const appState = {
-  order: null,
-  darkTheme: false
+export const aappState = {
+  theme: 'light'
 };
 
 
-export const appReducer = (state, action) => {
+export const aappReducer = (state, action) => {
   switch(action.type) {
-    case 'ORDER':
-      return {
-        ...state,
-        order: action.order
-      };
     case 'THEME':
       return {
         ...state,
-        darkTheme: action.darkTheme
+        theme: action.theme
       };
     default:
       return state;

@@ -7,31 +7,30 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 import { cancelOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
 
 export default function WaiterOrderDetails({navigation, route}) {
-  const {order, pay = false, readOnly} = route.params;
+  const {pay = false, readOnly} = route.params;
 
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [loading, setLoading] = useState(false);
-  const [updatedOrder, setUpdatedOrder] = useState(order);
+  const [order, setOrder] = useState(route.params.order);
 
   useEffect(() => {
-    isFocused && getOrder(order._id, token).then(res => setUpdatedOrder(res.order));
+    isFocused && getOrder(route.params.order._id).then(res => setOrder(res.order));
     navigation.setOptions({
-      title: `${order.user.firstName} ${order.user.lastName}\u2000\u2013\u2000${(order.takeaway ? 'À emporter' : 'Sur place')}`
+      title: `${route.params.order.user.firstName} ${route.params.order.user.lastName}` +
+      `\u2000\u2013\u2000${(route.params.order.takeaway ? 'À emporter' : 'Sur place')}`
     });
-  }, [isFocused, setUpdatedOrder]);
+  }, [isFocused, setOrder]);
 
 
   const handleValidate = () => {
     setLoading(true);
 
-    validateOrder(updatedOrder, token).then(res => {
+    validateOrder(order).then(res => {
       setLoading(false);
 
       Toast.show({
@@ -44,7 +43,7 @@ export default function WaiterOrderDetails({navigation, route}) {
       });
       
       res.success && navigation.goBack();
-    })
+    });
   };
   
   const handleCancel = () => {
@@ -55,7 +54,7 @@ export default function WaiterOrderDetails({navigation, route}) {
         onPress: () => {
           setLoading(true);
 
-          cancelOrder(updatedOrder, token).then(res => {
+          cancelOrder(order).then(res => {
             setLoading(false);
   
             Toast.show({
@@ -80,18 +79,18 @@ export default function WaiterOrderDetails({navigation, route}) {
       'Êtes-vous sûr ?',
       "Vous êtes sur le point d'annuler cette commande.",
       Platform.OS === 'ios' ? actions : actions.reverse()
-    )
+    );
   };
   
   
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-        <OrderDetails order={updatedOrder}/>
+        <OrderDetails order={order}/>
         <View style={{alignItems: 'center', margin: 20, marginBottom: 80}}>
           {readOnly
             ?
-          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
             :
           <>
             <TouchableOpacity style={{padding: 10}} onPress={handleValidate}>
@@ -105,14 +104,14 @@ export default function WaiterOrderDetails({navigation, route}) {
         </View>
       </ScrollView>
 
-      {!readOnly && !updatedOrder.validated && !updatedOrder.paid && (
+      {!readOnly && !order.validated && !order.paid && (
         <FAB style={styles.fab} icon='pencil' label='Modifier' color='white'
-        onPress={() => navigation.navigate('WaiterEditOrder', {order: updatedOrder})}/>
+        onPress={() => navigation.navigate('WaiterEditOrder', {order})}/>
       )}
 
       {pay && (
         <FAB style={styles.fab} icon='credit-card' label='Payer' color='white'
-        onPress={() => navigation.navigate('WaiterPayOrder', {order: updatedOrder, type: 'edit'})}/>
+        onPress={() => navigation.navigate('WaiterPayOrder', {order, type: 'edit'})}/>
       )}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>

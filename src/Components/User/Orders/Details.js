@@ -7,42 +7,39 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getOrder, cancelOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
 
 export default function UserOrderDetails({navigation, route}) {
-  const {order} = route.params;
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [loading, setLoading] = useState(false);
-  const [updatedOrder, setUpdatedOrder] = useState(order);
+  const [order, setOrder] = useState(route.params.order);
   
   useEffect(() => {
-    isFocused && getOrder(order._id, token).then(res => res.success && setUpdatedOrder(res.order));
-    navigation.setOptions({title: `Commande ${(updatedOrder.takeaway ? 'à emporter' : 'sur place')}`});
+    isFocused && getOrder(route.params.order._id).then(res => res.success && setOrder(res.order));
+    navigation.setOptions({title: `Commande ${(route.params.order.takeaway ? 'à emporter' : 'sur place')}`});
   }, [isFocused]);
 
   useEffect(() => {
-    !order.paid && (function() {
-      const actions = [
-        {
-          text: 'Payer',
-          onPress: () => navigation.navigate('UserPayOrder', {order, type: 'edit'})
-        }, {
-          text: 'Plus tard',
-          style: 'cancel'
-        }
-      ];
+    const actions = [
+      {
+        text: 'Payer',
+        onPress: () => navigation.navigate('UserPayOrder', {order: route.params.order, type: 'edit'})
+      }, {
+        text: 'Plus tard',
+        style: 'cancel'
+      }
+    ];
 
-      return Alert.alert(
+    !route.params.order.paid && (
+      Alert.alert(
         'Commande impayée',
         'Souhaitez-vous la payer maintenant ?',
         Platform.OS === 'ios' ? actions : actions.reverse()
-      );
-    }());
-  }, [order]);
+      )
+    );
+  }, []);
 
 
   const handleCancel = () => {
@@ -53,7 +50,7 @@ export default function UserOrderDetails({navigation, route}) {
         onPress: () => {
           setLoading(true);
 
-          cancelOrder(order, token).then(res => {
+          cancelOrder(order).then(res => {
             setLoading(false);
 
             Toast.show({
@@ -85,12 +82,12 @@ export default function UserOrderDetails({navigation, route}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
-        <OrderDetails order={updatedOrder}/>
+        <OrderDetails order={order}/>
 
         <View style={{alignItems: 'center', margin: 20}}>
-          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {updatedOrder.status}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
           
-          {!updatedOrder.validated && (
+          {!order.validated && (
             <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={handleCancel}>
               <Text style={styles.delete}>Annuler ma commande</Text>
             </TouchableOpacity>
@@ -98,9 +95,9 @@ export default function UserOrderDetails({navigation, route}) {
         </View>
       </ScrollView>
 
-      {!updatedOrder.validated && !updatedOrder.paid && (
+      {!order.validated && !order.paid && (
         <FAB style={styles.fab} icon='pencil' label='Modifier' color='white'
-        onPress={() => navigation.navigate('UserEditOrder', {order: updatedOrder})}/>
+        onPress={() => navigation.navigate('UserEditOrder', {order})}/>
       )}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>

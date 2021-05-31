@@ -32,8 +32,8 @@ const pickerStyle = {
 
   
 export default function UserSubmitOrder({navigation, route}) {
+  const [{user}] = useAuthContext();
   const {order, type} = route.params;
-  const [{user, token}] = useAuthContext();
   
   const [tip, setTip] = useState(order.tip);
   const [details, setDetails] = useState(order.details);
@@ -45,7 +45,7 @@ export default function UserSubmitOrder({navigation, route}) {
 
 
   const handleEdit = () => {
-    editOrder({...order, tip}, token).then(res => {
+    editOrder({...order, tip}).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -61,7 +61,7 @@ export default function UserSubmitOrder({navigation, route}) {
   };
   
   const handleSubmit = () => {
-    submitOrder({...order, tip, user}, token, user.email).then(res => {
+    submitOrder({...order, tip, user}, user.email).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de commande',
         text2: res.desc ?? res,

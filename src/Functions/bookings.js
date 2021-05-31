@@ -4,9 +4,10 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const getBookings = async (token) => {
+export const getBookings = async () => {
   try {
-    const {data} = await axios.get(apiUrl + 'bookings', authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'bookings', config);
 
     if (!data.success) return data?.error;
 
@@ -16,9 +17,10 @@ export const getBookings = async (token) => {
 };
 
 
-export const getDayBookings = async (day, token) => {
+export const getDayBookings = async (day) => {
   try {
-    const {data} = await axios.get(apiUrl + 'bookings/day/' + day, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'bookings/day/' + day, config);
 
     if (!data.success) return data?.error;
     
@@ -28,22 +30,12 @@ export const getDayBookings = async (day, token) => {
 };
 
 
-export const getBooking = async (id, token) => {
-  try {
-    const {data} = await axios.get(apiUrl + 'bookings/' + id, authConfig(token));
-
-    if (!data.success) return data?.error;
-
-    return {success: true, booking: data.booking};
-    
-  } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
-};
-
-
-export const newBooking = async (booking, token) => {
+export const newBooking = async (booking) => {
   try {
     booking.user.email = booking.user.email.replace(' ', '');
-    const {data} = await axios.post(apiUrl + 'bookings', booking, authConfig(token));
+    
+    const config = await authConfig();
+    const {data} = await axios.post(apiUrl + 'bookings', booking, config);
     
     if (!data.success) return data?.error;
 
@@ -56,9 +48,10 @@ export const newBooking = async (booking, token) => {
 };
 
 
-export const editBooking = async (booking, token) => {
+export const editBooking = async (booking) => {
   try {
-    const {data} = await axios.put(apiUrl + 'bookings/' + booking._id, booking, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'bookings/' + booking._id, booking, config);
     
     if (!data.success) return data?.error;
 
@@ -71,9 +64,10 @@ export const editBooking = async (booking, token) => {
 };
 
 
-export const deleteBooking = async (booking, token) => {
+export const deleteBooking = async (booking) => {
   try {
-    const {data} = await axios.delete(apiUrl + 'bookings/' + booking._id, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.delete(apiUrl + 'bookings/' + booking._id, config);
 
     if (!data.success) return data?.error;
 

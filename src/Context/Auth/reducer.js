@@ -1,6 +1,5 @@
 export const authState = {
-  user: null,
-  token: null
+  user: null
 };
 
 
@@ -9,8 +8,7 @@ export const authReducer = (state, action) => {
     case 'LOGIN':
       return {
         ...state,
-        user: action.user,
-        token: action.token
+        user: action.user
       };
     default:
       return state;

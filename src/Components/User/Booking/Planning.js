@@ -11,7 +11,6 @@ import MyBookings from './Edit/MyBookings';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getBookings } from '../../../Functions/bookings';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 
 
 const Stack = createStackNavigator();
@@ -34,12 +33,11 @@ export default function UserPlanning({title}) {
 
 function UserPlanningComponent({navigation}) {
   const isFocused = useIsFocused();
-  const [{token}] = useAuthContext();
   const [bookings, setBookings] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
 
   useEffect(() => {
-    isFocused && getBookings(token).then(res => {
+    isFocused && getBookings().then(res => {
       if (!res.success) return setBookings({});
 
       const dates = markedDates;

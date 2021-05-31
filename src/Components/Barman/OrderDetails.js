@@ -54,7 +54,7 @@ export default function BarmanOrderDetails({navigation, route}) {
         </View>
 
       </ScrollView>
-      <FAB style={styles.fab} label='Prête' icon='check' color='white' onPress={informWaiters}/>
+      <FAB style={styles.fab} label='Prêt' icon='check' color='white' onPress={informWaiters}/>
     </View>
   );
 }

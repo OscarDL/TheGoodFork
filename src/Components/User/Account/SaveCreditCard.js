@@ -1,9 +1,9 @@
 import Toast from 'react-native-toast-message';
 import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
-import { View, Text, Alert, Platform, TouchableOpacity } from 'react-native';
 import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
+import { TouchableWithoutFeedback, Keyboard, View, KeyboardAvoidingView, Text, Alert, Platform, TouchableOpacity } from 'react-native';
 
 import { styles } from '../../../Shared/styles';
 import { useAuthContext } from '../../../Context/Auth/Provider';
@@ -80,32 +80,36 @@ export default function UserSaveCreditCard({navigation}) {
 
 
   return (
-    <View style={styles.container}>
-      <Text style={{textAlign: 'center', paddingHorizontal: 20}}>
-        Vos données de paiement sont enregistrées de manière locale et sécurisée. Seulement vous y avez accès.
-      </Text>
+    <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
+      <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+      >
+        <Text style={{textAlign: 'center', paddingHorizontal: 20}}>
+          Vos données de paiement sont enregistrées de manière locale et sécurisée. Seulement vous y avez accès.
+        </Text>
 
-      <CreditCard user={user} card={card} setCard={setCard}/>
+        <CreditCard user={user} card={card} setCard={setCard}/>
 
-      <View style={{alignItems: 'center'}}>
-        <Button
-          icon={<Icon
-            name='save'
-            color='white'
-            style={{marginRight: 10}}
-          />}
-          title='Enregistrer'
-          onPress={() => creditCard(true)}
-          buttonStyle={[{...styles.button, marginBottom: 20}]}
-          disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
-        />
-      
-        {exists ? (
-          <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => creditCard(false)}>
-            <Text style={styles.delete}>Supprimer mes données de paiement</Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-    </View>
+        <View style={{alignItems: 'center'}}>
+          <Button
+            icon={<Icon
+              name='save'
+              color='white'
+              style={{marginRight: 10}}
+            />}
+            title='Enregistrer'
+            onPress={() => creditCard(true)}
+            buttonStyle={[{...styles.button, marginBottom: 20}]}
+            disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
+          />
+        
+          {exists ? (
+            <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => creditCard(false)}>
+              <Text style={styles.delete}>Supprimer mes données de paiement</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   )
 }

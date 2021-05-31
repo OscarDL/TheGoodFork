@@ -30,13 +30,13 @@ export default function OrderDishes({type, dishes, oldOrder, order, setOrder, se
 
   return (
     <View style={{...styles.container, flex: 1}}>
-      {dishes && <FlatList
+      <FlatList
         numColumns={cols}
         renderItem={renderItem}
         data={formatGrid(dishes, cols)}
         keyExtractor={item => item._id}
         contentContainerStyle={{padding: 5}}
-      />}
+      />
     </View>
   );
 }

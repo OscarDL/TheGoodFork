@@ -8,7 +8,7 @@ import { config, authConfig } from './utils';
 
 export const login = async (user) => {
   try {
-    user.email = user.email.replace(' ', '');
+    user.email = user.email?.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'user/login', user, config);
 
     if (!data.success) return data?.error;
@@ -21,7 +21,7 @@ export const login = async (user) => {
 
 export const register = async (user) => {
   try {
-    user.email = user.email.replace(' ', '');
+    user.email = user.email?.replace(' ', '');
     const {data} = await axios.post(apiUrl + 'user/register', user, config);
 
     if (!data.success) return data?.error;
@@ -34,7 +34,8 @@ export const register = async (user) => {
 
 export const getUserData = async (token) => {
   try {
-    const {data} = await axios.get(apiUrl + 'user', authConfig(token));
+    const config = await authConfig(token);
+    const {data} = await axios.get(apiUrl + 'user', config);
     
     if (!data.success) return data?.error;
 
@@ -46,7 +47,7 @@ export const getUserData = async (token) => {
 
 export const sendEmail = async (email) => {
   try {
-    email = email.replace(' ', '');
+    email = email?.replace(' ', '');
     const {data} = await axios.put(apiUrl + 'user/forgot', {email}, config);
 
     if (!data.success) return data?.error;
@@ -61,11 +62,11 @@ export const sendEmail = async (email) => {
 };
 
 
-export const resetPassword = async (token, password, passCheck) => {
-  if (!token) return 'Veuillez entrer le code reçu par email.';
+export const resetPassword = async (resetToken, password, passCheck) => {
+  if (!resetToken) return 'Veuillez entrer le code reçu par email.';
 
   try {
-    const {data} = await axios.put(apiUrl + 'user/reset/' + token, {password, passCheck}, config);
+    const {data} = await axios.put(apiUrl + 'user/reset/' + resetToken, {password, passCheck}, config);
 
     if (!data.success) return data?.error;
     
@@ -78,10 +79,12 @@ export const resetPassword = async (token, password, passCheck) => {
 };
 
 
-export const updateData = async (user, token) => {
+export const updateData = async (user) => {
   try {
-    user.email = user.email.replace(' ', '');
-    const {data} = await axios.put(apiUrl + 'user/data', user, authConfig(token));
+    user.email = user.email?.replace(' ', '');
+    
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'user/data', user, config);
     
     if (!data.success) return data?.error;
 
@@ -96,9 +99,10 @@ export const updateData = async (user, token) => {
 };
 
 
-export const updatePassword = async (current, password, passCheck, token) => {
+export const updatePassword = async (current, password, passCheck) => {
   try {
-    const {data} = await axios.put(apiUrl + 'user/password', {current, password, passCheck}, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'user/password', {current, password, passCheck}, config);
     
     if (!data.success) return data?.error;
 
@@ -113,9 +117,10 @@ export const updatePassword = async (current, password, passCheck, token) => {
 };
 
 
-export const deleteUser = async (token) => {
+export const deleteUser = async () => {
   try {
-    const {data} = await axios.delete(apiUrl + 'user', authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.delete(apiUrl + 'user', config);
     
     if (!data.success) return data?.error;
 
@@ -128,10 +133,10 @@ export const deleteUser = async (token) => {
 export const checkLogin = async (authDispatch) => {
   const token = await getItemAsync('authToken');
 
-  if (!token) return authDispatch({ type: 'LOGIN', user: null, token: '' });
+  if (!token) return authDispatch({ type: 'LOGIN', user: {} });
 
   getUserData(token).then(async (res) => {
-    if (res.success) return authDispatch({ type: 'LOGIN', user: res.user, token });
+    if (res.success) return authDispatch({ type: 'LOGIN', user: res.user });
     
     Alert.alert(
       'Erreur de connexion', 'Erreur lors de la connexion automatique. Merci de vous reconnecter.',
@@ -139,7 +144,7 @@ export const checkLogin = async (authDispatch) => {
         text: 'Compris',
         onPress: async () => {
           await deleteItemAsync('authToken');
-          authDispatch({ type: 'LOGIN', user: null, token: '' });
+          authDispatch({ type: 'LOGIN', user: {} });
         }
       }]
     );

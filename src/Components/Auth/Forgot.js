@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Icon, Input } from 'react-native-elements';
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
 import { sendEmail } from '../../Functions/user';
@@ -26,24 +26,26 @@ export default function Forgot({navigation}) {
 
 
   return (
-    <KeyboardAvoidingView
-      style={{...styles.container, alignItems: 'center'}}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-    >
-      <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer votre adresse email pour réinitialiser votre mot de passe.</Text>
-      <Input keyboardType='email-address' autoCapitalize='none' placeholder='Adresse email' onChangeText={email => setEmail(email)} />
-      <View style={{marginVertical: 50}}>
-        <Button
-          icon={<Icon
-            name='send'
-            color='white'
-            style={{marginRight: 10}}
-          />}
-          onPress={handleEmail}
-          title='Envoyer ma demande'
-          buttonStyle={[styles.button]} 
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
+      <KeyboardAvoidingView
+        style={{...styles.container, alignItems: 'center'}}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+      >
+        <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer votre adresse email pour réinitialiser votre mot de passe.</Text>
+        <Input keyboardType='email-address' autoCapitalize='none' placeholder='Adresse email' onChangeText={email => setEmail(email)} />
+        <View style={{marginVertical: 50}}>
+          <Button
+            icon={<Icon
+              name='send'
+              color='white'
+              style={{marginRight: 10}}
+            />}
+            onPress={handleEmail}
+            title='Envoyer ma demande'
+            buttonStyle={[styles.button]} 
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }

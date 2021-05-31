@@ -9,7 +9,7 @@ import { useAuthContext } from '../../Context/Auth/Provider';
 
 
 export default function LogoutButton() {
-  const [{user, token}, authDispatch] = useAuthContext();
+  const [{user}, authDispatch] = useAuthContext();
 
   const handleDelete = () => {
     if (user.type !== 'user') return null;
@@ -18,7 +18,7 @@ export default function LogoutButton() {
       {
         text: 'Supprimer',
         style: 'destructive',
-        onPress: () => deleteUser(token).then(res => {
+        onPress: () => deleteUser().then(res => {
           Toast.show({
             text1: res.title ?? 'Erreur de supression',
             text2: res.desc ?? res,

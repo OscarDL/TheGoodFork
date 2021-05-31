@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Icon } from 'react-native-elements';
+import { NavigationContainer } from '@react-navigation/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
+import { Provider, DefaultTheme, DarkTheme } from 'react-native-paper';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Login from './Auth/Login';
@@ -52,7 +53,6 @@ import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
 import { StatusBar } from 'expo-status-bar';
 import { checkLogin } from '../Functions/user';
-import { useAppContext } from '../Context/App/Provider';
 import { useAuthContext } from '../Context/Auth/Provider';
 import LogoutButton from '../Shared/Components/LogoutButton';
 
@@ -65,13 +65,12 @@ const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIO
 
 
 export default function Routes() {
-  const [{darkTheme}] = useAppContext();
-  const [{user, token}, authauthDispatch] = useAuthContext();
+  const [{user}, authDispatch] = useAuthContext();
 
-  useEffect(() => { checkLogin(authauthDispatch); }, [authauthDispatch]);
+  useEffect(() => { checkLogin(authDispatch); }, [authDispatch]);
 
 
-  const authStack = () => (
+  const AuthStack = () => (
     <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name='Login' options={{title: 'Connexion'}} component={Login} />
       <Stack.Screen name='Register' options={{title: "S'enregistrer", cardStyleInterpolator: iosH}} component={Register} />
@@ -80,7 +79,7 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
-  const adminStack = () => (
+  const AdminStack = () => (
     <Stack.Navigator initialRouteName='AdminHome'>
       <Stack.Screen name='AdminHome' component={AdminHome} options={{
         title: 'Centre administrateur',
@@ -100,7 +99,7 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
-  const barmanStack = () => (
+  const BarmanStack = () => (
     <Stack.Navigator initialRouteName='BarmanHome'>
       <Stack.Screen name='BarmanHome' component={BarmanHome} options={{
         title: 'Centre barmans',
@@ -111,7 +110,7 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
-  const cookStack = () => (
+  const CookStack = () => (
     <Stack.Navigator initialRouteName='CookHome'>
       <Stack.Screen name='CookHome'  component={CookHome} options={{
         title: 'Centre cuisiniers',
@@ -122,7 +121,7 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
-  const waiterStack = () => (
+  const WaiterStack = () => (
     <Stack.Navigator initialRouteName='WaiterHome'>
       <Stack.Screen name='WaiterHome' component={WaiterHome} options={{
         title: 'Centre serveurs',
@@ -144,7 +143,7 @@ export default function Routes() {
     </Stack.Navigator>
   );
 
-  const userStack = () => (
+  const UserStack = () => (
     <Tabs.Navigator barStyle={{backgroundColor: 'white'}} activeColor={colors.accentPrimary} tabBarOptions={{activeTintColor: colors.accentPrimary}}>
       <Tabs.Screen name='UserPlanning' options={{tabBarLabel: 'Planning', tabBarIcon: ({color}) => <Icon color={color} name='event-available' />}}>
         {props => <UserPlanning {...props} title='Réservations'/>}
@@ -165,24 +164,24 @@ export default function Routes() {
   );
 
   const components = {
-    'auth': authStack,
-    'admin': adminStack,
-    'barman': barmanStack,
-    'waiter': waiterStack,
-    'cook': cookStack,
-    'user': userStack
+    'auth': AuthStack,
+    'admin': AdminStack,
+    'barman': BarmanStack,
+    'waiter': WaiterStack,
+    'cook': CookStack,
+    'user': UserStack
   };
 
   
   return (
-    token === null ? (
+    user === null ? (
       <View style={styles.container}>
         <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
       </View>
     ) : (<>
-      <StatusBar style={darkTheme ? 'light' : 'dark'}/>
-      <NavigationContainer theme={darkTheme ? DarkTheme : DefaultTheme}>
-        <Stack.Navigator initialRouteName={token === '' ? 'auth' : user.type}>
+      <StatusBar style='dark'/>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={user === {} ? 'auth' : user.type}>
           <Stack.Screen name={user.type ?? 'auth'} options={{headerShown: false}} component={components[user.type ?? 'auth']} />
         </Stack.Navigator>
       </NavigationContainer>

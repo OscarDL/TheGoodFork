@@ -8,7 +8,6 @@ import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';
 import { getTables } from '../../../../Functions/tables';
-import { useAuthContext } from '../../../../Context/Auth/Provider';
 import TablePicker from '../../../../Shared/Components/Bookings/TablePicker';
 import PeriodPicker from '../../../../Shared/Components/Bookings/PeriodPicker';
 import { getDayBookings, editBooking, deleteBooking } from '../../../../Functions/bookings';
@@ -32,8 +31,6 @@ const circleZone = {
 
 
 export default function UserNewBooking({navigation, route}) {
-  const [{token}] = useAuthContext();
-
   const [step, setStep] = useState(3);
   const [show, setShow] = useState(null);
   
@@ -43,8 +40,8 @@ export default function UserNewBooking({navigation, route}) {
   const [booking, setBooking] = useState(route.params.booking);
   
   useEffect(() => {
-    getDayBookings(booking.dateBooked, token).then(bookings => (
-      getTables(token).then(res => {
+    getDayBookings(booking.dateBooked).then(bookings => (
+      getTables().then(res => {
         setLoading(false);
         setBookings(bookings);
         setTables(res.tables.amount);
@@ -60,7 +57,7 @@ export default function UserNewBooking({navigation, route}) {
     setLoading(true);
     setBooking({ ...booking, dateBooked: e.nativeEvent.timestamp });
 
-    getDayBookings(e.nativeEvent.timestamp, token).then(bookings => {
+    getDayBookings(e.nativeEvent.timestamp).then(bookings => {
       setStep(1);
       setLoading(false);
       setBookings(bookings);
@@ -71,7 +68,7 @@ export default function UserNewBooking({navigation, route}) {
     setShow(null);
     setLoading(true);
 
-    getDayBookings(booking.dateBooked, token).then(bookings => {
+    getDayBookings(booking.dateBooked).then(bookings => {
       setStep(1);
       setLoading(false);
       setBookings(bookings);
@@ -79,7 +76,7 @@ export default function UserNewBooking({navigation, route}) {
   };
 
   const handleEdit = () => {
-    editBooking(booking, token).then(res => {
+    editBooking(booking).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -99,7 +96,7 @@ export default function UserNewBooking({navigation, route}) {
       {
         text: 'Continuer',
         style: 'destructive',
-        onPress: () => deleteBooking(booking, token).then(res => {
+        onPress: () => deleteBooking(booking).then(res => {
           Toast.show({
             text1: res.title ?? "Erreur d'annulation",
             text2: res.desc ?? res,

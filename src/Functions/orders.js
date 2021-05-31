@@ -4,9 +4,10 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const getOrders = async (user, token) => {
+export const getOrders = async (user) => {
   try {
-    const {data} = await axios.get(apiUrl + 'orders', authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'orders', config);
 
     if (!data.success) return data?.error;
 
@@ -19,9 +20,10 @@ export const getOrders = async (user, token) => {
 };
 
 
-export const getOrder = async (id, token) => {
+export const getOrder = async (id) => {
   try {
-    const {data} = await axios.get(apiUrl + 'orders/' + id, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.get(apiUrl + 'orders/' + id, config);
 
     if (!data.success) return data?.error;
 
@@ -31,10 +33,12 @@ export const getOrder = async (id, token) => {
 };
 
 
-export const validateOrder = async (order, token) => {
+export const validateOrder = async (order) => {
   try {
     order.validated = true;
-    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, authConfig(token));
+
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, config);
 
     if (!data.success) return data?.error;
 
@@ -47,11 +51,13 @@ export const validateOrder = async (order, token) => {
 };
 
 
-export const submitOrder = async (order, token, email) => {
+export const submitOrder = async (order, email) => {
   try {
     order.orderedBy = email;
     order.price = totalPrice(order); // For security
-    const {data} = await axios.post(apiUrl + 'orders', order, authConfig(token));
+
+    const config = await authConfig();
+    const {data} = await axios.post(apiUrl + 'orders', order, config);
     
     if (!data.success) return data?.error;
 
@@ -66,10 +72,12 @@ export const submitOrder = async (order, token, email) => {
 };
 
 
-export const editOrder = async (order, token) => {
+export const editOrder = async (order) => {
   try {
     order.price = totalPrice(order); // For security
-    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, authConfig(token));
+
+    const config = await authConfig();
+    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, config);
     
     if (!data.success) return data?.error;
 
@@ -84,9 +92,10 @@ export const editOrder = async (order, token) => {
 };
 
 
-export const cancelOrder = async (order, token) => {
+export const cancelOrder = async (order) => {
   try {
-    const {data} = await axios.delete(apiUrl + 'orders/' + order._id, authConfig(token));
+    const config = await authConfig();
+    const {data} = await axios.delete(apiUrl + 'orders/' + order._id, config);
 
     if (!data.success) return data?.error;
 

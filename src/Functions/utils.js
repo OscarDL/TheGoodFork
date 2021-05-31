@@ -1,15 +1,21 @@
-export const authConfig = (token) => ({
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + token
-  }
-});
+import { getItemAsync } from 'expo-secure-store';
+
+export const authConfig = async (token = null) => {
+  if (!token) token = await getItemAsync('authToken');
+
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+  };
+};
 
 export const config = {
   headers: {
     'Content-Type': 'application/json'
   }
-}
+};
 
 
 export const formatGrid = (data, numCol) => {
@@ -22,7 +28,7 @@ export const formatGrid = (data, numCol) => {
   }
 
   return data.sort((a, b) => a.name > b.name ? 1 : -1);
-}
+};
 
 export const matchesOrder = (order, search) => (
   order.user.firstName.toLowerCase().includes(search.toLowerCase())

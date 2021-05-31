@@ -15,7 +15,7 @@ const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao
 
 
 export default function BookingPeriod({tables, bookings, setRefresh, dateBooked, period}) {
-  const [{user, token}] = useAuthContext();
+  const [{user}] = useAuthContext();
   
   const handleSubmit = (table) => {
     const booking = {user, table, period, dateBooked};
@@ -26,7 +26,7 @@ export default function BookingPeriod({tables, bookings, setRefresh, dateBooked,
     const actions = [
       {
         text: 'Réserver',
-        onPress: () => newBooking(booking, token).then(res => {
+        onPress: () => newBooking(booking).then(res => {
           Toast.show({
             text1: res.title ?? 'Erreur de réservation',
             text2: res.desc ?? res,

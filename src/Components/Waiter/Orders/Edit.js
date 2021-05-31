@@ -1,40 +1,34 @@
 import { Button } from 'react-native-elements';
+import { Text, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native-paper';
-import { View, Text, SafeAreaView, Platform } from 'react-native';
 
-import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrder } from '../../../Functions/orders';
-import { useAuthContext } from '../../../Context/Auth/Provider';
+import { truncPrice } from '../../../Functions/utils';
 import SubmitOrderTabs from '../../../Shared/Components/Orders/SubmitOrderTabs';
 
 
 export default function WaiterEditOrder({navigation, route}) {
-  const [{token}] = useAuthContext();
-
-  const [newOrder, setNewOrder] = useState(null);
-  const [price, setPrice] = useState(route.params.order.price);
+  const [order, setOrder] = useState(null);
+  const [price, setPrice] = useState(null);
   
   useEffect(() => {
-    getOrder(route.params.order._id, token).then(res => {
-      setNewOrder(res.success ? res.order : route.params.order);
+    getOrder(route.params.order._id).then(res => {
+      setOrder(res.success ? res.order : route.params.order);
       setPrice(res.success ? res.order.price : route.params.order.price);
     });
     // Necessary, else for some reason the original order would get mutated
     // when using the newOrder state with the order prop as default value
-  }, [setNewOrder, setPrice]);
+  }, [setOrder, setPrice]);
 
 
-  return newOrder ? <>
-    <SubmitOrderTabs oldOrder={route.params.order} order={newOrder} setOrder={setNewOrder} setPrice={setPrice}/>
+  return (order && price) ? <>
+    <SubmitOrderTabs oldOrder={route.params.order} order={order} setOrder={setOrder} setPrice={setPrice}/>
 
     <SafeAreaView style={styles.orderStrip}>
-      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {price} EUR</Text>
+      <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {truncPrice(price)} EUR</Text>
       <Button title='Confirmer' disabled={!price} buttonStyle={[styles.button]} 
-      onPress={() => navigation.navigate('WaiterSubmitOrder', {order: newOrder, type: 'edit'})}/>
+      onPress={() => navigation.navigate('WaiterSubmitOrder', {order, type: 'edit'})}/>
     </SafeAreaView>
-  </> : <View style={styles.container}>
-    <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
-  </View>
+  </> : null
 };

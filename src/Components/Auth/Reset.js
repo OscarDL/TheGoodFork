@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Input, Icon } from 'react-native-elements';
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { styles } from '../../Shared/styles';
 import { resetPassword } from '../../Functions/user';
@@ -28,29 +28,31 @@ export default function Reset({navigation}) {
 
 
   return (
-    <KeyboardAvoidingView
-      style={{...styles.container, alignItems: 'center'}}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-    >
-      <View>
-        <Text style={{margin: 10, textAlign: 'center'}}>Réinitialisation de votre mot de passe</Text>
-        <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer le code qui vous a été envoyé par email, ainsi que votre nouveau mot de passe.</Text>
-      </View>
-      <View style={{width: '100%'}}>
-        <Input placeholder='Code secret' onChangeText={token => setToken(token)}/>
-        <Input placeholder='Nouveau mot de passe' secureTextEntry onChangeText={password => setPassword(password)}/>
-        <Input placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)}/>
-      </View>
-      <Button
-        icon={<Icon
-          name='done'
-          color='white'
-          style={{marginRight: 10}}
-        />}
-        title='Réinitialiser'
-        onPress={handleReset}
-        buttonStyle={[styles.button]}
-      />
-    </KeyboardAvoidingView>
+    <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
+      <KeyboardAvoidingView
+        style={{...styles.container, alignItems: 'center'}}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+      >
+        <View>
+          <Text style={{margin: 10, textAlign: 'center'}}>Réinitialisation de votre mot de passe</Text>
+          <Text style={{margin: 10, textAlign: 'center'}}>Veuillez entrer le code qui vous a été envoyé par email, ainsi que votre nouveau mot de passe.</Text>
+        </View>
+        <View style={{width: '100%'}}>
+          <Input placeholder='Code secret' onChangeText={token => setToken(token)}/>
+          <Input placeholder='Nouveau mot de passe' secureTextEntry onChangeText={password => setPassword(password)}/>
+          <Input placeholder='Confirmation' secureTextEntry onChangeText={passCheck => setPassCheck(passCheck)}/>
+        </View>
+        <Button
+          icon={<Icon
+            name='done'
+            color='white'
+            style={{marginRight: 10}}
+          />}
+          title='Réinitialiser'
+          onPress={handleReset}
+          buttonStyle={[styles.button]}
+        />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }

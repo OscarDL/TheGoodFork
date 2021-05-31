@@ -33,13 +33,14 @@ const failureAlert = (error, navigation, setRetry) => {
 
 export default function WaiterCheckOrders({navigation}) {
   const isFocused = useIsFocused();
+  const [{user}] = useAuthContext();
+  
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
-  const [{user, token}] = useAuthContext();
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user, token).then(res => {
+    if (isFocused || retry) getOrders(user).then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });
