@@ -55,7 +55,7 @@ export const sendEmail = async (email) => {
     return {
       success: true,
       title: 'Email de récupération',
-      desc: data.data
+      desc: 'Email envoyé à ' + email + ' avec succès.'
     };
 
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -72,8 +72,8 @@ export const resetPassword = async (resetToken, password, passCheck) => {
     
     return {
       success: true,
-      title: 'Réinitialisation réussie',
-      desc: data.data
+      title: 'Récupération réussie',
+      desc: 'Mot de passe réinitialisé avec succès.'
     };
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
@@ -109,8 +109,7 @@ export const updatePassword = async (current, password, passCheck) => {
     return {
       success: true,
       title: 'Modification réussie',
-      desc: 'Votre mot de passe a bien été mis à jour.',
-      user: data.user
+      desc: 'Votre mot de passe a bien été mis à jour.'
     };
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }

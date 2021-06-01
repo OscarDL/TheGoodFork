@@ -9,6 +9,7 @@ import { getDishes } from '../../../Functions/dishes';
 
 
 const Tabs = createMaterialTopTabNavigator();
+
 const style = {
   scrollEnabled: true,
   pressColor: 'darkgrey',
@@ -42,8 +43,8 @@ export default function SubmitOrderTabs({navigation, oldOrder, order, setOrder, 
 
   useEffect(() => {
     retry && getDishes().then(res => {
-      setRetry(false);
       res.success ? setDishes(res.dishes) : failureAlert(res, navigation, setRetry);
+      setRetry(false);
     });
   }, [retry, setRetry]);
 

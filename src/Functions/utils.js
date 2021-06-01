@@ -17,7 +17,6 @@ export const config = {
   }
 };
 
-
 export const formatGrid = (data, numCol) => {
   const numFullRows = Math.floor(data.length / numCol);
 
@@ -38,7 +37,6 @@ export const matchesOrder = (order, search) => (
   (order.user.firstName.toLowerCase() + ' ' + order.user.lastName.toLowerCase()).includes(search.toLowerCase())
 );
 
-
 export const getPeriod = (period) => {
   if (period === 1) return 'matin';
   if (period === 2) return 'midi';
@@ -46,5 +44,27 @@ export const getPeriod = (period) => {
   if (period === 4) return 'soir';
 };
 
+export const getStatus = (status) => {
+  const all = {
+    ready: 'prête',
+    served: 'servie',
+    pending: 'en attente',
+    preparing: 'en préparation'
+  };
+
+  return all[status];
+};
+
+export const getType = (type) => {
+  const types = {
+    appetizer: 'Entrée',
+    mainDish: 'Plat',
+    dessert: 'Dessert',
+    drink: 'Boisson',
+    alcohol: 'Alcool'
+  };
+
+  return types[type];
+};
 
 export const truncPrice = (price) => Number(price).toFixed(2);

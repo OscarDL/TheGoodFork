@@ -7,6 +7,7 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { getStatus } from '../../../Functions/utils';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 import { cancelOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
@@ -30,7 +31,7 @@ export default function WaiterOrderDetails({navigation, route}) {
   const handleValidate = () => {
     setLoading(true);
 
-    validateOrder(order).then(res => {
+    validateOrder({...order, status: 'validated'}).then(res => {
       setLoading(false);
 
       Toast.show({
@@ -90,11 +91,11 @@ export default function WaiterOrderDetails({navigation, route}) {
         <View style={{alignItems: 'center', margin: 20, marginBottom: 80}}>
           {readOnly
             ?
-          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
+          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {getStatus(order.status)}</Text>
             :
           <>
             <TouchableOpacity style={{padding: 10}} onPress={handleValidate}>
-              <Text style={styles.link}>Valider cette commande</Text>
+              <Text style={{...styles.link, fontWeight: 'bold', fontSize: 18}}>Valider cette commande</Text>
             </TouchableOpacity>
             <Text> </Text>
             <TouchableOpacity style={{padding: 10}} onPress={handleCancel}>

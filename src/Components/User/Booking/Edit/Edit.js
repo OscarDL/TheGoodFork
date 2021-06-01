@@ -29,49 +29,80 @@ const circleZone = {
   height: Dimensions.get('window').width * 0.3
 };
 
+const failureAlert = (error, navigation, setRetry) => {
+  const actions = [
+    {
+      text: 'Réessayer',
+      onPress: () => setRetry(true)
+    }, {
+      text: 'Annuler',
+      style: 'cancel',
+      onPress: () => navigation.goBack()
+    }
+  ];
+
+  Alert.alert(
+    'Erreur de chargement des tables', error,
+    Platform.OS === 'ios' ? actions : actions.reverse()
+  );
+};
+
 
 export default function UserNewBooking({navigation, route}) {
+  const [show, setShow] = useState(0);
   const [step, setStep] = useState(3);
-  const [show, setShow] = useState(null);
   
+  const [retry, setRetry] = useState(true);
   const [tables, setTables] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookings, setBookings] = useState(null);
   const [booking, setBooking] = useState(route.params.booking);
   
   useEffect(() => {
-    getDayBookings(booking.dateBooked).then(bookings => (
-      getTables().then(res => {
-        setLoading(false);
-        setBookings(bookings);
-        setTables(res.tables.amount);
-      })
-    ));
-  }, [setTables, setLoading, setBookings]);
+    retry && getDayBookings(booking.dateBooked).then(async (bookRes) => {
+      setRetry(false);
+      let error = null;
+
+      if (!bookRes.success)
+        error = bookRes;
+      else {
+        const tableRes = await getTables();
+        if (!tableRes.success)
+          error = tableRes;
+        else {
+          setBookings(bookRes.bookings);
+          setTables(tableRes.tables.amount);
+        }
+      }
+
+      setLoading(false);
+      error && failureAlert(error, navigation, setRetry);
+    });
+  }, [retry, setRetry, setTables, setLoading, setBookings]);
 
 
   const androidChange = (e) => {
-    if (e.type === 'dismissed' || e.nativeEvent.timestamp === booking.dateBooked) return setShow(null);
+    if (e.type === 'dismissed' || e.nativeEvent.timestamp === booking.dateBooked) return setShow(0);
 
-    setShow(null);
+    setShow(0);
     setLoading(true);
     setBooking({ ...booking, dateBooked: e.nativeEvent.timestamp });
 
-    getDayBookings(e.nativeEvent.timestamp).then(bookings => {
+    getDayBookings(e.nativeEvent.timestamp).then(res => {
       setStep(1);
       setLoading(false);
-      setBookings(bookings);
+      setBookings(res.bookings);
     });
   };
 
   const iosChange = () => {
-    setShow(null);
+    setShow(0);
     setLoading(true);
 
-    getDayBookings(booking.dateBooked).then(bookings => {
+    getDayBookings(booking.dateBooked).then(res => {
       setStep(1);
       setLoading(false);
-      setBookings(bookings);
+      setBookings(res.bookings);
     });
   };
 
@@ -135,7 +166,7 @@ export default function UserNewBooking({navigation, route}) {
         <TouchableOpacity
           style={circleZone}
           activeOpacity={0.66}
-          onPress={() => setShow(0)}
+          onPress={() => setShow(1)}
         >
           <View style={{...circle, backgroundColor: step > 0 ? colors.green : colors.yellow}}>
             <Icon name={step > 0 ? 'event-available' : 'event-busy'} color='white' size={48}/>
@@ -146,7 +177,7 @@ export default function UserNewBooking({navigation, route}) {
         <TouchableOpacity
           style={circleZone}
           activeOpacity={0.66}
-          onPress={() => setShow(1)}
+          onPress={() => setShow(2)}
         >
           <View style={{...circle, backgroundColor: step > 1 ? colors.green : colors.yellow}}>
             <Icon name={step > 1 ? 'schedule' : 'more-time'} color='white' size={48}/>
@@ -158,7 +189,7 @@ export default function UserNewBooking({navigation, route}) {
           style={circleZone}
           disabled={step < 2}
           activeOpacity={0.66}
-          onPress={() => setShow(2)}
+          onPress={() => setShow(3)}
         >
           <View style={{...circle, opacity: step > 1 ? 1 : 0.5, backgroundColor: step > 2 ? colors.green : colors.yellow}}>
             <Icon name={step > 2 ? 'restaurant' : 'no-meals'} color='white' size={48}/>
@@ -167,7 +198,7 @@ export default function UserNewBooking({navigation, route}) {
         </TouchableOpacity>
       </View>
 
-      {show === 0 && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
+      {show === 1 && (Platform.OS === 'ios' ? <View style={styles.iosDateBackdrop}>
         <View style={styles.iosDateBg}>
           <DateTimePicker
             mode='date'
@@ -176,14 +207,14 @@ export default function UserNewBooking({navigation, route}) {
             textColor='black'
             value={new Date(booking.dateBooked)}
             minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
-            onChange={e => setBooking({ ...booking, dateBooked: e.nativeEvent.timestamp })}
+            onChange={e => setBooking({...booking, dateBooked: e.nativeEvent.timestamp})}
           />
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={() => setShow(null)}>
-              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>Cancel</Text>
+            <TouchableOpacity onPress={() => setShow(0)}>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>Annuler</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>Done</Text>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>Terminé</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -196,7 +227,7 @@ export default function UserNewBooking({navigation, route}) {
         minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
       />)}
 
-      {show === 1 && <PeriodPicker
+      {show === 2 && <PeriodPicker
         setStep={setStep}
         setShow={setShow}
         booking={booking}
@@ -204,7 +235,7 @@ export default function UserNewBooking({navigation, route}) {
         setBooking={setBooking}
       />}
 
-      {show === 2 && <TablePicker
+      {show === 3 && <TablePicker
         tables={tables}
         setStep={setStep}
         setShow={setShow}

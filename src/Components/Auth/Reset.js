@@ -8,9 +8,9 @@ import { resetPassword } from '../../Functions/user';
 
 
 export default function Reset({navigation}) {
-  const [token, setToken] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [passCheck, setPassCheck] = useState(null);
+  const [token, setToken] = useState('');
+  const [password, setPassword] = useState('');
+  const [passCheck, setPassCheck] = useState('');
 
   const handleReset = () => {
     resetPassword(token, password, passCheck).then(res => {

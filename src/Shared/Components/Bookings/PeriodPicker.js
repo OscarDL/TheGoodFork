@@ -54,12 +54,12 @@ export default function PeriodPicker({tables, setStep, setShow, booking, booking
           />
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
-          <TouchableOpacity onPress={() => setShow(null)}>
+          <TouchableOpacity onPress={() => setShow(0)}>
             <Text style={{color: colors.red, fontSize: 18, padding: 20}}>Annuler</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
+            setShow(0);
             setStep(2);
-            setShow(null);
 
             const total = Array.from(Array(tables), (_, i) => i + 1);
             bookings

@@ -40,7 +40,7 @@ function UserPlanningComponent({navigation}) {
     isFocused && getBookings().then(res => {
       if (!res.success) return setBookings({});
 
-      const dates = markedDates;
+      const dates = {};
       res.bookings.forEach((booking, i) => {
         const day = getDay(booking.dateBooked).toISOString().slice(0,10);
         dates[day] = {marked: true, dotColor: day < getDay(Date.now()).toISOString().slice(0,10) ? 'orange' : 'limegreen'};
@@ -88,13 +88,12 @@ function UserPlanningComponent({navigation}) {
           firstDay={1}
           pastScrollRange={1}
           futureScrollRange={12}
-          markedDates={markedDates}
+          markedDates={{...markedDates}} // dates don't update if simply using 'markedDates' and not '{...markedDates}
 
           scrollEnabled={true}
           showScrollIndicator={true}
         />
         <FAB
-          animated
           color='white'
           icon='calendar'
           style={styles.fab}

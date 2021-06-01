@@ -46,17 +46,15 @@ export default function UserPayOrder({route, navigation}) {
     const security = await getEnrolledLevelAsync();
     const biometricsActive = await isEnrolledAsync(); 
 
-    if (security) {
-      const promptMessage = (security === 2 && biometricsActive) ? (
-        'Paiement sécurisé avec données biométriques.'
-      ) : (
-        'Veuillez entrer votre code de dévérouillage pour effectuer votre paiement sécurisé.'
-      );
+    if (!security) return setCard(card);
 
-      authenticateAsync({promptMessage}).then(res => res.success && setCard(card));
-    } else {
-      setCard(card);
-    }
+    const promptMessage = (security === 2 && biometricsActive) ? (
+      'Paiement sécurisé avec données biométriques.'
+    ) : (
+      'Veuillez entrer votre code de dévérouillage pour effectuer votre paiement sécurisé.'
+    );
+
+    authenticateAsync({promptMessage}).then(res => res.success && setCard(card));
   };
 
   const handlePayment = async () => {
@@ -75,7 +73,7 @@ export default function UserPayOrder({route, navigation}) {
       return setLoading(false);
     }
 
-    if (!payment.intent.next_action && !payment.intent.last_payment_error && payment.intent.status === 'succeeded')
+    if (!payment.intent.next_action && !payment.intent.last_payment_error)
       return finalizePayment(payment);
 
     setPaymentIntent(payment);
@@ -86,9 +84,9 @@ export default function UserPayOrder({route, navigation}) {
     setLoading(true);
     const {intent} = await getIntent(payment.intent.id);
 
-    if (!intent?.next_action && !intent?.last_payment_error && intent?.status === 'succeeded') {
+    if (!intent.next_action && !intent.last_payment_error) {
       const res = await (type === 'edit' ? (
-        editOrder({...order, paid: true, status: 'paid', stripePi: payment.intent.id})
+        editOrder({...order, paid: true, stripePi: payment.intent.id}, user, true)
       ) : (
         submitOrder({...order, user, stripePi: payment.intent.id}, user.email)
       ));
@@ -105,6 +103,8 @@ export default function UserPayOrder({route, navigation}) {
         navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs');
       }
     } else {
+      console.log(!intent.next_action, !intent.last_payment_error);
+      
       setWebview(null);
       setLoading(false);
 
@@ -167,7 +167,7 @@ export default function UserPayOrder({route, navigation}) {
             style={{marginRight: 10, padding: 2}}
           />}
           onPress={handlePayment}
-          buttonStyle={[styles.button, {alignSelf: 'center'}]}
+          buttonStyle={[{...styles.button, alignSelf: 'center'}]}
           title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
           disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
         />

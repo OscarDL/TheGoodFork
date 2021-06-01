@@ -24,7 +24,7 @@ export const getDayBookings = async (day) => {
 
     if (!data.success) return data?.error;
     
-    return data.bookings;
+    return {success: true, bookings: data.bookings};
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };

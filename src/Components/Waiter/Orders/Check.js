@@ -8,7 +8,6 @@ import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import SearchBar from '../../../Shared/Components/SearchBar';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
@@ -33,14 +32,12 @@ const failureAlert = (error, navigation, setRetry) => {
 
 export default function WaiterCheckOrders({navigation}) {
   const isFocused = useIsFocused();
-  const [{user}] = useAuthContext();
-  
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user).then(res => {
+    if (isFocused || retry) getOrders().then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });
@@ -57,7 +54,7 @@ export default function WaiterCheckOrders({navigation}) {
             <Text style={styles.title}>Prêt à servir</Text>
             {orders.filter(order => order.status === 'ready')?.length > 0
               ?
-            orders.map((order, i) => matchesOrder(order, search) && <TouchCard
+            orders.filter(order => order.status === 'ready').map((order, i) => matchesOrder(order, search) && <TouchCard
               key={i} size={26} icon='how-to-reg' title={`${order.user.firstName} ${order.user.lastName}`} params={{order, readOnly: false}}
               subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='WaiterOrderDetails' navigation={navigation}
               description={`${new Date(order.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order.dateOrdered).toLocaleTimeString()}`}
@@ -70,7 +67,7 @@ export default function WaiterCheckOrders({navigation}) {
             <Text style={styles.title}>En préparation</Text>
             {orders.filter(order => order.status === 'preparing')?.length > 0
               ?
-            orders.map((order, i) => matchesOrder(order, search) && <TouchCard
+            orders.filter(order => order.status === 'preparing').map((order, i) => matchesOrder(order, search) && <TouchCard
               key={i} size={26} icon='how-to-reg' title={`${order.user.firstName} ${order.user.lastName}`} params={{order, readOnly: false}}
               subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='WaiterOrderDetails' navigation={navigation}
               description={`${new Date(order.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order.dateOrdered).toLocaleTimeString()}`}

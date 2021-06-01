@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'react-native-elements';
 import { View, ScrollView } from 'react-native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 

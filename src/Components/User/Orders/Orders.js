@@ -14,9 +14,8 @@ import UserOrderDetails from './Details';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
-import { truncPrice } from '../../../Functions/utils';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useAuthContext } from '../../../Context/Auth/Provider';
+import { getStatus, truncPrice } from '../../../Functions/utils';
 
 
 const Stack = createStackNavigator();
@@ -63,7 +62,7 @@ export default function UserOrders({title}) {
 };
 
 
-function UserOrdersComponent({navigation, orders}) {
+function UserOrdersComponent({navigation, orders, paid}) {
   return (
     <View style={styles.container}>
       {orders.length > 0
@@ -71,7 +70,7 @@ function UserOrdersComponent({navigation, orders}) {
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         <View>
           {orders.map((order, i) => (
-            <TouchCard key={i} icon='restaurant' description={'Statut : ' + order.status}
+            <TouchCard key={i} icon='restaurant' description={'Statut : ' + getStatus(order.status)}
               params={{order}} title={new Date(order.dateOrdered).toDateString().slice(4, -5)
               + `, ${new Date(order.dateOrdered).toLocaleTimeString()}`} navigation={navigation}
               subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='UserOrderDetails'
@@ -81,7 +80,7 @@ function UserOrdersComponent({navigation, orders}) {
       </ScrollView>
         :
       <View>
-        <Text style={styles.emptySection}>Vous n'avez aucune commande à payer.</Text>
+        <Text style={styles.emptySection}>Vous n'avez pas de commandes {paid ? 'précédentes' : 'à payer'}.</Text>
       </View>}
     </View>
   );
@@ -90,8 +89,6 @@ function UserOrdersComponent({navigation, orders}) {
 
 function UserOrderTabs({navigation}) {
   const isFocused = useIsFocused();
-  const [{user}] = useAuthContext();
-
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
   
@@ -100,7 +97,7 @@ function UserOrderTabs({navigation}) {
   const [date, setDate] = useState(new Date(Date.now()));
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user).then(res => {
+    if (isFocused || retry) getOrders().then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
       setRetry(false);
     });
@@ -171,10 +168,10 @@ function UserOrderTabs({navigation}) {
             backBehavior='initialRoute'
           >
             <Tabs.Screen name='A payer'>
-              {props => <UserOrdersComponent {...props} orders={orders.filter(order => !order.paid)}/>}
+              {props => <UserOrdersComponent {...props} orders={orders.filter(order => !order.paid)} paid={false}/>}
             </Tabs.Screen>
             <Tabs.Screen name='Payées'>
-              {props => <UserOrdersComponent {...props} orders={orders.filter(order => order.paid)}/>}
+              {props => <UserOrdersComponent {...props} orders={orders.filter(order => order.paid)} paid={true}/>}
             </Tabs.Screen>
           </Tabs.Navigator>
         </View>
@@ -197,10 +194,10 @@ function UserOrderTabs({navigation}) {
           />
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <TouchableOpacity onPress={iosCancel}>
-              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>{mode === 'date' ? 'Cancel' : 'Previous'}</Text>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>{mode === 'date' ? 'Annuler' : 'Précédent'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Next' : 'Done'}</Text>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Suivant' : 'Terminé'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -213,7 +210,7 @@ function UserOrderTabs({navigation}) {
         minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
       />)}
 
-      <FAB style={styles.fab} animated label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
+      <FAB style={styles.fab} label='Commander' icon='plus' color='white' onPress={handleNavigation}/>
     </>
   ) : (
     <View style={styles.container}>

@@ -100,11 +100,11 @@ export default function UserSaveCreditCard({navigation}) {
             title='Enregistrer'
             onPress={() => creditCard(true)}
             buttonStyle={[{...styles.button, marginBottom: 20}]}
-            disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
+            disabled={!(card.number.length === 16 && card.cvc.length === 3 && card.exp_month && card.exp_year)}
           />
         
           {exists ? (
-            <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => creditCard(false)}>
+            <TouchableOpacity style={{padding: 10}} onPress={() => creditCard(false)}>
               <Text style={styles.delete}>Supprimer mes données de paiement</Text>
             </TouchableOpacity>
           ) : null}

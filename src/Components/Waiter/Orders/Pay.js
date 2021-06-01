@@ -67,9 +67,9 @@ export default function WaiterPayOrder({route, navigation}) {
     setLoading(true);
     const {intent} = await getIntent(payment.intent.id);
 
-    if (!intent?.next_action && !intent?.last_payment_error && intent?.status === 'succeeded') {
+    if (!intent.next_action && !intent.last_payment_error) {
       const res = await (type === 'edit' ? (
-        editOrder({...order, paid: true, status: 'paid', stripePi: payment.intent.id})
+        editOrder({...order, paid: true, stripePi: payment.intent.id}, user, true)
       ) : (
         submitOrder({...order, stripePi: payment.intent.id}, user.email)
       ));
@@ -115,7 +115,7 @@ export default function WaiterPayOrder({route, navigation}) {
             style={{marginRight: 10}}
           />}
           onPress={handlePayment}
-          buttonStyle={[styles.button, {alignSelf: 'center'}]}
+          buttonStyle={[{...styles.button, alignSelf: 'center'}]}
           title={`Payer : ${truncPrice(order.price + order.tip)} EUR`}
           disabled={card.number.length < 16 && card.cvc.length < 3 && !card.exp_month && !card.exp_year}
         />

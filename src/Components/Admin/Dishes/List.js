@@ -63,7 +63,7 @@ export default function AdminDishes({navigation}) {
 
   return dishes ? (
     <SafeAreaView style={styles.container}>
-      {dishes?.length > 0 ? (
+      {dishes.length > 0 ? (
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <View style={{alignItems: 'center', marginVertical: 30}}>
             <Text style={{marginBottom: 10}}>Catégorie à afficher</Text>
@@ -90,42 +90,47 @@ export default function AdminDishes({navigation}) {
           <View>
             {(type === 'appetizer' || type === 'all') && <>
               <Text style={styles.title}>Entrées</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'appetizer' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='AdminEditDish' description={dish.detail || 'Pas de détails'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
-              />)}
+              {dishes.filter(dish => dish.type === 'appetizer').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} navigation={navigation} screen='AdminEditDish'
+                description={dish.detail || 'Pas de détails'} params={{dish}} title={dish.name}
+                subtitle={`${dish.price} ${dish.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}/>
+              ))}
             </>}
 
             {(type === 'mainDish' || type === 'all') && <>
               <Text style={styles.title}>Plats</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'mainDish' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='AdminEditDish' description={dish.detail || 'Pas de détails'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
-              />)}
+              {dishes.filter(dish => dish.type === 'mainDish').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} navigation={navigation} screen='AdminEditDish'
+                description={dish.detail || 'Pas de détails'} params={{dish}} title={dish.name}
+                subtitle={`${dish.price} ${dish.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}/>
+              ))}
             </>}
 
             {(type === 'dessert' || type === 'all') && <>
               <Text style={styles.title}>Desserts</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'dessert' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='AdminEditDish' description={dish.detail || 'Pas de détails'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
-              />)}
+              {dishes.filter(dish => dish.type === 'dessert').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} navigation={navigation} screen='AdminEditDish'
+                description={dish.detail || 'Pas de détails'} params={{dish}} title={dish.name}
+                subtitle={`${dish.price} ${dish.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}/>
+              ))}
             </>}
 
             {(type === 'drink' || type === 'all') && <>
               <Text style={styles.title}>Boissons</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'drink' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='AdminEditDish' description={dish.detail || 'Pas de détails'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
-              />)}
+              {dishes.filter(dish => dish.type === 'drink').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} navigation={navigation} screen='AdminEditDish'
+                description={dish.detail || 'Pas de détails'} params={{dish}} title={dish.name}
+                subtitle={`${dish.price} ${dish.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}/>
+              ))}
             </>}
 
             {(type === 'alcohol' || type === 'all') && <>
               <Text style={styles.title}>Boissons alcoolisées</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'alcohol' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='AdminEditDish' description={dish.detail || 'Pas de détails'}
-                params={{dish}} title={dish?.name} subtitle={`${dish?.price} ${dish?.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}
-              />)}
+              {dishes.filter(dish => dish.type === 'alcohol').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} navigation={navigation} screen='AdminEditDish'
+                description={dish.detail || 'Pas de détails'} params={{dish}} title={dish.name}
+                subtitle={`${dish.price} ${dish.currency}\u2000\u2013\u2000Stock : ${dish.stock ?? 'non défini'}`}/>
+              ))}
             </>}
           </View>
         </ScrollView>

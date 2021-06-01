@@ -28,8 +28,8 @@ export const createStaff = async (staff) => {
     
     return {
       success: true,
-      title: 'Création de compte',
-      desc: 'Votre nouveau membre a été ajouté avec succès.'
+      title: 'Création de membre',
+      desc: `${staff.firstName} ${staff.lastName} a été ajouté avec succès.`
     };
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -47,8 +47,8 @@ export const editStaff = async (id, staff) => {
 
     return {
       success: true,
-      title: staff.firstName + ' ' + staff.lastName,
-      desc: data?.data,
+      title: 'Modification de membre',
+      desc: `${staff.firstName} ${staff.lastName} a été modifié avec succès.`
     };
 
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
@@ -66,8 +66,8 @@ export const deleteStaff = async (staff) => {
 
     return {
       success: true,
-      title: staff.firstName + ' ' + staff.lastName,
-      desc: data?.data,
+      title: 'Suppression de membre',
+      desc: `${staff.firstName} ${staff.lastName} a été supprimé avec succès.`
     };
 
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }

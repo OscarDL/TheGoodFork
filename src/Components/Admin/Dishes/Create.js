@@ -36,7 +36,6 @@ export default function AdminCreateDish({navigation, route}) {
     type: route.params.type ?? 'appetizer'
   });
 
-
   const handleCreate = () => {
     createDish({...dish, stock: dish.stock || null}).then(res => {
       Toast.show({

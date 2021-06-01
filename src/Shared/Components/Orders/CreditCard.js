@@ -10,13 +10,15 @@ export default function CreditCard({user, card, setCard}) {
       borderRadius: 12,
       alignSelf: 'center',
       paddingVertical: 20,
-      paddingHorizontal: 30,
+      paddingHorizontal: 24,
       backgroundColor: '#2a2a2a',
       justifyContent: 'space-between',
       width: Dimensions.get('screen').width * 0.9,
       height: Dimensions.get('screen').width * (0.9/1.586)
     }}>
-      <Text style={{...styles.title, marginTop: 0, paddingHorizontal: 0, color: '#eee'}}>{user.firstName + ' ' + user.lastName}</Text>
+      <Text numberOfLines={1} style={{...styles.title, marginTop: 0, paddingHorizontal: 0, color: '#eee'}}>
+        {user.firstName + ' ' + user.lastName}
+      </Text>
       <View>
         <TextInput
           maxLength={16}

@@ -9,8 +9,8 @@ import SubmitOrderTabs from '../../../Shared/Components/Orders/SubmitOrderTabs';
 
 
 export default function UserEditOrder({navigation, route}) {
+  const [price, setPrice] = useState(0);
   const [order, setOrder] = useState(null);
-  const [price, setPrice] = useState(null);
   
   useEffect(() => {
     getOrder(route.params.order._id).then(res => {
@@ -27,7 +27,7 @@ export default function UserEditOrder({navigation, route}) {
 
     <SafeAreaView style={styles.orderStrip}>
       <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {truncPrice(price)} EUR</Text>
-      <Button title='Confirmer' disabled={!price} buttonStyle={[styles.button]} 
+      <Button title='Continuer' disabled={!price} buttonStyle={[styles.button]} 
       onPress={() => navigation.navigate('UserSubmitOrder', {order, type: 'edit'})}/>
     </SafeAreaView>
   </> : null

@@ -4,17 +4,14 @@ import { authConfig } from './utils';
 import { apiUrl } from '../../config';
 
 
-export const getOrders = async (user) => {
+export const getOrders = async () => {
   try {
     const config = await authConfig();
     const {data} = await axios.get(apiUrl + 'orders', config);
 
     if (!data.success) return data?.error;
 
-    let newOrders = []; // Return non validated orders to waiters only
-    data.orders?.map(order => order.validated === false && newOrders.push(order));
-
-    return {success: true, orders: user.type === 'waiter' ? newOrders : data.orders};
+    return {success: true, orders: data.orders};
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };
@@ -72,12 +69,12 @@ export const submitOrder = async (order, email) => {
 };
 
 
-export const editOrder = async (order) => {
+export const editOrder = async (order, user, pay = false) => {
   try {
     order.price = totalPrice(order); // For security
 
     const config = await authConfig();
-    const {data} = await axios.put(apiUrl + 'orders/' + order._id, order, config);
+    const {data} = await axios.put(apiUrl + 'orders/' + (user.type === 'user' ? '' : 'staff/') + order._id, {order, pay}, config);
     
     if (!data.success) return data?.error;
 

@@ -136,13 +136,13 @@ export default function AdminEditStaff({route, navigation}) {
             />}
             title='Sauvegarder'
             onPress={handleEdit}
-            buttonStyle={[styles.button]}
+            buttonStyle={[{...styles.button, marginBottom: 30}]}
           />
+
+          <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={handleDelete}>
+            <Text style={styles.delete}>Supprimer {staff.firstName} {staff.lastName}</Text>
+          </TouchableOpacity>
         </View>
-        
-        <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={handleDelete}>
-          <Text style={styles.delete}>Supprimer</Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

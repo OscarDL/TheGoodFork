@@ -6,7 +6,6 @@ import { styles } from '../../../Shared/styles';
 
 
 export default function WaiterPlanning({navigation}) {
-  
   return (
     <View style={styles.container}>
       <CalendarList

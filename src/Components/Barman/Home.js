@@ -4,9 +4,9 @@ import { View, Text, ScrollView, ActivityIndicator, Alert, Platform, SafeAreaVie
 
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
+import { getStatus } from '../../Functions/utils';
 import { getOrders } from '../../Functions/orders';
 import TouchCard from '../../Shared/Components/TouchCard';
-import { useAuthContext } from '../../Context/Auth/Provider';
 
 
 const failureAlert = (error, setRetry) => {
@@ -29,13 +29,11 @@ const failureAlert = (error, setRetry) => {
 
 export default function BarmanHome({navigation}) {
   const isFocused = useIsFocused();
-  const [{user}] = useAuthContext();
-  
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user).then(res => {
+    if (isFocused || retry) getOrders().then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, setRetry);
       setRetry(false);
     });
@@ -47,12 +45,12 @@ export default function BarmanHome({navigation}) {
       {orders?.filter(order => order.validated).length > 0 ? (
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <Text style={styles.title}>Commandes à préparer</Text>
-
-          {orders.map((order, i) => order.validated && <TouchCard
-            key={i} icon='restaurant' title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + 
-            new Date(order.dateOrdered).toLocaleTimeString()} subtitle={(order.price + order.tip) + ' ' + order.currency}
-            description={'Statut : ' + order.status} screen='BarmanOrderDetails' params={{order}} navigation={navigation}
-          />)}
+          {orders
+            .filter(order => order.validated && order.status !== 'ready' && order.status !== 'served')
+            .map((order, i) => <TouchCard key={i} icon='restaurant' subtitle={(order.price + order.tip) + ' ' + order.currency}
+            title={new Date(order.dateOrdered).toDateString().slice(4, -5) + ', ' + new Date(order.dateOrdered).toLocaleTimeString()}
+            description={'Statut : ' + getStatus(order.status)} screen='CookOrderDetails' params={{order}} navigation={navigation}/>)
+          }
         </ScrollView>
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

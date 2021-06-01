@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { View, ActivityIndicator, Platform } from 'react-native';
+import { View, ActivityIndicator, Platform, Alert } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import BookingsTab from './Tab';
@@ -24,7 +24,7 @@ export default function MyBookings({route}) {
   const [bookings, setBookings] = useState(route.params.bookings ?? null);
 
   useEffect(() => {
-    isFocused && getBookings().then(res => setBookings(res.bookings));
+    isFocused && getBookings().then(res => res.success && setBookings(res.bookings));
   }, [isFocused, setBookings]);
 
   

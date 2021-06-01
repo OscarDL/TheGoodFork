@@ -46,7 +46,7 @@ export default function Login({navigation}) {
         <View style={{width: '100%'}}>
           <Image
             style={{ width: 180, height: 180, alignSelf: 'center' }}
-            source={{ uri: 'https://res.cloudinary.com/thegoodfork/image/upload/v1620079806/TGF_jrfhd0.png' }}
+            source={{ uri: 'https://res.cloudinary.com/thegoodfork/image/upload/v1620079806/TGF_brown.png' }}
           />
         </View>
 

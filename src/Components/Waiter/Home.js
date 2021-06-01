@@ -14,7 +14,7 @@ export default function WaiterHome({navigation}) {
           <TouchCard icon='assignment-turned-in' title='Valider une commande' description='Valider ou supprimer une commande client.' screen='WaiterValidateOrder' navigation={navigation} />
           <TouchCard icon='app-registration' title='Nouvelle commande' description='Passer commande pour client non-enregistré.' screen='WaiterNewOrder' navigation={navigation} />
           <TouchCard icon='alarm' title='Commandes en cours' description='Consulter le statut des commandes en cours.' screen='WaiterCheckOrders' navigation={navigation} />
-          <TouchCard icon='credit-card' title='Addition client' description="Faire l'addition pour un client sur place." screen='WaiterCreateBill' navigation={navigation} />
+          <TouchCard icon='credit-card' title='Addition client' description="Faire l'addition pour un client sur place." screen='WaiterUnpaidOrders' navigation={navigation} />
         </View>
       </ScrollView>
     </View>

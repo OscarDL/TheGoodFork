@@ -7,6 +7,7 @@ import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 're
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { getStatus } from '../../../Functions/utils';
 import { getOrder, cancelOrder } from '../../../Functions/orders';
 import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
@@ -85,7 +86,7 @@ export default function UserOrderDetails({navigation, route}) {
         <OrderDetails order={order}/>
 
         <View style={{alignItems: 'center', margin: 20}}>
-          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {order.status}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>Statut : {getStatus(order.status)}</Text>
           
           {!order.validated && (
             <TouchableOpacity style={{padding: 10, marginTop: 20}} onPress={handleCancel}>

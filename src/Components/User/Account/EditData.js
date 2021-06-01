@@ -45,19 +45,13 @@ export default function UpdateInfo() {
 
         <View>
           <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Prénom</Text>
-          <Input placeholder='Prénom' defaultValue={newUser.firstName} onChangeText={firstName => setNewUser({...newUser, firstName})} />
+          <Input defaultValue={newUser.firstName} onChangeText={firstName => setNewUser({...newUser, firstName})} />
 
           <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Nom</Text>
-          <Input placeholder='Nom' defaultValue={newUser.lastName} onChangeText={lastName => setNewUser({...newUser, lastName})} />
+          <Input defaultValue={newUser.lastName} onChangeText={lastName => setNewUser({...newUser, lastName})} />
           
           <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Adresse email</Text>
-          <Input
-            autoCapitalize='none'
-            placeholder='Adresse email'
-            keyboardType='email-address'
-            defaultValue={newUser.email}
-            onChangeText={email => setNewUser({...newUser, email})}
-          />
+          <Input autoCapitalize='none' keyboardType='email-address' defaultValue={newUser.email} onChangeText={email => setNewUser({...newUser, email})}/>
         </View>
 
         <Button

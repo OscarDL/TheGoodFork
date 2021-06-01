@@ -25,7 +25,7 @@ export default function UserNewOrder({navigation, route}) {
 
     <SafeAreaView style={styles.orderStrip}>
       <Text style={{fontSize: 16, fontWeight: '600'}}>Total : {truncPrice(price)} EUR</Text>
-      <Button title='Confirmer' disabled={!price} buttonStyle={[styles.button]}
+      <Button title='Continuer' disabled={!price} buttonStyle={[styles.button]}
       onPress={() => navigation.navigate('UserSubmitOrder', {order, type: 'submit'})}/>
     </SafeAreaView>
   </>

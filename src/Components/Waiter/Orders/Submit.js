@@ -51,7 +51,7 @@ export default function WaiterSubmitOrder({navigation, route}) {
   const handleEdit = () => {
     if (!order.price) return navigation.goBack();
 
-    editOrder({...order, tip, user: customer}).then(res => {
+    editOrder({...order, tip, user: customer}, user).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -132,24 +132,24 @@ export default function WaiterSubmitOrder({navigation, route}) {
 
         <Collapsible collapsed={collapsed.customer}>
           <Input
-            placeholder='First name'
-            defaultValue={order?.user?.firstName}
+            placeholder='Prénom'
+            defaultValue={order.user.firstName}
             placeholderTextColor={colors.accentSecondary}
-            onChangeText={firstName => setCustomer({ ...customer, firstName })}
+            onChangeText={firstName => setCustomer({...customer, firstName})}
           />
           <Input
-            placeholder='Last name'
-            defaultValue={order?.user?.lastName}
+            placeholder='Nom'
+            defaultValue={order.user.lastName}
             placeholderTextColor={colors.accentSecondary}
-            onChangeText={lastName => setCustomer({ ...customer, lastName })}
+            onChangeText={lastName => setCustomer({...customer, lastName})}
           />
           <Input
             autoCapitalize='none'
-            placeholder='Email address'
+            placeholder='Adresse email'
             keyboardType='email-address'
-            defaultValue={order?.user?.email}
+            defaultValue={order.user.email}
             placeholderTextColor={colors.accentSecondary}
-            onChangeText={email => setCustomer({ ...customer, email })}
+            onChangeText={email => setCustomer({...customer, email})}
           />
         </Collapsible>
 

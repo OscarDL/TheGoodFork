@@ -8,7 +8,7 @@ import { sendEmail } from '../../Functions/user';
 
 
 export default function Forgot({navigation}) {
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState('');
 
   const handleEmail = () => {
     sendEmail(email).then(res => {

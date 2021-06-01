@@ -45,7 +45,7 @@ export default function UserSubmitOrder({navigation, route}) {
 
 
   const handleEdit = () => {
-    editOrder({...order, tip}).then(res => {
+    editOrder({...order, tip}, user).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -92,7 +92,7 @@ export default function UserSubmitOrder({navigation, route}) {
       const actions = [
         {
           text: 'Payer',
-          onPress: () => navigation.navigate('UserPayOrder', {order, type})
+          onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
         }, {
           text: 'Annuler',
           style: 'cancel'

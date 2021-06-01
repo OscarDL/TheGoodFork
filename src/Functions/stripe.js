@@ -28,7 +28,9 @@ export const getIntent = async (intent) => {
     const config = await authConfig();
     const {data} = await axios.get(apiUrl + 'stripe/' + intent, config);
 
-    return data.success ? data : data?.error;
+    if (!data.success) return data?.error;
+
+    return data;
     
   } catch (error) { return error.response?.data.error || 'Erreur inconnue.'; }
 };

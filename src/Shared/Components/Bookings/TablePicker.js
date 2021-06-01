@@ -62,10 +62,10 @@ export default function TablePicker({tables, setStep, setShow, booking, bookings
           />
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
-          <TouchableOpacity onPress={() => setShow(null)}>
+          <TouchableOpacity onPress={() => setShow(0)}>
             <Text style={{color: colors.red, fontSize: 18, padding: 20}}>Annuler</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { setStep(3); setShow(null); }}>
+          <TouchableOpacity onPress={() => { setShow(0); setStep(3); }}>
             <Text style={{color: colors.blue, fontSize: 18, padding: 20}}>Terminé</Text>
           </TouchableOpacity>
         </View>

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, ActivityIndicator, Platform } from 'react-native';
-import { Provider, DefaultTheme, DarkTheme } from 'react-native-paper';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -30,13 +29,13 @@ import WaiterPayOrder from './Waiter/Orders/Pay';
 import WaiterEditOrder from './Waiter/Orders/Edit';
 import WaiterCheckOrders from './Waiter/Orders/Check';
 import WaiterSubmitOrder from './Waiter/Orders/Submit';
+import WaiterUnpaidOrders from './Waiter/Orders/Unpaid';
 import WaiterOrderDetails from './Waiter/Orders/Details';
 import WaiterValidateOrder from './Waiter/Orders/Validate';
 import WaiterNewBooking from './Waiter/Bookings/New';
 import WaiterEditBooking from './Waiter/Bookings/Edit';
 import WaiterBookings from './Waiter/Bookings/Day/Bookings';
 import WaiterPlanning from './Waiter/Bookings/Planning';
-import WaiterCreateBill from './Waiter/Billing/Create';
 
 import BarmanHome from './Barman/Home';
 import BarmanOrderDetails from './Barman/OrderDetails';
@@ -135,8 +134,8 @@ export default function Routes() {
       <Stack.Screen name='WaiterNewOrder' options={{title: 'Nouvelle commande', cardStyleInterpolator: iosH}} component={WaiterNewOrder}/>
       <Stack.Screen name='WaiterPayOrder' options={{title: 'Payer commande', cardStyleInterpolator: iosV}} component={WaiterPayOrder}/>
       <Stack.Screen name='WaiterEditOrder' options={{title: 'Modifier commande', cardStyleInterpolator: iosH}} component={WaiterEditOrder}/>
-      <Stack.Screen name='WaiterCreateBill' options={{title: 'Faire une addition', cardStyleInterpolator: iosH}} component={WaiterCreateBill}/>
       <Stack.Screen name='WaiterCheckOrders' options={{title: 'Commandes en cours', cardStyleInterpolator: iosH}} component={WaiterCheckOrders}/>
+      <Stack.Screen name='WaiterUnpaidOrders' options={{title: 'Faire une addition', cardStyleInterpolator: iosH}} component={WaiterUnpaidOrders}/>
       <Stack.Screen name='WaiterOrderDetails' options={{title: 'Détails de commande', cardStyleInterpolator: iosH}} component={WaiterOrderDetails}/>
       <Stack.Screen name='WaiterValidateOrder' options={{title: 'Valider une commande', cardStyleInterpolator: iosH}} component={WaiterValidateOrder}/>
       <Stack.Screen name='WaiterSubmitOrder' options={{title: 'Vérification', cardStyleInterpolator: iosH}} component={WaiterSubmitOrder}/>

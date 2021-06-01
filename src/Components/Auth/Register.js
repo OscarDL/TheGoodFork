@@ -99,7 +99,7 @@ export default function Register() {
               name='how-to-reg'
               style={{marginRight: 10}}
             />}
-            title="S'enregistrer"
+            title='Créer mon compte'
             onPress={handleRegister}
             buttonStyle={[styles.button]}
           />

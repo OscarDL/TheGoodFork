@@ -23,12 +23,14 @@ export const styles = StyleSheet.create({
   },
   link: {
     fontSize: 16,
-    color: colors.blue
+    color: colors.blue,
+    textAlign: 'center'
   },
   delete: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.red
+    color: colors.red,
+    textAlign: 'center'
   },
   card: {
     padding: 10,

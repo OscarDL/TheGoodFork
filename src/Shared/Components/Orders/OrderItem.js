@@ -11,7 +11,7 @@ import { addToOrder } from '../../../Functions/orders';
 export default function OrderItem({item, type, oldOrder, order, setOrder, setPrice, small}) {
   // initialQuantity is necessary to get static existing quantities when editing order
   const initialQuantity = oldOrder?.[type]?.find(dish => dish && dish._id === item._id)?.quantity ?? 0;
-  const [quantity, setQuantity] = useState(order[type]?.find(dish => dish && dish._id === item._id)?.quantity ?? 0);
+  const [quantity, setQuantity] = useState(order[type].find(dish => dish && dish._id === item._id)?.quantity ?? 0);
 
   const addItem = (item, num) => {
     setQuantity(quantity => quantity + num);
@@ -42,8 +42,8 @@ export default function OrderItem({item, type, oldOrder, order, setOrder, setPri
           >
             {item?.name}
           </Text>
-          <Text style={{paddingTop: 20}}>{item?.detail || 'Aucun détail'}</Text>
-          <Text>{item?.price + ' ' + item?.currency}</Text>
+          <Text style={{paddingTop: 20}}>{item.detail || 'Aucun détail'}</Text>
+          <Text>{item.price + ' ' + item.currency}</Text>
         </View>
       </View>
 

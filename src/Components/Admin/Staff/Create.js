@@ -35,8 +35,7 @@ export default function AdminRegisterStaff({navigation, route}) {
     passCheck: '',
     type: route.params.type ?? 'admin'
   });
-
-
+  
   const handleCreate = () => {
     createStaff(staff).then(res => {
       Toast.show({
@@ -126,7 +125,7 @@ export default function AdminRegisterStaff({navigation, route}) {
               name='how-to-reg'
               style={{marginRight: 10}}
             />}
-            title='Créer'
+            title='Enregistrer'
             onPress={handleCreate}
             buttonStyle={[styles.button]}
           />

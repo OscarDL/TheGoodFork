@@ -3,21 +3,11 @@ import { ScrollView, View, Text, Image, Dimensions } from 'react-native';
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { getType } from '../../../Functions/utils';
 
 
 export default function UserDishDetails({navigation, route}) {
   const dish = route.params.dish;
-
-  const getType = (type) => {
-    const types = {
-      appetizer: 'Entrée',
-      mainDish: 'Plat',
-      dessert: 'Dessert',
-      drink: 'Boisson',
-      alcohol: 'Alcool'
-    };
-    return types[type]
-  };
 
   useEffect(() => {
     navigation.setOptions({title: getType(dish.type) + '\u2000\u2013\u2000' + dish.name});
@@ -52,7 +42,7 @@ export default function UserDishDetails({navigation, route}) {
         <View style={{marginVertical: 10}}>
           <Text style={styles.title}>Détails</Text>
           <View style={styles.card}>
-            <Text style={{fontSize: 16}}>{dish.detail ?? 'Pas de détails.'}</Text>
+            <Text style={{fontSize: 16}}>{dish.detail || 'Pas de détails.'}</Text>
           </View>
         </View>
           

@@ -32,10 +32,10 @@ export default function AdminTablesList() {
 
   return tables !== null ? (
     <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
-      <KeyboardAvoidingView style={styles.container}
+      <KeyboardAvoidingView style={{...styles.container, alignItems: 'center'}}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
       >
-        <View style={{padding: 20}}>
+        <View style={{paddingHorizontal: 40}}>
           <Text style={{textAlign: 'center', marginBottom: 10}}>
             Vous pouvez modifier le nombre de tables que vos utilisateurs peuvent réserver.
           </Text>
@@ -49,8 +49,7 @@ export default function AdminTablesList() {
           <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Nombre de tables</Text>
           <Input
             keyboardType='number-pad'
-            defaultValue={String(tables)}
-            placeholder='Nombre de tables'
+            defaultValue={String(tables ?? 0)}
             onChangeText={tables => setTables(tables.replace(/[^0-9]/g, ''))}
           />
         </View>
@@ -63,7 +62,7 @@ export default function AdminTablesList() {
           />}
           title='Sauvegarder'
           onPress={handleUpdate}
-          buttonStyle={[tyles.button]}
+          buttonStyle={[styles.button]}
         />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

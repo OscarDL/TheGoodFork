@@ -11,6 +11,7 @@ import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getDishes } from '../../../Functions/dishes';
 import TouchCard from '../../../Shared/Components/TouchCard';
+import { Button } from 'react-native-elements/dist/buttons/Button';
 
 
 const Stack = createStackNavigator();
@@ -78,7 +79,7 @@ function UserDishesComponent({navigation}) {
 
   return dishes ? (
     <SafeAreaView style={styles.container}>
-      {dishes?.length > 0 ? (
+      {dishes.length > 0 ? (
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <View style={{alignItems: 'center', marginVertical: 30}}>
             <Text style={{marginBottom: 10}}>Catégorie à afficher</Text>
@@ -105,42 +106,42 @@ function UserDishesComponent({navigation}) {
           <View>
             {(type === 'appetizer' || type === 'all') && <>
               <Text style={styles.title}>Entrées</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'appetizer' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='UserDishDetails' title={dish?.name}
-                params={{dish}} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}
-              />)}
+              {dishes.filter(dish => dish.type === 'appetizer').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
+                navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
+              ))}
             </>}
 
             {(type === 'mainDish' || type === 'all') && <>
               <Text style={styles.title}>Plats</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'mainDish' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='UserDishDetails' title={dish?.name}
-                params={{dish}} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}
-              />)}
+              {dishes.filter(dish => dish.type === 'mainDish').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
+                navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
+              ))}
             </>}
 
             {(type === 'dessert' || type === 'all') && <>
               <Text style={styles.title}>Desserts</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'dessert' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='UserDishDetails' title={dish?.name}
-                params={{dish}} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}
-              />)}
+              {dishes.filter(dish => dish.type === 'dessert').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
+                navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
+              ))}
             </>}
 
             {(type === 'drink' || type === 'all') && <>
               <Text style={styles.title}>Boissons</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'drink' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='UserDishDetails' title={dish?.name}
-                params={{dish}} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}
-              />)}
+              {dishes.filter(dish => dish.type === 'drink').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
+                navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
+              ))}
             </>}
 
             {(type === 'alcohol' || type === 'all') && <>
               <Text style={styles.title}>Boissons alcoolisées</Text>
-              {dishes?.sort((a, b) => a.name > b.name).map((dish, i) => dish.type === 'alcohol' && <TouchCard
-                key={i} image={dish.image} navigation={navigation} screen='UserDishDetails' title={dish?.name}
-                params={{dish}} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}
-              />)}
+              {dishes.filter(dish => dish.type === 'alcohol').sort((a, b) => a.name > b.name).map((dish, i) => (
+                <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
+                navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
+              ))}
             </>}
           </View>
         </ScrollView>

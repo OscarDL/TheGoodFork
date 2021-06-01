@@ -8,7 +8,6 @@ import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
 import SearchBar from '../../../Shared/Components/SearchBar';
 import TouchCard from '../../../Shared/Components/TouchCard';
-import { useAuthContext } from '../../../Context/Auth/Provider';
 import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
@@ -31,16 +30,14 @@ const failureAlert = (error, navigation, setRetry) => {
 };
 
 
-export default function WaiterCreateBill({navigation}) {
+export default function WaiterUnpaidOrders({navigation}) {
   const isFocused = useIsFocused();
-  const [{user}] = useAuthContext();
-  
   const [search, setSearch] = useState('');
   const [retry, setRetry] = useState(false);
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {
-    if (isFocused || retry) getOrders(user).then(res => {
+    if (isFocused || retry) getOrders().then(res => {
       res.success ? setOrders(res.orders) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });

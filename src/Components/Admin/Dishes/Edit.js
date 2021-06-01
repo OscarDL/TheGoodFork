@@ -114,7 +114,7 @@ export default function AdminEditDish({route, navigation}) {
               <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Prix (EUR)</Text>
               <Input
                 keyboardType='numeric'
-                value={String(newDish.price)}
+                value={String(newDish.price ?? '')}
                 onChangeText={price => setNewDish({...newDish, price: price.replace(',', '.')})}
               />
             </View>
@@ -122,7 +122,7 @@ export default function AdminEditDish({route, navigation}) {
               <Text style={{paddingHorizontal: 10, color: colors.accentPrimary}}>Stock (le cas échéant)</Text>
               <Input
                 keyboardType='numeric'
-                value={String(newDish.stock)}
+                value={String(newDish.stock ?? '')}
                 onChangeText={stock => setNewDish({...newDish, stock: stock.replace(/[^0-9]/g, '')})}
               />
             </View>
@@ -145,7 +145,7 @@ export default function AdminEditDish({route, navigation}) {
           />
         
           <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={handleDelete}>
-            <Text style={styles.delete}>Supprimer</Text>
+            <Text style={styles.delete}>Supprimer {dish.name}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

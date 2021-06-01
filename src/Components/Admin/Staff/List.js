@@ -41,7 +41,7 @@ const failureAlert = (error, navigation, setRetry) => {
   ];
 
   Alert.alert(
-  "Erreur d'affichage du staff", error,
+  "Erreur d'affichage du personnel", error,
   Platform.OS === 'ios' ? actions : actions.reverse()
   );
 };
