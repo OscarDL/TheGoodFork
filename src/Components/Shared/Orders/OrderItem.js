@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { View, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { colors } from '../../colors';
-import { styles } from '../../styles';
+import Text from '../Text';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { addToOrder } from '../../../Functions/orders';
 
 
@@ -54,7 +55,11 @@ export default function OrderItem({item, type, oldOrder, order, setOrder, setPri
             onPress={() => addItem(item, -1)}
             style={{minWidth: '30%', borderBottomLeftRadius: 6}}
           >
-            <Icon name='remove' color={colors.accentPrimary} style={styles.orderItemButton}/>
+            <Icon
+              name='remove'
+              style={styles.orderItemButton}
+              color={quantity ? colors.accentPrimary : colors.accentSecondary}
+            />
           </TouchableOpacity>
 
           <Text style={{minWidth: '40%', textAlign: 'center', fontSize: 20}}>
@@ -66,7 +71,11 @@ export default function OrderItem({item, type, oldOrder, order, setOrder, setPri
             style={{minWidth: '30%', borderBottomRightRadius: 6}}
             disabled={item.stock !== null && quantity >= (item.stock + initialQuantity)}
           >
-            <Icon name='add' color={colors.accentPrimary} style={styles.orderItemButton}/>
+            <Icon
+              name='add'
+              style={styles.orderItemButton}
+              color={item.stock === null || quantity < (item.stock + initialQuantity) ? colors.accentPrimary : colors.accentSecondary}
+            />
           </TouchableOpacity>
         </View>
       ) : (

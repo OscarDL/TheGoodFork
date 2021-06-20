@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { ScrollView, View, Text, Image, Dimensions } from 'react-native';
+import { ScrollView, View, Image, Dimensions } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getType } from '../../../Functions/utils';

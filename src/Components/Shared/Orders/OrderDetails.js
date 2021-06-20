@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 
-import { styles } from '../../styles';
+import Text from '../Text';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
 
 
@@ -81,7 +83,7 @@ export default OrderDetails = ({order, hideDetails = false, showPrice = true}) =
     </View>}
     
     {showPrice && <>
-      <Text style={{...styles.title, textAlign: 'center', marginTop: 30}}>
+      <Text style={{...styles.title, textAlign: 'center', marginTop: 30, color: colors.text}}>
         Total : {truncPrice(order.price + order.tip)} EUR
       </Text>
       {order.tip ? <Text style={{fontSize: 16, alignSelf: 'center', marginBottom: 10}}>

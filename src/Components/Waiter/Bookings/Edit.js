@@ -2,13 +2,15 @@ import Toast from 'react-native-toast-message';
 import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { ActivityIndicator, Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, Platform, TouchableOpacity, View } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
+import { getPeriod } from '../../../Functions/utils';
 import { getTables } from '../../../Functions/tables';
-import TablePicker from '../../../Shared/Components/Bookings/TablePicker';
-import PeriodPicker from '../../../Shared/Components/Bookings/PeriodPicker';
+import TablePicker from '../../Shared/Bookings/TablePicker';
+import PeriodPicker from '../../Shared/Bookings/PeriodPicker';
 import { getDayBookings, editBooking, deleteBooking } from '../../../Functions/bookings';
 
 
@@ -81,13 +83,13 @@ export default function UserNewBooking({navigation, route}) {
 
 
   const androidChange = (e) => {
-    if (e.type === 'dismissed' || e.nativeEvent.timestamp === booking.dateBooked) return setShow(0);
+    if (e.type === 'dismissed' || new Date(e.nativeEvent.timestamp).getTime() === booking.dateBooked) return setShow(0);
 
     setShow(0);
     setLoading(true);
-    setBooking({ ...booking, dateBooked: e.nativeEvent.timestamp });
+    setBooking({ ...booking, dateBooked: new Date(e.nativeEvent.timestamp).getTime() });
 
-    getDayBookings(e.nativeEvent.timestamp).then(res => {
+    getDayBookings(new Date(e.nativeEvent.timestamp).getTime()).then(res => {
       setStep(1);
       setLoading(false);
       setBookings(res.bookings);
@@ -98,7 +100,7 @@ export default function UserNewBooking({navigation, route}) {
     setShow(0);
     setLoading(true);
 
-    getDayBookings(booking.dateBooked).then(res => {
+    getDayBookings(new Date(booking.dateBooked).getTime()).then(res => {
       setStep(1);
       setLoading(false);
       setBookings(res.bookings);
@@ -178,7 +180,9 @@ export default function UserNewBooking({navigation, route}) {
           <View style={{...circle, backgroundColor: step > 0 ? colors.green : colors.yellow}}>
             <Icon name={step > 0 ? 'event-available' : 'event-busy'} color='white' size={48}/>
           </View>
-          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Date</Text>
+          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>
+            {`${days[new Date(booking.dateBooked).getDay()]} ${new Date(booking.dateBooked).getDate()} ${months[new Date(booking.dateBooked).getMonth()]}`}
+          </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
@@ -189,7 +193,9 @@ export default function UserNewBooking({navigation, route}) {
           <View style={{...circle, backgroundColor: step > 1 ? colors.green : colors.yellow}}>
             <Icon name={step > 1 ? 'schedule' : 'more-time'} color='white' size={48}/>
           </View>
-          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Période</Text>
+          <Text style={{padding: 10, textAlign: 'center', fontSize: 16, textTransform: 'capitalize'}}>
+            {step > 1 ? getPeriod(booking.period) : 'Période'}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -201,7 +207,9 @@ export default function UserNewBooking({navigation, route}) {
           <View style={{...circle, opacity: step > 1 ? 1 : 0.5, backgroundColor: step > 2 ? colors.green : colors.yellow}}>
             <Icon name={step > 2 ? 'restaurant' : 'no-meals'} color='white' size={48}/>
           </View>
-          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>Table</Text>
+          <Text style={{padding: 10, textAlign: 'center', fontSize: 16}}>
+            {'Table' + (step > 2 ? ` : ${booking.table}` : '')}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -214,14 +222,14 @@ export default function UserNewBooking({navigation, route}) {
             textColor='black'
             value={new Date(booking.dateBooked)}
             minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
-            onChange={e => setBooking({...booking, dateBooked: e.nativeEvent.timestamp})}
+            onChange={e => setBooking({...booking, dateBooked: new Date(e.nativeEvent.timestamp).getTime()})}
           />
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={() => setShow(0)}>
-              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>Annuler</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
+            <TouchableOpacity style={{width: '50%'}} onPress={() => setShow(0)}>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18, textAlign: 'center'}}>Annuler</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>Terminé</Text>
+            <TouchableOpacity style={{width: '50%'}} onPress={iosChange}>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18, textAlign: 'center'}}>Terminé</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -252,7 +260,7 @@ export default function UserNewBooking({navigation, route}) {
       />}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>}
 
       <View style={{alignItems: 'center'}}>

@@ -3,27 +3,18 @@ import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Alert, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text'
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { editDish, deleteDish } from '../../../Functions/dishes';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 
@@ -33,7 +24,7 @@ export default function AdminEditDish({route, navigation}) {
 
 
   const handleEdit = () => {
-    editDish(dish._id, {...newDish, stock: newDish.stock || null}).then(res => {
+    editDish({...newDish, stock: newDish.stock || null}).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -51,7 +42,7 @@ export default function AdminEditDish({route, navigation}) {
       {
         text: 'Supprimer',
         style: 'destructive',
-        onPress: () => deleteDish(dish._id, dish).then(res => {
+        onPress: () => deleteDish(dish).then(res => {
           Toast.show({
             text1: res.title ?? 'Erreur de supression',
             text2: res.desc ?? res,
@@ -86,17 +77,18 @@ export default function AdminEditDish({route, navigation}) {
           
           <View style={styles.pickerView}>
             <Picker
-              onValueChange={type => setNewDish({...newDish, type})}
               items={[
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrée', value: 'appetizer', key: 0 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plat', value: 'mainDish', key: 1 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Dessert', value: 'dessert', key: 2 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson', value: 'drink', key: 3 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+                { label: 'Entrée', value: 'appetizer', key: 0 },
+                { label: 'Plat', value: 'mainDish', key: 1 },
+                { label: 'Dessert', value: 'dessert', key: 2 },
+                { label: 'Boisson', value: 'drink', key: 3 },
+                { label: 'Alcool', value: 'alcohol', key: 3 }
               ]}
               placeholder={{}}
               style={pickerStyle}
               value={newDish.type}
+              useNativeAndroidPickerStyle={false}
+              onValueChange={type => setNewDish({...newDish, type})}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
           </View>

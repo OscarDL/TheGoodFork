@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { View, ActivityIndicator, Platform, Alert } from 'react-native';
+import { View, ActivityIndicator, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import BookingsTab from './Tab';
@@ -39,7 +39,7 @@ export default function MyBookings({route}) {
     </Tabs.Navigator>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

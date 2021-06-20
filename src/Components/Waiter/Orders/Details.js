@@ -3,12 +3,13 @@ import Toast from 'react-native-toast-message';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
+import { View, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getStatus } from '../../../Functions/utils';
-import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
+import OrderDetails from '../../Shared/Orders/OrderDetails';
 import { cancelOrder, getOrder, validateOrder } from '../../../Functions/orders';
 
 
@@ -91,7 +92,9 @@ export default function WaiterOrderDetails({navigation, route}) {
         <View style={{alignItems: 'center', margin: 20, marginBottom: 80}}>
           {readOnly
             ?
-          <Text style={{fontSize: 16, marginBottom: 15, textTransform: 'capitalize'}}>Statut : {getStatus(order.status)}</Text>
+          <Text style={{fontSize: 16, textTransform: 'capitalize'}}>
+            Statut : {getStatus(order.status)}
+          </Text>
             :
           <>
             <TouchableOpacity style={{padding: 10}} onPress={handleValidate}>
@@ -116,7 +119,7 @@ export default function WaiterOrderDetails({navigation, route}) {
       )}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>}
 
     </SafeAreaView>

@@ -1,8 +1,9 @@
 import Toast from 'react-native-toast-message';
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getTables, updateTables } from '../../../Functions/tables';
@@ -68,7 +69,7 @@ export default function AdminTablesList() {
     </TouchableWithoutFeedback>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

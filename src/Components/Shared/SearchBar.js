@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
+import { View, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-import { styles } from '../styles';
+import Text from './Text';
+import { styles } from '../../Shared/styles';
 
 
 export default function SearchBar({search, setSearch, placeholder}) {

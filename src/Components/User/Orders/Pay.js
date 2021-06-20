@@ -1,18 +1,18 @@
 import WebView from 'react-native-webview';
 import Toast from 'react-native-toast-message';
-import { getItemAsync } from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
+import { deleteItemAsync, getItemAsync } from 'expo-secure-store';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
 import { TouchableWithoutFeedback, Keyboard, Platform, KeyboardAvoidingView, View, ActivityIndicator, Alert } from 'react-native';
 
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
+import CreditCard from '../../Shared/Orders/CreditCard';
 import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getIntent, payOrder } from '../../../Functions/stripe';
 import { editOrder, submitOrder } from '../../../Functions/orders';
-import CreditCard from '../../../Shared/Components/Orders/CreditCard';
 
 
 const fullScreen = {
@@ -103,8 +103,6 @@ export default function UserPayOrder({route, navigation}) {
         navigation.navigate(type === 'edit' ? 'UserOrderDetails' : 'UserOrderTabs');
       }
     } else {
-      console.log(!intent.next_action, !intent.last_payment_error);
-      
       setWebview(null);
       setLoading(false);
 
@@ -130,7 +128,14 @@ export default function UserPayOrder({route, navigation}) {
 
   useEffect(() => {
     const getCard = async () => {
-      const card = await getItemAsync('card');
+      let card;
+
+      try {
+        card = await getItemAsync('card');
+      } catch (error) {
+        try { await deleteItemAsync('card'); } catch { }
+      }
+      
       if (!card) return;
 
       const actions = [
@@ -180,7 +185,7 @@ export default function UserPayOrder({route, navigation}) {
         </View> : null}
 
         {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
-          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+          <ActivityIndicator size={60} color={colors.accentPrimary}/>
         </View>}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

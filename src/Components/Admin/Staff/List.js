@@ -4,28 +4,19 @@ import Picker from 'react-native-picker-select';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
+import { View, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 
+import Text from '../../Shared/Text';
+import TouchCard from '../../Shared/TouchCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getStaff } from '../../../Functions/staff';
-import TouchCard from '../../../Shared/Components/TouchCard';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 const failureAlert = (error, navigation, setRetry) => {
@@ -55,7 +46,7 @@ export default function AdminStaffList({navigation}) {
 
   useEffect(() => {
     if (isFocused || retry) getStaff().then(res => {
-      res.success ? setStaff(res.users) : failureAlert(res, navigation, setRetry);
+      res.success ? setStaff(res.staff) : failureAlert(res, navigation, setRetry);
       setRetry(false);
     });
   }, [isFocused, retry, setRetry, setStaff]);
@@ -63,24 +54,25 @@ export default function AdminStaffList({navigation}) {
 
   return staff ? (
     <SafeAreaView style={{...styles.container, paddingHorizontal: 0}}>
-      {staff?.length > 0 ? (
+      {staff.length > 0 ? (
         <ScrollView contentContainerStyle={{paddingVertical: 5}}>
           <View style={{alignItems: 'center', marginVertical: 30}}>
             <Text style={{marginBottom: 10}}>Catégorie à afficher</Text>
             
             <View style={styles.pickerView}>
               <Picker
-                onValueChange={type => setType(type)}
                 items={[
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Staff complet', value: 'all', key: 0 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Administrateurs', value: 'admin', key: 1 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Barmans', value: 'barman', key: 2 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Cuisiniers', value: 'cook', key: 3 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Serveurs', value: 'waiter', key: 4 }
+                  { label: 'Staff complet', value: 'all', key: 0 },
+                  { label: 'Administrateurs', value: 'admin', key: 1 },
+                  { label: 'Barmans', value: 'barman', key: 2 },
+                  { label: 'Cuisiniers', value: 'cook', key: 3 },
+                  { label: 'Serveurs', value: 'waiter', key: 4 }
                 ]}
                 value={type}
                 placeholder={{}}
                 style={pickerStyle}
+                useNativeAndroidPickerStyle={false}
+                onValueChange={type => setType(type)}
                 Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
               />
             </View>
@@ -89,33 +81,41 @@ export default function AdminStaffList({navigation}) {
           <View>
             {(type === 'admin' || type === 'all') && <>
               <Text style={styles.title}>Administrateurs</Text>
-              {staff?.map((staff, i) => staff.type == 'admin' && <TouchCard
-                key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
-                description={staff?.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
+              {staff
+                .filter(staff => staff.type === 'admin')
+                .sort((a, b) => a.firstName.localeCompare(b.firstName)).map((staff, i) => <TouchCard
+                key={i} icon='how-to-reg' title={`${staff.firstName} ${staff.lastName}`} subtitle={staff.email}
+                description={staff.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
               />)}
             </>}
 
             {(type === 'barman' || type === 'all') && <>
               <Text style={styles.title}>Barmans</Text>
-              {staff?.map((staff, i) => staff.type == 'barman' && <TouchCard
-                key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
-                description={staff?.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
+              {staff
+                .filter(staff => staff.type === 'barman')
+                .sort((a, b) => a.firstName.localeCompare(b.firstName)).map((staff, i) => <TouchCard
+                key={i} icon='how-to-reg' title={`${staff.firstName} ${staff.lastName}`} subtitle={staff.email}
+                description={staff.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
               />)}
             </>}
 
             {(type === 'cook' || type === 'all') && <>
               <Text style={styles.title}>Cuisiniers</Text>
-              {staff?.map((staff, i) => staff.type == 'cook' && <TouchCard
-                key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
-                description={staff?.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
+              {staff
+                .filter(staff => staff.type === 'cook')
+                .sort((a, b) => a.firstName.localeCompare(b.firstName)).map((staff, i) => <TouchCard
+                key={i} icon='how-to-reg' title={`${staff.firstName} ${staff.lastName}`} subtitle={staff.email}
+                description={staff.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
               />)}
             </>}
 
             {(type === 'waiter' || type === 'all') && <>
               <Text style={styles.title}>Serveurs</Text>
-              {staff?.map((staff, i) => staff.type == 'waiter' && <TouchCard
-                key={i} icon='how-to-reg' title={`${staff?.firstName} ${staff?.lastName}`} subtitle={staff?.email}
-                description={staff?.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
+              {staff
+                .filter(staff => staff.type === 'waiter')
+                .sort((a, b) => a.firstName.localeCompare(b.firstName)).map((staff, i) => <TouchCard
+                key={i} icon='how-to-reg' title={`${staff.firstName} ${staff.lastName}`} subtitle={staff.email}
+                description={staff.type} screen='AdminEditStaff' params={{staff}} navigation={navigation}
               />)}
             </>}
           </View>
@@ -129,7 +129,7 @@ export default function AdminStaffList({navigation}) {
     </SafeAreaView>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

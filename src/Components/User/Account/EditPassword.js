@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Icon, Input, Button } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { updatePassword } from '../../../Functions/user';

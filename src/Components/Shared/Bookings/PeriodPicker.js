@@ -1,26 +1,17 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
 import Picker from 'react-native-picker-select';
-import { View, Text, Platform, TouchableOpacity } from 'react-native';
+import { View, Platform, TouchableOpacity } from 'react-native';
 
-import { colors } from '../../colors';
-import { styles } from '../../styles';
+import Text from '../Text';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 const pickerBg = {
@@ -41,23 +32,24 @@ export default function PeriodPicker({tables, setStep, setShow, booking, booking
         <View style={styles.pickerView}>
           <Picker
             items={[
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Matin', value: 1, key: 0 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Midi', value: 2, key: 1 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Après-Midi', value: 3, key: 2 },
-              { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Soir', value: 4, key: 3 }
+              { label: 'Matin', value: 1, key: 0 },
+              { label: 'Midi', value: 2, key: 1 },
+              { label: 'Après-Midi', value: 3, key: 2 },
+              { label: 'Soir', value: 4, key: 3 }
             ]}
             placeholder={{}}
             style={pickerStyle}
             value={booking.period}
+            useNativeAndroidPickerStyle={false}
             onValueChange={period => setBooking({ ...booking, period })}
             Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
           />
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
-          <TouchableOpacity onPress={() => setShow(0)}>
-            <Text style={{color: colors.red, fontSize: 18, padding: 20}}>Annuler</Text>
+          <TouchableOpacity style={{width: '50%'}} onPress={() => setShow(0)}>
+            <Text style={{padding: 24, color: colors.red, fontSize: 18, textAlign: 'center'}}>Annuler</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity style={{width: '50%'}} onPress={() => {
             setShow(0);
             setStep(2);
 
@@ -69,7 +61,7 @@ export default function PeriodPicker({tables, setStep, setShow, booking, booking
             // Select lowest available table by default to avoid submit error
             setBooking({ ...booking, table: Math.min(...total) });
           }}>
-            <Text style={{color: colors.blue, fontSize: 18, padding: 20}}>Terminé</Text>
+            <Text style={{padding: 24, color: colors.blue, fontSize: 18, fontWeight: '500', textAlign: 'center'}}>Terminé</Text>
           </TouchableOpacity>
         </View>
       </View>

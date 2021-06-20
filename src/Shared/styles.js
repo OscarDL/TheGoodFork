@@ -9,18 +9,22 @@ export const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-evenly',
   },
-  button: {
-    paddingHorizontal: 12,
-    backgroundColor: colors.accentPrimary,
-    borderRadius: Platform.OS === 'ios' ? 10 : 5
-  },
+
   title: {
     fontSize: 24,
     marginTop: 6,
     paddingBottom: 4,
     fontWeight: '700',
     paddingHorizontal: 20,
+    color: colors.accentPrimary
   },
+  
+  button: {
+    paddingHorizontal: 12,
+    backgroundColor: colors.accentPrimary,
+    borderRadius: Platform.OS === 'ios' ? 10 : 5
+  },
+  
   link: {
     fontSize: 16,
     color: colors.blue,
@@ -32,6 +36,7 @@ export const styles = StyleSheet.create({
     color: colors.red,
     textAlign: 'center'
   },
+
   card: {
     padding: 10,
     borderRadius: 6,
@@ -47,6 +52,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: Platform.OS === 'ios' ? 10 : 5
   },
+
   fab: {
     right: 0,
     bottom: 0,
@@ -54,15 +60,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: colors.accentSecondary
   },
-  pickerView: {
-    height: 45,
-    padding: 1,
-    width: '50%',
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: '#bbb',
-    backgroundColor: 'white'
-  },
+
   item: {
     flex: 1,
     margin: 5,
@@ -76,6 +74,7 @@ export const styles = StyleSheet.create({
     color: 'transparent',
     backgroundColor: 'transparent'
   },
+
   bookingRow: {
     paddingVertical: 4,
     marginHorizontal: 16,
@@ -85,6 +84,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: colors.accentPrimary
   },
+
   orderItemRow: {
     height: 50,
     alignItems: 'center',
@@ -99,19 +99,14 @@ export const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center'
   },
+
   orderStrip: {
     margin: 10,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  sectionTitle: {
-    flex: 1,
-    marginVertical: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
+
   orderDetailsView: {
     flex: 1,
     flexDirection: 'row',
@@ -122,9 +117,18 @@ export const styles = StyleSheet.create({
     marginRight: 10,
     fontWeight: '400'
   },
+
+  sectionTitle: {
+    flex: 1,
+    marginVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   sectionText: {
     flexGrow: 1,
     fontSize: 20,
+    color: '#111',
     textAlign: 'center'
   },
   emptySection: {
@@ -133,6 +137,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center'
   },
+
   searchBarBg: {
     margin: 10,
     flexShrink: 1,
@@ -152,6 +157,26 @@ export const styles = StyleSheet.create({
     paddingLeft: 0,
     color: colors.blue
   },
+
+  pickerView: {
+    height: 45,
+    width: '50%',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: '#bbb',
+    backgroundColor: 'white'
+  },
+  pickerInput: {
+    height: '100%',
+    paddingLeft: 12,
+    paddingRight: 36,
+    color: colors.text
+  },
+  pickerIconContainer: {
+    height: '100%',
+    paddingHorizontal: 6
+  },
+
   iosDateBackdrop: {
     top: 0,
     zIndex: 99,

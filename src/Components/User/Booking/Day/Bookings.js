@@ -66,7 +66,7 @@ export default function Bookings({route}) {
 
       {refresh && (
         <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+          <ActivityIndicator size={60} color={colors.accentPrimary}/>
         </View>
       )}
     </SafeAreaView>

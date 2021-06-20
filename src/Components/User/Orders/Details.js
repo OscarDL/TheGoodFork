@@ -3,13 +3,14 @@ import Toast from 'react-native-toast-message';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
+import { View, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getStatus } from '../../../Functions/utils';
+import OrderDetails from '../../Shared/Orders/OrderDetails';
 import { getOrder, cancelOrder } from '../../../Functions/orders';
-import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
 
 export default function UserOrderDetails({navigation, route}) {
@@ -102,7 +103,7 @@ export default function UserOrderDetails({navigation, route}) {
       )}
 
       {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>}
     </SafeAreaView>
   );

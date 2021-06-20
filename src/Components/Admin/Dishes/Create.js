@@ -2,27 +2,18 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { createDish } from '../../../Functions/dishes';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 
@@ -61,17 +52,18 @@ export default function AdminCreateDish({navigation, route}) {
           
           <View style={styles.pickerView}>
             <Picker
-              onValueChange={type => setDish({...dish, type})}
               items={[
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrée', value: 'appetizer', key: 0 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plat', value: 'mainDish', key: 1 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Dessert', value: 'dessert', key: 2 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson', value: 'drink', key: 3 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boisson alcoolisée', value: 'alcohol', key: 3 }
+                { label: 'Entrée', value: 'appetizer', key: 0 },
+                { label: 'Plat', value: 'mainDish', key: 1 },
+                { label: 'Dessert', value: 'dessert', key: 2 },
+                { label: 'Boisson', value: 'drink', key: 3 },
+                { label: 'Alcool', value: 'alcohol', key: 3 }
               ]}
               placeholder={{}}
               value={dish.type}
               style={pickerStyle}
+              useNativeAndroidPickerStyle={false}
+              onValueChange={type => setDish({...dish, type})}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
           </View>

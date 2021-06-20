@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
 import { getItemAsync, deleteItemAsync } from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { apiUrl } from '../../config';
 import { config, authConfig } from './utils';
@@ -130,9 +131,24 @@ export const deleteUser = async () => {
 
 
 export const checkLogin = async (authDispatch) => {
-  const token = await getItemAsync('authToken');
+  let token = null, signedIn = null;
 
-  if (!token) return authDispatch({ type: 'LOGIN', user: {} });
+  try {
+    signedIn = await AsyncStorage.getItem('signedIn');
+    token = await getItemAsync('authToken');
+  } catch { }
+
+  if (!eval(signedIn)) {
+    // Manually reset secure store after app uninstall (iOS)
+    if (signedIn === null) {
+      try {
+        await deleteItemAsync('authToken');
+        await deleteItemAsync('card');
+      } catch { }
+    }
+
+    return authDispatch({ type: 'LOGIN', user: {} });
+  }
 
   getUserData(token).then(async (res) => {
     if (res.success) return authDispatch({ type: 'LOGIN', user: res.user });
@@ -142,7 +158,8 @@ export const checkLogin = async (authDispatch) => {
       [{
         text: 'Compris',
         onPress: async () => {
-          await deleteItemAsync('authToken');
+          try { await deleteItemAsync('authToken'); } catch { }
+          await AsyncStorage.setItem('signedIn', 'false');
           authDispatch({ type: 'LOGIN', user: {} });
         }
       }]
@@ -152,5 +169,5 @@ export const checkLogin = async (authDispatch) => {
 
 
 export const logout = (authDispatch) => {
-  deleteItemAsync('authToken').then(() => checkLogin(authDispatch));
+  AsyncStorage.setItem('signedIn', 'false').then(() => checkLogin(authDispatch));
 };

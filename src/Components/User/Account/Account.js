@@ -4,10 +4,10 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 
 import UserEditData from './EditData';
 import UserEditPassword from './EditPassword';
+import TouchCard from '../../Shared/TouchCard';
 import { styles } from '../../../Shared/styles';
 import UserSaveCreditCard from './SaveCreditCard';
-import TouchCard from '../../../Shared/Components/TouchCard';
-import LogoutButton from '../../../Shared/Components/LogoutButton';
+import LogoutButton from '../../Shared/LogoutButton';
 
 
 const Stack = createStackNavigator();

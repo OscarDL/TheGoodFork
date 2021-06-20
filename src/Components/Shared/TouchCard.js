@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 
-import { styles } from '../styles';
+import Text from './Text';
+import { styles } from '../../Shared/styles';
 
 
 export default function TouchCard({

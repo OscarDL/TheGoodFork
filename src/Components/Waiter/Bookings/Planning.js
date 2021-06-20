@@ -1,8 +1,19 @@
 import React from 'react';
-import { CalendarList } from 'react-native-calendars';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import { CalendarList, LocaleConfig } from 'react-native-calendars';
 
+import Text from '../../Shared/Text';
 import { styles } from '../../../Shared/styles';
+
+
+LocaleConfig.locales['fr'] = {
+  dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+  monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+};
+
+LocaleConfig.defaultLocale = 'fr';
 
 
 export default function WaiterPlanning({navigation}) {

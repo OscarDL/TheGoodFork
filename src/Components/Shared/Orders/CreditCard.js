@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TextInput, Dimensions } from 'react-native';
+import { View, TextInput, Dimensions } from 'react-native';
 
-import { styles } from '../../styles';
+import Text from '../Text';
+import { styles } from '../../../Shared/styles';
 
 
 export default function CreditCard({user, card, setCard}) {

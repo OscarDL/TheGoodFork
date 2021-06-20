@@ -3,44 +3,28 @@ import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Icon, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Alert, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { editStaff, deleteStaff } from '../../../Functions/staff';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 
 export default function AdminEditStaff({route, navigation}) {
   const {staff} = route.params;
-
-  const [newStaff, setNewStaff] = useState({
-    firstName: staff.firstName,
-    lastName: staff.lastName,
-    email: staff.email,
-    type: staff.type,
-    password: null
-  });
+  const [newStaff, setNewStaff] = useState({...staff, password: null});
 
 
   const handleEdit = () => {
-    editStaff(staff._id, newStaff).then(res => {
+    editStaff(newStaff).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de supression',
         text2: res.desc ?? res,
@@ -93,16 +77,17 @@ export default function AdminEditStaff({route, navigation}) {
           
           <View style={styles.pickerView}>
             <Picker
-              onValueChange={type => setNewStaff({...newStaff, type})}
               items={[
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Administrateur', value: 'admin', key: 0 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Barman', value: 'barman', key: 1 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Cuisinier', value: 'cook', key: 2 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Serveur', value: 'waiter', key: 3 }
+                { label: 'Administrateur', value: 'admin', key: 0 },
+                { label: 'Barman', value: 'barman', key: 1 },
+                { label: 'Cuisinier', value: 'cook', key: 2 },
+                { label: 'Serveur', value: 'waiter', key: 3 }
               ]}
               placeholder={{}}
-              value={newStaff.type}
               style={pickerStyle}
+              value={newStaff.type}
+              useNativeAndroidPickerStyle={false}
+              onValueChange={type => setNewStaff({...newStaff, type})}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
           </View>

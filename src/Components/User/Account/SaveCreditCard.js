@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Icon } from 'react-native-elements';
 import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import { authenticateAsync, getEnrolledLevelAsync, isEnrolledAsync } from 'expo-local-authentication';
-import { TouchableWithoutFeedback, Keyboard, View, KeyboardAvoidingView, Text, Alert, Platform, TouchableOpacity } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, KeyboardAvoidingView, Alert, Platform, TouchableOpacity } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { styles } from '../../../Shared/styles';
+import CreditCard from '../../Shared/Orders/CreditCard';
 import { useAuthContext } from '../../../Context/Auth/Provider';
-import CreditCard from '../../../Shared/Components/Orders/CreditCard';
 
 
 export default function UserSaveCreditCard({navigation}) {
@@ -22,7 +23,14 @@ export default function UserSaveCreditCard({navigation}) {
 
 
   const getCard = async () => {
-    const card = await getItemAsync('card');
+    let card;
+    
+    try {
+      card = await getItemAsync('card');
+    } catch (error) {
+      try { await deleteItemAsync('card'); } catch { }
+    }
+
     if (card) {
       setCard(JSON.parse(card));
       setExists(true);
@@ -40,7 +48,7 @@ export default function UserSaveCreditCard({navigation}) {
         'Veuillez entrer votre code de dévérouillage pour accéder à vos données de paiement sécurisées.'
       );
 
-      authenticateAsync({promptMessage}).then(res => res.success && getCard());
+      authenticateAsync({promptMessage}).then(res => res.success ? getCard() : navigation.goBack());
     } else {
       const actions = [
         {

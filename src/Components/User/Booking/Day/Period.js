@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
 import Toast from 'react-native-toast-message';
-import { ScrollView, Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
+import { ScrollView, View, TouchableOpacity, Alert, Platform } from 'react-native';
 
+import Text from '../../../Shared/Text';
 import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';

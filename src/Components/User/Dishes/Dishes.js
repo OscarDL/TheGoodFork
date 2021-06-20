@@ -3,33 +3,23 @@ import Picker from 'react-native-picker-select';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
+import { View, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Alert, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 
+import Text from '../../Shared/Text';
 import UserDishDetails from './Details';
+import TouchCard from '../../Shared/TouchCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getDishes } from '../../../Functions/dishes';
-import TouchCard from '../../../Shared/Components/TouchCard';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 
 
 const Stack = createStackNavigator();
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 const failureAlert = (error, navigation, setRetry) => {
@@ -86,18 +76,19 @@ function UserDishesComponent({navigation}) {
             
             <View style={styles.pickerView}>
               <Picker
-                onValueChange={type => setType(type)}
                 items={[
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Tous les plats', value: 'all', key: 0 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Entrées', value: 'appetizer', key: 1 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Plats', value: 'mainDish', key: 2 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Desserts', value: 'dessert', key: 3 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons', value: 'drink', key: 4 },
-                  { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Boissons alcoolisées', value: 'alcohol', key: 5 }
+                  { label: 'Tous les plats', value: 'all', key: 0 },
+                  { label: 'Entrées', value: 'appetizer', key: 1 },
+                  { label: 'Plats', value: 'mainDish', key: 2 },
+                  { label: 'Desserts', value: 'dessert', key: 3 },
+                  { label: 'Boissons', value: 'drink', key: 4 },
+                  { label: 'Alcools', value: 'alcohol', key: 5 }
                 ]}
                 value={type}
                 placeholder={{}}
                 style={pickerStyle}
+                useNativeAndroidPickerStyle={false}
+                onValueChange={type => setType(type)}
                 Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
               />
             </View>
@@ -106,7 +97,7 @@ function UserDishesComponent({navigation}) {
           <View>
             {(type === 'appetizer' || type === 'all') && <>
               <Text style={styles.title}>Entrées</Text>
-              {dishes.filter(dish => dish.type === 'appetizer').sort((a, b) => a.name > b.name).map((dish, i) => (
+              {dishes.filter(dish => dish.type === 'appetizer').sort((a, b) => a.name.localeCompare(b.name)).map((dish, i) => (
                 <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
                 navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
               ))}
@@ -114,7 +105,7 @@ function UserDishesComponent({navigation}) {
 
             {(type === 'mainDish' || type === 'all') && <>
               <Text style={styles.title}>Plats</Text>
-              {dishes.filter(dish => dish.type === 'mainDish').sort((a, b) => a.name > b.name).map((dish, i) => (
+              {dishes.filter(dish => dish.type === 'mainDish').sort((a, b) => a.name.localeCompare(b.name)).map((dish, i) => (
                 <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
                 navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
               ))}
@@ -122,7 +113,7 @@ function UserDishesComponent({navigation}) {
 
             {(type === 'dessert' || type === 'all') && <>
               <Text style={styles.title}>Desserts</Text>
-              {dishes.filter(dish => dish.type === 'dessert').sort((a, b) => a.name > b.name).map((dish, i) => (
+              {dishes.filter(dish => dish.type === 'dessert').sort((a, b) => a.name.localeCompare(b.name)).map((dish, i) => (
                 <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
                 navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
               ))}
@@ -130,7 +121,7 @@ function UserDishesComponent({navigation}) {
 
             {(type === 'drink' || type === 'all') && <>
               <Text style={styles.title}>Boissons</Text>
-              {dishes.filter(dish => dish.type === 'drink').sort((a, b) => a.name > b.name).map((dish, i) => (
+              {dishes.filter(dish => dish.type === 'drink').sort((a, b) => a.name.localeCompare(b.name)).map((dish, i) => (
                 <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
                 navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
               ))}
@@ -138,7 +129,7 @@ function UserDishesComponent({navigation}) {
 
             {(type === 'alcohol' || type === 'all') && <>
               <Text style={styles.title}>Boissons alcoolisées</Text>
-              {dishes.filter(dish => dish.type === 'alcohol').sort((a, b) => a.name > b.name).map((dish, i) => (
+              {dishes.filter(dish => dish.type === 'alcohol').sort((a, b) => a.name.localeCompare(b.name)).map((dish, i) => (
                 <TouchCard key={i} image={dish.image} title={dish.name} screen='UserDishDetails' params={{dish}} 
                 navigation={navigation} description={dish.detail ? ('Détails : ' + dish.detail) : 'Pas de détails'}/>
               ))}
@@ -153,7 +144,7 @@ function UserDishesComponent({navigation}) {
     </SafeAreaView>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

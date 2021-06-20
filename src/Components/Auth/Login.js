@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { setItemAsync } from 'expo-secure-store';
 import { Button, Input, Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableWithoutFeedback, Keyboard, View, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../Shared/Text';
 import { login } from '../../Functions/user';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
@@ -33,6 +35,7 @@ export default function Login({navigation}) {
     );
   
     await setItemAsync('authToken', res.token);
+    await AsyncStorage.setItem('signedIn', 'true');
     authDispatch({ type: 'LOGIN', user: res.user });
   };
 
@@ -40,17 +43,15 @@ export default function Login({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={() => Platform.OS === 'ios' ? Keyboard.dismiss() : null} accessible={false}>
       <KeyboardAvoidingView
-        style={styles.container}
+        style={{...styles.container, alignItems: 'center'}}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
       >
-        <View style={{width: '100%'}}>
-          <Image
-            style={{ width: 180, height: 180, alignSelf: 'center' }}
-            source={{ uri: 'https://res.cloudinary.com/thegoodfork/image/upload/v1620079806/TGF_brown.png' }}
-          />
-        </View>
+        <Image
+          style={{width: 180, height: 180}}
+          source={{ uri: 'https://res.cloudinary.com/thegoodfork/image/upload/v1620079806/TGF_brown.png' }}
+        />
 
-        <View>
+        <View style={{alignSelf: 'stretch'}}>
           <Input autoCapitalize='none' placeholder='Adresse email' keyboardType='email-address' onChangeText={email => setUserLogin({...userLogin, email})}/>
           <Input autoCapitalize='none' placeholder='Mot de passe' secureTextEntry onChangeText={password => setUserLogin({...userLogin, password})}/>
 
@@ -59,7 +60,7 @@ export default function Login({navigation}) {
           </TouchableOpacity>
         </View>
 
-        <View style={{alignItems: 'center'}}>
+        <View>
           <Button
             icon={<Icon
               color='white'
@@ -72,8 +73,8 @@ export default function Login({navigation}) {
           />
         </View>
         
-        <TouchableOpacity style={{alignItems: 'center', padding: 10}} onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.link}>Je n'ai pas encore de compte</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={{...styles.link, padding: 20}}>Je n'ai pas encore de compte</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

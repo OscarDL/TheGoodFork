@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 
+import TouchCard from '../Shared/TouchCard';
 import { styles } from '../../Shared/styles';
-import TouchCard from '../../Shared/Components/TouchCard';
 
 
 export default function WaiterHome({navigation}) {
