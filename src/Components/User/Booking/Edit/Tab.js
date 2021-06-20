@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
+import Text from '../../../Shared/Text';
+import TouchCard from '../../../Shared/TouchCard';
 import { styles } from '../../../../Shared/styles';
 import { getPeriod } from '../../../../Functions/utils';
-import TouchCard from '../../../../Shared/Components/TouchCard';
 
 
 const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -18,7 +19,7 @@ export default function BookingsTab({navigation, bookings, future}) {
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         {bookings
           .filter(booking => future ? booking.dateBooked > Date.now() : booking.dateBooked < Date.now())
-          .sort((a, b) => (a.dateBooked + a.table) > (b.dateBooked + b.table)) // append table to sort by table too
+          .sort((a, b) => String(a.dateBooked + a.table).localeCompare(b.dateBooked + b.table)) // append table to sort by table too
           .map((booking, i) => {
             const date = new Date(booking.dateBooked);
             return <TouchCard

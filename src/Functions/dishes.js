@@ -41,10 +41,10 @@ export const createDish = async (dish) => {
 };
 
 
-export const editDish = async (id, dish) => {
+export const editDish = async (dish) => {
   try {
     const config = await authConfig();
-    const {data} = await axios.put(apiUrl + 'dishes/' + id, dish, config);
+    const {data} = await axios.put(apiUrl + 'dishes/' + dish._id, dish, config);
 
     if (!data.success) return data?.error;
 
@@ -57,10 +57,10 @@ export const editDish = async (id, dish) => {
 };
 
 
-export const deleteDish = async (id, dish) => {
+export const deleteDish = async (dish) => {
   try {
     const config = await authConfig();
-    const {data} = await axios.delete(apiUrl + 'dishes/' + id, config);
+    const {data} = await axios.delete(apiUrl + 'dishes/' + dish._id, config);
 
     if (!data.success) return data?.error;
 

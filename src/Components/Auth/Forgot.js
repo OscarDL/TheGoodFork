@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Icon, Input } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, KeyboardAvoidingView, Platform } from 'react-native';
 
+import Text from '../Shared/Text';
 import { styles } from '../../Shared/styles';
 import { sendEmail } from '../../Functions/user';
 

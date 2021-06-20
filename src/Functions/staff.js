@@ -36,12 +36,12 @@ export const createStaff = async (staff) => {
 };
 
 
-export const editStaff = async (id, staff) => {
+export const editStaff = async (staff) => {
   try {
     staff.email = staff.email.replace(' ', '');
 
     const config = await authConfig();
-    const {data} = await axios.put(apiUrl + 'staff/' + id, staff, config);
+    const {data} = await axios.put(apiUrl + 'staff/' + staff._id, staff, config);
 
     if (!data.success) return data?.error;
 

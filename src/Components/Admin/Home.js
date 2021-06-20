@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 
+import TouchCard from '../Shared/TouchCard';
 import { styles } from '../../Shared/styles';
-import TouchCard from '../../Shared/Components/TouchCard';
 
 
 export default function AdminHome({navigation}) {
@@ -15,7 +15,6 @@ export default function AdminHome({navigation}) {
           <TouchCard icon='menu-book' title='Menu et plats' description='Création, modification et suppression des plats.' screen='AdminDishList' navigation={navigation} />
           <TouchCard icon='euro' title='Revenu quotidien' description='Consulter les statistiques du revenu quotidien.' screen='AdminDailyRevenue' navigation={navigation} />
           <TouchCard icon='local-mall' title='Détails des ventes' description='Consulter les statistiques de vente avancées.' screen='AdminSalesStats' navigation={navigation} />
-          <TouchCard icon='insights' title='Stocks disponibles' description='Vérifier la disponibilité du stock des plats.' screen='AdminStocksStats' navigation={navigation} />
         </View>
       </ScrollView>
     </View>

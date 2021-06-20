@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
-import { View, Text, ScrollView, ActivityIndicator, Alert, Platform, SafeAreaView } from 'react-native';
+import { View, ScrollView, ActivityIndicator, Alert, Platform, SafeAreaView } from 'react-native';
 
+import Text from '../Shared/Text';
+import TouchCard from '../Shared/TouchCard';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { getStatus } from '../../Functions/utils';
 import { getOrders } from '../../Functions/orders';
-import TouchCard from '../../Shared/Components/TouchCard';
 
 
 const failureAlert = (error, setRetry) => {
@@ -60,7 +61,7 @@ export default function CookHome({navigation}) {
     </SafeAreaView>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

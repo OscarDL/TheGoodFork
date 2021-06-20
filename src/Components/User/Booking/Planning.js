@@ -1,10 +1,11 @@
 import { FAB } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
-import { CalendarList } from 'react-native-calendars';
 import { useIsFocused } from '@react-navigation/native';
+import { CalendarList, LocaleConfig } from 'react-native-calendars';
+import { View, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
+import Text from '../../Shared/Text';
 import Bookings from './Day/Bookings';
 import EditBooking from './Edit/Edit';
 import MyBookings from './Edit/MyBookings';
@@ -18,6 +19,15 @@ const iosH = CardStyleInterpolators.forHorizontalIOS;
 const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIOS;
 
 const getDay = (date) => new Date(new Date(date).setHours(0,0,0,0) - new Date().getTimezoneOffset() * 60000);
+
+LocaleConfig.locales['fr'] = {
+  dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+  monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+};
+
+LocaleConfig.defaultLocale = 'fr';
 
 
 export default function UserPlanning({title}) {
@@ -44,10 +54,9 @@ function UserPlanningComponent({navigation}) {
       res.bookings.forEach((booking, i) => {
         const day = getDay(booking.dateBooked).toISOString().slice(0,10);
         dates[day] = {marked: true, dotColor: day < getDay(Date.now()).toISOString().slice(0,10) ? 'orange' : 'limegreen'};
-
-        if (i+1 === res.bookings.length) return setMarkedDates(dates);
       });
 
+      setMarkedDates(dates);
       setBookings(res.bookings);
     });
   }, [isFocused, setBookings, setMarkedDates]);
@@ -101,7 +110,7 @@ function UserPlanningComponent({navigation}) {
           onPress={() => navigation.navigate('MyBookings', {bookings})}
         />
       </> : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>}
     </View>
   );

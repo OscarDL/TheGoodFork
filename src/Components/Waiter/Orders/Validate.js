@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/core';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
+import { View, Alert, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
+import Text from '../../Shared/Text';
+import SearchBar from '../../Shared/SearchBar';
+import TouchCard from '../../Shared/TouchCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
-import SearchBar from '../../../Shared/Components/SearchBar';
-import TouchCard from '../../../Shared/Components/TouchCard';
 import { matchesOrder, truncPrice } from '../../../Functions/utils';
 
 
@@ -28,6 +29,9 @@ const failureAlert = (error, navigation, setRetry) => {
     Platform.OS === 'ios' ? actions : actions.reverse()
   );
 };
+
+const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 
 export default function WaiterValidateOrder({navigation}) {
@@ -53,11 +57,14 @@ export default function WaiterValidateOrder({navigation}) {
           <View>
             <Text style={styles.title}>Commandes</Text>
 
-            {orders.filter(order => !order.validated)?.map((order, i) => matchesOrder(order, search) && <TouchCard
-              key={i} size={26} icon='how-to-reg' title={`${order.user.firstName} ${order.user.lastName}`} params={{order, readOnly: false}}
-              subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='WaiterOrderDetails' navigation={navigation}
-              description={`${new Date(order.dateOrdered).toDateString().slice(4, -5)}, ${new Date(order.dateOrdered).toLocaleTimeString()}`}
-            />)}
+            {orders.filter(order => !order.validated).map((order, i) => {
+              const date = new Date(order.dateOrdered);
+              return matchesOrder(order, search) ? <TouchCard
+                key={i} icon='how-to-reg' title={`${order.user.firstName} ${order.user.lastName}`} params={{order, readOnly: false}}
+                subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='WaiterOrderDetails' navigation={navigation}
+                description={`${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}, ${new Date(date).toLocaleTimeString()}`}
+              /> : null
+            })}
           </View>
         </ScrollView>
       </> : (
@@ -68,7 +75,7 @@ export default function WaiterValidateOrder({navigation}) {
     </SafeAreaView>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

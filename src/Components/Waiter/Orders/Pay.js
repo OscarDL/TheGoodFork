@@ -7,10 +7,10 @@ import { TouchableWithoutFeedback, Keyboard, Platform, KeyboardAvoidingView, Vie
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
+import CreditCard from '../../Shared/Orders/CreditCard';
 import { useAuthContext } from '../../../Context/Auth/Provider';
 import { getIntent, payOrder } from '../../../Functions/stripe';
 import { editOrder, submitOrder } from '../../../Functions/orders';
-import CreditCard from '../../../Shared/Components/Orders/CreditCard';
 
 
 const fullScreen = {
@@ -128,7 +128,7 @@ export default function WaiterPayOrder({route, navigation}) {
         </View> : null}
 
         {loading && <View style={[styles.container, {...fullScreen, zIndex: 99}]}>
-          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+          <ActivityIndicator size={60} color={colors.accentPrimary}/>
         </View>}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

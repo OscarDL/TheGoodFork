@@ -20,7 +20,6 @@ import AdminEditStaff from './Admin/Staff/Edit';
 import AdminCreateStaff from './Admin/Staff/Create';
 import AdminTables from './Admin/Tables/Tables';
 import AdminSalesStats from './Admin/Stats/Sales';
-import AdminStocksStats from './Admin/Stats/Stocks';
 import AdminDailyRevenue from './Admin/Revenue/Daily';
 
 import WaiterHome from './Waiter/Home';
@@ -52,8 +51,8 @@ import { colors } from '../Shared/colors';
 import { styles } from '../Shared/styles';
 import { StatusBar } from 'expo-status-bar';
 import { checkLogin } from '../Functions/user';
+import LogoutButton from './Shared/LogoutButton';
 import { useAuthContext } from '../Context/Auth/Provider';
-import LogoutButton from '../Shared/Components/LogoutButton';
 
 
 const Stack = createStackNavigator();
@@ -93,7 +92,6 @@ export default function Routes() {
       <Stack.Screen name='AdminCreateStaff' options={{title: 'Nouveau membre', cardStyleInterpolator: iosV}} component={AdminCreateStaff} />
       <Stack.Screen name='AdminTables' options={{title: 'Nombre de tables', cardStyleInterpolator: iosH}} component={AdminTables} />
       <Stack.Screen name='AdminSalesStats' options={{title: 'Statistiques : ventes', cardStyleInterpolator: iosH}} component={AdminSalesStats} />
-      <Stack.Screen name='AdminStocksStats' options={{title: 'Statistiques : stock', cardStyleInterpolator: iosH}} component={AdminStocksStats} />
       <Stack.Screen name='AdminDailyRevenue' options={{title: 'Revenu quotidien', cardStyleInterpolator: iosH}} component={AdminDailyRevenue} />
     </Stack.Navigator>
   );
@@ -173,17 +171,19 @@ export default function Routes() {
 
   
   return (
-    user === null ? (
+    user ? (
+      <>
+        <StatusBar style='dark' backgroundColor='white'/>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={user === {} ? 'auth' : user.type}>
+            <Stack.Screen name={user.type ?? 'auth'} options={{headerShown: false}} component={components[user.type ?? 'auth']} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </>
+    ) : (
       <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>
-    ) : (<>
-      <StatusBar style='dark'/>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={user === {} ? 'auth' : user.type}>
-          <Stack.Screen name={user.type ?? 'auth'} options={{headerShown: false}} component={components[user.type ?? 'auth']} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>)
+    )
   );
 }

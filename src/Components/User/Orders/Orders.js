@@ -4,17 +4,18 @@ import { useIsFocused } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import { View, ScrollView, Text, Alert, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, ScrollView, Alert, Platform, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import UserNewOrder from './New';
 import UserPayOrder from './Pay';
 import UserEditOrder from './Edit';
+import Text from '../../Shared/Text';
 import UserSubmitOrder from './Submit';
 import UserOrderDetails from './Details';
+import TouchCard from '../../Shared/TouchCard';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { getOrders } from '../../../Functions/orders';
-import TouchCard from '../../../Shared/Components/TouchCard';
 import { getStatus, truncPrice } from '../../../Functions/utils';
 
 
@@ -22,6 +23,10 @@ const Stack = createStackNavigator();
 const Tabs = createMaterialTopTabNavigator();
 const iosH = CardStyleInterpolators.forHorizontalIOS;
 const iosV = Platform.OS === 'ios' ? iosH : CardStyleInterpolators.forVerticalIOS;
+
+
+const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+const months = ['Janv.', 'Fév.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 const style = {
   pressColor: 'darkgrey',
@@ -69,13 +74,15 @@ function UserOrdersComponent({navigation, orders, paid}) {
         ?
       <ScrollView contentContainerStyle={{paddingVertical: 5}}>
         <View>
-          {orders.map((order, i) => (
-            <TouchCard key={i} icon='restaurant' description={'Statut : ' + getStatus(order.status)}
-              params={{order}} title={new Date(order.dateOrdered).toDateString().slice(4, -5)
-              + `, ${new Date(order.dateOrdered).toLocaleTimeString()}`} navigation={navigation}
-              subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='UserOrderDetails'
-            />
-          ))}
+          {orders.map((order, i) => {
+            const date = new Date(order.dateOrdered);
+            return (
+              <TouchCard key={i} icon='restaurant' description={'Statut : ' + getStatus(order.status)} params={{order}}
+                title={`${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}, ${date.toLocaleTimeString()}`}
+                navigation={navigation} subtitle={`${truncPrice(order.price + order.tip)} ${order.currency}`} screen='UserOrderDetails'
+              />
+            )
+          })}
         </View>
       </ScrollView>
         :
@@ -192,12 +199,16 @@ function UserOrderTabs({navigation}) {
             minimumDate={new Date(Date.now()).setHours(0,0,0,0)}
             onChange={e => setDate(new Date(e.nativeEvent.timestamp))}
           />
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={iosCancel}>
-              <Text style={{padding: 24, color: colors.red, fontSize: 18}}>{mode === 'date' ? 'Annuler' : 'Précédent'}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
+            <TouchableOpacity style={{width: '50%'}} onPress={iosCancel}>
+              <Text style={{padding: 24, color: colors.red, fontSize: 18, textAlign: 'center'}}>
+                {mode === 'date' ? 'Annuler' : 'Précédent'}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={iosChange}>
-              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18}}>{mode === 'date' ? 'Suivant' : 'Terminé'}</Text>
+            <TouchableOpacity style={{width: '50%'}} onPress={iosChange}>
+              <Text style={{padding: 24, color: colors.blue, fontWeight: '500', fontSize: 18, textAlign: 'center'}}>
+                {mode === 'date' ? 'Suivant' : 'Continuer'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -214,7 +225,7 @@ function UserOrderTabs({navigation}) {
     </>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   )
 };

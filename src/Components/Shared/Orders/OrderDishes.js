@@ -3,7 +3,7 @@ import { View, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 import OrderItem from './OrderItem';
-import { styles } from '../../styles';
+import { styles } from '../../../Shared/styles';
 import { formatGrid } from '../../../Functions/utils';
 
 

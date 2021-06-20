@@ -61,7 +61,7 @@ export default function Bookings({navigation, route}) {
   return (
     <SafeAreaView style={styles.container}>
       {(bookings && (tables !== null)) ? <PeriodTabs tables={tables} bookings={bookings} navigation={navigation} day={day}/> : <View style={styles.container}>
-        <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+        <ActivityIndicator size={60} color={colors.accentPrimary}/>
       </View>}
     </SafeAreaView>
   );

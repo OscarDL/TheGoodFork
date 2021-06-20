@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Icon, Input, Button } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Platform, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Platform, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { updateData } from '../../../Functions/user';
@@ -66,7 +67,7 @@ export default function UpdateInfo() {
         />
 
         {loading && <View style={{...styles.container, ...styles.iosDateBackdrop, justifyContent: 'center'}}>
-          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+          <ActivityIndicator size={60} color={colors.accentPrimary}/>
         </View>}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

@@ -26,7 +26,7 @@ export const formatGrid = (data, numCol) => {
     lastRowCount += 1;
   }
 
-  return data.sort((a, b) => a.name > b.name ? 1 : -1);
+  return data.sort((a, b) => a.name.localeCompare(b.name));
 };
 
 export const matchesOrder = (order, search) => (

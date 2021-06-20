@@ -3,7 +3,7 @@ import Toast from 'react-native-toast-message';
 import { Alert, Platform } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 
-import { colors } from '../colors';
+import { colors } from '../../Shared/colors';
 import { deleteUser, logout } from '../../Functions/user';
 import { useAuthContext } from '../../Context/Auth/Provider';
 

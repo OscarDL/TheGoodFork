@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Alert, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import { colors } from '../../colors';
-import { styles } from '../../styles';
 import OrderDishes from './OrderDishes';
+import { colors } from '../../../Shared/colors';
+import { styles } from '../../../Shared/styles';
 import { getDishes } from '../../../Functions/dishes';
 
 
@@ -83,7 +83,7 @@ export default function SubmitOrderTabs({navigation, oldOrder, order, setOrder, 
     </Tabs.Navigator>
   ) : (
     <View style={styles.container}>
-      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={colors.accentPrimary}/>
+      <ActivityIndicator size={60} color={colors.accentPrimary}/>
     </View>
   );
 }

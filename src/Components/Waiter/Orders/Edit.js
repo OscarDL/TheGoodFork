@@ -1,11 +1,12 @@
+import { SafeAreaView } from 'react-native';
 import { Button } from 'react-native-elements';
-import { Text, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
+import Text from '../../Shared/Text';
 import { styles } from '../../../Shared/styles';
 import { getOrder } from '../../../Functions/orders';
 import { truncPrice } from '../../../Functions/utils';
-import SubmitOrderTabs from '../../../Shared/Components/Orders/SubmitOrderTabs';
+import SubmitOrderTabs from '../../Shared/Orders/SubmitOrderTabs';
 
 
 export default function WaiterEditOrder({navigation, route}) {

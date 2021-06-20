@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { setItemAsync } from 'expo-secure-store';
 import { Button, Input, Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableWithoutFeedback, Keyboard, View, KeyboardAvoidingView, Platform } from 'react-native';
 
+import Text from '../Shared/Text';
 import { colors } from '../../Shared/colors';
 import { styles } from '../../Shared/styles';
 import { register } from '../../Functions/user';
@@ -37,6 +39,7 @@ export default function Register() {
     );
   
     await setItemAsync('authToken', res.token);
+    await AsyncStorage.setItem('signedIn', 'true');
     authDispatch({ type: 'LOGIN', user: res.user });
   };
 

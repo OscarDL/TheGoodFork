@@ -1,14 +1,15 @@
 import { FAB } from 'react-native-paper';
 import React, { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { View, Alert, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, Alert, Platform } from 'react-native';
 
+import Text from '../Shared/Text';
 import { styles } from '../../Shared/styles';
 import { getStatus } from '../../Functions/utils';
 import { editOrder } from '../../Functions/orders';
+import OrderDetails from '../Shared/Orders/OrderDetails';
 import { useAuthContext } from '../../Context/Auth/Provider';
-import OrderDetails from '../../Shared/Components/Orders/OrderDetails';
 
 
 export default function BarmanOrderDetails({navigation, route}) {

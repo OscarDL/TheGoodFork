@@ -1,7 +1,8 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TouchableOpacity } from 'react-native';
 
+import Text from '../../../Shared/Text';
 import { colors } from '../../../../Shared/colors';
 import { styles } from '../../../../Shared/styles';
 

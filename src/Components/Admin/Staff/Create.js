@@ -2,27 +2,18 @@ import React, { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import Picker from 'react-native-picker-select';
 import { Button, Input, Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback, Keyboard, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, Platform, KeyboardAvoidingView } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { colors } from '../../../Shared/colors';
 import { styles } from '../../../Shared/styles';
 import { createStaff } from '../../../Functions/staff';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
 
@@ -61,16 +52,17 @@ export default function AdminRegisterStaff({navigation, route}) {
           
           <View style={styles.pickerView}>
             <Picker
-              onValueChange={type => setStaff({...staff, type})}
               items={[
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Administrateur', value: 'admin', key: 0 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Barman', value: 'barman', key: 1 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Cuisinier', value: 'cook', key: 2 },
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + 'Serveur', value: 'waiter', key: 3 }
+                { label: 'Administrateur', value: 'admin', key: 0 },
+                { label: 'Barman', value: 'barman', key: 1 },
+                { label: 'Cuisinier', value: 'cook', key: 2 },
+                { label: 'Serveur', value: 'waiter', key: 3 }
               ]}
               placeholder={{}}
               value={staff.type}
               style={pickerStyle}
+              useNativeAndroidPickerStyle={false}
+              onValueChange={type => setStaff({...staff, type})}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
           </View>

@@ -5,29 +5,20 @@ import React, { useEffect, useState } from 'react';
 import Collapsible from 'react-native-collapsible';
 import { Button, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, ScrollView, Text, SafeAreaView, Platform } from 'react-native';
+import { View, ScrollView, SafeAreaView, Platform } from 'react-native';
 
+import Text from '../../Shared/Text';
 import { styles } from '../../../Shared/styles';
 import { truncPrice } from '../../../Functions/utils';
+import OrderDetails from '../../Shared/Orders/OrderDetails';
 import { useAuthContext } from '../../../Context/Auth/Provider';
 import { editOrder, submitOrder } from '../../../Functions/orders';
-import OrderDetails from '../../../Shared/Components/Orders/OrderDetails';
 
 
 const pickerStyle = {
-  inputIOS: {
-    height: '100%',
-    marginLeft: 12,
-    marginRight: 28
-  },
-  inputAndroid: {
-    height: '100%',
-    marginRight: 20
-  },
-  iconContainer: {
-    padding: 6,
-    height: '100%'
-  }
+  inputIOS: styles.pickerInput,
+  inputAndroid: styles.pickerInput,
+  iconContainer: styles.pickerIconContainer
 };
 
   
@@ -45,7 +36,7 @@ export default function UserSubmitOrder({navigation, route}) {
 
 
   const handleEdit = () => {
-    editOrder({...order, tip}, user).then(res => {
+    editOrder({...order, details, tip}, user).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de modification',
         text2: res.desc ?? res,
@@ -61,7 +52,7 @@ export default function UserSubmitOrder({navigation, route}) {
   };
   
   const handleSubmit = () => {
-    submitOrder({...order, tip, user}, user.email).then(res => {
+    submitOrder({...order, details, tip, user}, user.email).then(res => {
       Toast.show({
         text1: res.title ?? 'Erreur de commande',
         text2: res.desc ?? res,
@@ -92,7 +83,7 @@ export default function UserSubmitOrder({navigation, route}) {
       const actions = [
         {
           text: 'Payer',
-          onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
+          onPress: () => navigation.navigate('UserPayOrder', {order: {...order, details, tip}, type})
         }, {
           text: 'Annuler',
           style: 'cancel'
@@ -109,7 +100,7 @@ export default function UserSubmitOrder({navigation, route}) {
     const actions = [
       {
         text: 'Payer',
-        onPress: () => navigation.navigate('UserPayOrder', {order: {...order, tip}, type})
+        onPress: () => navigation.navigate('UserPayOrder', {order: {...order, details, tip}, type})
       }, {
         text: 'Plus tard',
         onPress: () => type === 'edit' ? handleEdit() : handleSubmit()
@@ -145,13 +136,14 @@ export default function UserSubmitOrder({navigation, route}) {
         <Collapsible collapsed={collapsed.tip}>
           <View style={{...styles.pickerView, alignSelf: 'center', marginVertical: 20}}>
             <Picker
+              items={Array.from(Array(11), (_, i) => i * 5).map(tip => (
+                { label: tip + ' %', value: (order.price * tip/100), key: tip / 5 }
+              ))}
               placeholder={{}}
               style={pickerStyle}
               defaultValue={order.tip}
               onValueChange={tip => setTip(tip)}
-              items={Array.from(Array(11), (_, i) => i * 5).map(tip => (
-                { label: (Platform.OS !== 'ios' ? '   ' : '') + tip + ' %', value: (order.price * tip/100), key: tip / 5 }
-              ))}
+              useNativeAndroidPickerStyle={false}
               Icon={() => <Icon name='arrow-drop-down' size={28} style={{height: '100%', flexDirection: 'row'}}/>}
             />
           </View>
